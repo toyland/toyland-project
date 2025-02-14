@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16 # PostgreSQL 최신 이미지 사용
+    container_name: postgresql-container # 컨테이너 이름을 'postgresql-container'로 지정
+    environment:
+      POSTGRES_USER: postgres # 슈퍼유저 계정으로 'postgres' 사용 권장
+      POSTGRES_PASSWORD: password  # DB 접속 비밀번호 설정
+      POSTGRES_DB: postgres # 생성할 기본 데이터베이스 이름 설정
+    ports:
+      - "5432:5432" # 호스트와 컨테이너 간 포트 매핑
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"  # 데이터 유지 볼륨
+    restart: unless-stopped  # 컨테이너가 중지되면 자동으로 재시작
+
+volumes:
+  postgres_data: #볼룸을 서비스 바깥에서 정의해야 docker compose에서 인식식
