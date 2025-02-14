@@ -1,8 +1,6 @@
 package com.toyland.global.config.auditing;
 
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
