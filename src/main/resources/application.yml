@@ -1,15 +1,20 @@
 spring:
-  application:
-    name: toyland
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: password
     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/toyland
+    username: toyland
+    password: 1234
   jpa:
+    database: postgresql
+    show-sql: true
     hibernate:
-      ddl-auto: update  # 'create', 'create-drop' 등으로 변경 가능
+      ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+        spring.jpa.open-in-view: false
+        format_sql: true
+        default_batch_fetch_size: 10
+
+
+jwt:
+  secret_key: 0852712ba4290435a5c95068466f7cfb579762fe49b6879bb364055ba9ba90cb
