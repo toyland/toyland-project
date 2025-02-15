@@ -4,6 +4,8 @@ import com.toyland.address.model.entity.Address;
 import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
+import com.toyland.global.exception.CustomException;
+import com.toyland.global.exception.type.BusinessErrorCode;
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +28,7 @@ public class AddressServiceImpl implements AddressService{
     @Override
     public AddressResponseDto createAddress(CreateAddressRequestDto requestDto) {
         User user = userRepository.findById(requestDto.userId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new CustomException(BusinessErrorCode.USER_NOT_FOUND));
 
         Address savedAddress = addressRepository.save(Address.of(requestDto, user));
 
@@ -37,6 +39,6 @@ public class AddressServiceImpl implements AddressService{
     public Address findByAddressId(UUID addressId) {
         return addressRepository.findById(addressId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("존재하지 않는 주소 입니다. 올바른 주소 ID를 입력해주세요."));
+                        new CustomException(BusinessErrorCode.ADDRESS_NOT_FOUND));
     }
 }

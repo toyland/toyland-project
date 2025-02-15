@@ -21,8 +21,8 @@ public class CustomException extends RuntimeException{
         return errorCode.getCode();
     }
 
-
     public int getHttpStatus() {
-        return errorCode.getStatus().value();
+        return errorCode.getHttpStatus();
     }
+
 }

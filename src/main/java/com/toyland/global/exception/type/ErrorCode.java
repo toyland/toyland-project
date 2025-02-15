@@ -11,4 +11,8 @@ public interface ErrorCode {
     String getMessage();
     HttpStatus getStatus();
 
+    default int getHttpStatus() {
+        return getStatus().value();
+    }
+
 }
