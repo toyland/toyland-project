@@ -3,7 +3,6 @@ package com.toyland.address.model.entity;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
 import com.toyland.user.model.User;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "p_address")
 @NoArgsConstructor
-@AllArgsConstructor
 public class Address {
 
     @Id
