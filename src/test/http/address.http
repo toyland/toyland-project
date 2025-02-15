@@ -1,0 +1,9 @@
+### Address 생성
+POST http://localhost:8080/v1/api/addresses
+Content-Type: application/json
+
+{
+  "addressName": "테스트",
+  "userId": 1
+}
+
