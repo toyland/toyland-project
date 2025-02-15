@@ -37,7 +37,7 @@ public class Address {
         this.user = user;
     }
     //Dto를 통해 생성하는 Address의 비즈니스 로직에선 아래 정적 메서드 사용
-    public static Address build(CreateAddressRequestDto dto, User user) {
+    public static Address of(CreateAddressRequestDto dto, User user) {
         return Address.builder()
                 .addressName(dto.addressName())
                 .user(user)
