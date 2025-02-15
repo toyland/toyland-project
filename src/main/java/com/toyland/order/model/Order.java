@@ -1,6 +1,5 @@
 package com.toyland.order.model;
 
-import com.toyland.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
