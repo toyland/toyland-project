@@ -28,9 +28,9 @@ public class AddressServiceImpl implements AddressService{
         User user = userRepository.findById(requestDto.userId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        Address savedAddress = addressRepository.save(Address.build(requestDto, user));
+        Address savedAddress = addressRepository.save(Address.of(requestDto, user));
 
-        return AddressResponseDto.toDto(savedAddress);
+        return AddressResponseDto.from(savedAddress);
     }
 
     @Override

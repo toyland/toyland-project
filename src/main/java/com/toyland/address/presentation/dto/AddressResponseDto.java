@@ -13,7 +13,7 @@ public record AddressResponseDto(UUID addressId,
                                  Long userId) {
 
 
-    public static AddressResponseDto toDto(Address address) {
+    public static AddressResponseDto from(Address address) {
         return new AddressResponseDto(address.getId(),
                 address.getAddressName(),
                 address.getUser().getId());
