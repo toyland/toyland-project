@@ -1,14 +1,13 @@
 package com.toyland.user.model;
 
+import com.toyland.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
