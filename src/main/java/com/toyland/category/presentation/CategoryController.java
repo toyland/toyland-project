@@ -21,6 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CategoryController {
   private final CategoryFacade categoryFacade;
 
+  /**
+   * 카테고리를 생성합니다.
+   * @param request 카테고리 생성 정보
+   * @return 200 성공
+   */
   @PostMapping
   public ResponseEntity<Void> createCategory(@Valid @RequestBody CreateCategoryRequestDto request) {
     categoryFacade.createCategory(request);
