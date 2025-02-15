@@ -1,4 +1,4 @@
-package com.toyland.global.config.auditing;
+package com.toyland.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

@@ -1,4 +1,4 @@
-package com.toyland.global.config.auditing;
+package com.toyland.global.common.auditing;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
