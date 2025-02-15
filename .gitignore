@@ -124,6 +124,7 @@ fabric.properties
 
 #env file
 *.env
+*.env.*
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
