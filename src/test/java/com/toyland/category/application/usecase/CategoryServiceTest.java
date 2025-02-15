@@ -1,3 +1,7 @@
+/**
+ * @Date : 2025. 02. 15.
+ * @author : jieun(je-pa)
+ */
 package com.toyland.category.application.usecase;
 
 import static org.assertj.core.api.Assertions.assertThat;
