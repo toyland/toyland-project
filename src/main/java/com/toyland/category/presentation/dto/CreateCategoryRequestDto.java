@@ -4,8 +4,11 @@
  */
 package com.toyland.category.presentation.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import java.util.UUID;
 
-public record CreateCategoryRequestDto(UUID patentId, String name) {
+public record CreateCategoryRequestDto(
+    UUID patentId,
+    @NotEmpty(message = "이름은 필수 입력값입니다.") String name) {
 
 }
