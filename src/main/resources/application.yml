@@ -1,20 +1,25 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/toyland
-    username: toyland
-    password: 1234
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   jpa:
     database: postgresql
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         spring.jpa.open-in-view: false
         format_sql: true
         default_batch_fetch_size: 10
-
-
 jwt:
-  secret_key: 0852712ba4290435a5c95068466f7cfb579762fe49b6879bb364055ba9ba90cb
+  secret_key: ${JWT_SECRET_KEY}
+openai:
+  model: ${OPENAI_MODEL}
+  api:
+    url: ${OPENAI_API_URL}
+    key: ${OPENAI_API_KEY}
