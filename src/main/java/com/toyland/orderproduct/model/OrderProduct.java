@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -20,12 +21,12 @@ public class OrderProduct {
     private UUID id;
 
     @Column(name = "order_product_price", updatable = false, nullable = false)
-    private String orderProductPrice; // 주문 가격(주문 당시 가격)
+    private BigDecimal orderProductPrice; // 주문 가격(주문 당시 가격)
 
-    @Column(name = "content", nullable = false)
-    private String quantity;
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "order_id") // p_order 테이블의 order_id로 외래키(FK) 설정
+    @JoinColumn(name = "order_id", nullable = false) // p_order 테이블의 order_id로 외래키(FK) 설정
     private Order order;
 }
