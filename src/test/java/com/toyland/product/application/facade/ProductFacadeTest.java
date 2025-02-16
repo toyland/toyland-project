@@ -15,6 +15,7 @@ import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import java.math.BigDecimal;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,12 @@ class ProductFacadeTest extends IntegrationTestSupport {
 
   @Autowired
   private StoreRepository storeRepository;
+
+  @AfterEach
+  void tearDown() {
+    productRepository.deleteAllInBatch();
+    storeRepository.deleteAllInBatch();
+  }
 
   @DisplayName("상품을 생성합니다.")
   @Test
