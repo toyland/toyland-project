@@ -8,6 +8,7 @@ import com.toyland.region.presentation.dto.CreateRegionRequestDto;
 import com.toyland.region.presentation.dto.RegionResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RegionServiceImpl implements RegionService{
 
     private final RegionRepository regionRepository;
@@ -27,6 +29,7 @@ public class RegionServiceImpl implements RegionService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Region findByRegionId(UUID regionId) {
         return regionRepository.findById(regionId)
                 .orElseThrow(() ->

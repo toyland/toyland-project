@@ -6,12 +6,13 @@ import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.BusinessErrorCode;
+import com.toyland.region.application.usecase.RegionService;
 import com.toyland.region.model.entity.Region;
-import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -21,19 +22,19 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AddressServiceImpl implements AddressService{
 
     private final AddressRepository addressRepository;
-    // userRepository 이 부분은 정길님이 UserService에서 findByUserId 만들면 AddressFacadeImpl에서
-    // 가져오도록 리팩토링 예정
+    // userRepository 이 부분은 정길님이 UserService에서 findByUserId 만들면 service를 // 가져오도록 리팩토링 예정
     private final UserRepository userRepository;
-    private final RegionRepository regionRepository;
+    private final RegionService regionService;
     @Override
     public AddressResponseDto createAddress(CreateAddressRequestDto requestDto) {
         User user = userRepository.findById(requestDto.userId())
                 .orElseThrow(() -> new CustomException(BusinessErrorCode.USER_NOT_FOUND));
-        Region region = regionRepository.findById(requestDto.regionId())
-                .orElseThrow(() -> new CustomException(BusinessErrorCode.REGION_NOT_FOUND));
+
+        Region region = regionService.findByRegionId(requestDto.regionId());
 
         Address savedAddress = addressRepository.save(Address.of(requestDto, user, region));
 
@@ -41,6 +42,7 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Address findByAddressId(UUID addressId) {
         return addressRepository.findById(addressId)
                 .orElseThrow(() ->
