@@ -8,6 +8,7 @@ import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.BusinessErrorCode;
 import com.toyland.region.application.usecase.RegionService;
 import com.toyland.region.model.entity.Region;
+import com.toyland.region.presentation.dto.RegionResponseDto;
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,9 @@ public class AddressServiceImpl implements AddressService{
         User user = userRepository.findById(requestDto.userId())
                 .orElseThrow(() -> new CustomException(BusinessErrorCode.USER_NOT_FOUND));
 
-        Region region = regionService.findByRegionId(requestDto.regionId());
+        RegionResponseDto findByRegionId = regionService.findByRegionId(requestDto.regionId());
 
-        Address savedAddress = addressRepository.save(Address.of(requestDto, user, region));
+        Address savedAddress = addressRepository.save(Address.of(requestDto, user, Region.from(findByRegionId)));
 
         return AddressResponseDto.from(savedAddress);
     }

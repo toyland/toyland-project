@@ -15,6 +15,8 @@ public interface RegionRepository {
 
     Optional<Region> findById(UUID regionId);
 
+    void deleteById(UUID regionId);
+
     //테스트
     void deleteAll();
 }

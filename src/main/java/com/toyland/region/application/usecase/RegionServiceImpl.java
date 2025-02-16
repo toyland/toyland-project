@@ -30,9 +30,28 @@ public class RegionServiceImpl implements RegionService{
 
     @Override
     @Transactional(readOnly = true)
-    public Region findByRegionId(UUID regionId) {
-        return regionRepository.findById(regionId)
+    public RegionResponseDto findByRegionId(UUID regionId) {
+        return RegionResponseDto.from(regionRepository.findById(regionId)
+                .orElseThrow(() ->
+                        new CustomException(BusinessErrorCode.REGION_NOT_FOUND)));
+
+    }
+
+    @Override
+    public RegionResponseDto updateRegion(UUID regionId, CreateRegionRequestDto requestDto) {
+        Region findRegion = regionRepository.findById(regionId)
                 .orElseThrow(() ->
                         new CustomException(BusinessErrorCode.REGION_NOT_FOUND));
+        findRegion.updateRegion(requestDto.regionName());
+        return RegionResponseDto.from(findRegion);
     }
+
+    @Override
+    public void deleteByRegionId(UUID regionId, Long userId) {
+        Region findRegion = regionRepository.findById(regionId)
+                .orElseThrow(() ->
+                        new CustomException(BusinessErrorCode.REGION_NOT_FOUND));
+        findRegion.addDeletedField(userId);
+    }
+
 }

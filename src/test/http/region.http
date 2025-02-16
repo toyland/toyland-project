@@ -1,6 +1,26 @@
+### 지역 생성
 POST http://localhost:8080/api/v1/regions
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjYyMzQsImlhdCI6MTczOTcyMjYzNH0.OqS6OaniuXEU9U7lUraSkKYyM5jyrbe4wnTl2orvX3k
 
 {
   "regionName": "서울시"
 }
+
+### 지역 단 건 조회
+GET http://localhost:8080/api/v1/regions/95689b56-4ae9-4477-8e5d-06eeec294a1f
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjYyMzQsImlhdCI6MTczOTcyMjYzNH0.OqS6OaniuXEU9U7lUraSkKYyM5jyrbe4wnTl2orvX3k
+
+
+### 지역 수정
+PUT http://localhost:8080/api/v1/regions/95689b56-4ae9-4477-8e5d-06eeec294a1f
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjYyMzQsImlhdCI6MTczOTcyMjYzNH0.OqS6OaniuXEU9U7lUraSkKYyM5jyrbe4wnTl2orvX3k
+
+{
+  "regionName": "부산시"
+}
+
+### 지역 삭제
+DELETE http://localhost:8080/api/v1/regions/95689b56-4ae9-4477-8e5d-06eeec294a1f
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjYyMzQsImlhdCI6MTczOTcyMjYzNH0.OqS6OaniuXEU9U7lUraSkKYyM5jyrbe4wnTl2orvX3k
