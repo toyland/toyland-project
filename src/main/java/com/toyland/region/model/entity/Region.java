@@ -6,7 +6,7 @@ import com.toyland.region.presentation.dto.CreateRegionRequestDto;
 import com.toyland.region.presentation.dto.RegionResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(access = AccessLevel.PROTECTED)
-@Where(clause = "deleted_at IS NULL")
+@SQLRestriction("deleted_at IS NULL")
 public class Region extends BaseEntity {
 
     @Id
