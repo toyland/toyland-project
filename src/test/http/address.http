@@ -4,6 +4,7 @@ Content-Type: application/json
 
 {
   "addressName": "테스트",
-  "userId": 1
+  "userId": 1,
+  "regionId": "6ac8342f-a3f9-47b2-b449-d545ed4f297e"
 }
 
