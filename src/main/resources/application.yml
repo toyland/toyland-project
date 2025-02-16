@@ -19,7 +19,9 @@ spring:
 jwt:
   secret_key: ${JWT_SECRET_KEY}
 
+
 openai:
   api:
     key: ${OPENAI_API_KEY}
   model: ${OPENAI_MODEL}
+
