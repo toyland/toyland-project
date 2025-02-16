@@ -26,6 +26,6 @@ public class Order {
     private OrderType orderType; // 주문유형(포장/배달)
 
     @Enumerated(value = EnumType.STRING)
-    @Column(name = "paymentType")
+    @Column(name = "payment_Type")
     private PaymentType payment_type; // 결제유형(카드/현금)
 }
