@@ -27,5 +27,5 @@ public class Order {
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "payment_Type")
-    private PaymentType payment_type; // 결제유형(카드/현금)
+    private PaymentType paymentType; // 결제유형(카드/현금)
 }
