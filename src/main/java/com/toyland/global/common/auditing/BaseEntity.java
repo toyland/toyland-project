@@ -4,8 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -15,11 +13,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+
+
+
+/**
+ * @Where(clause = "deleted_at IS NULL")
+ * 상속 받고 위 어노테이션 달아주세요!
+ * Pull Request에 있는 방법에 따라 Delete 부분 구현해주세요
+ */
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@SQLDelete(sql = "UPDATE {h-schema}#{#entityName} SET deleted_at = NOW(), deleted_by = ? WHERE id = ?")
-@Where(clause = "deleted_at IS NULL") // 삭제된 데이터는 조회에서 제외
 public abstract class BaseEntity implements Serializable {
 
     @CreatedBy
@@ -38,16 +42,11 @@ public abstract class BaseEntity implements Serializable {
 
     private Long deletedBy;
 
-    @Column(updatable = false)
+
     private LocalDateTime deletedAt;
 
-
-    /**
-     * 삭제 식별자와 삭제 일자를 넣기 위한 메서드 같은 패키지 외부에서 불러야 하기 떄문에 Protected로 설정
-     * @param userId 인증 객체에서 반환 받은 Id
-     */
-    protected void updateDeleted(Long userId) {
-        this.deletedBy = userId;
+    public void addDeletedField(Long deletedBy) {
+        this.deletedBy = deletedBy;
         this.deletedAt = LocalDateTime.now();
     }
 
