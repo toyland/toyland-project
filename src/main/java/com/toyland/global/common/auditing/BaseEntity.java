@@ -17,10 +17,9 @@ import java.time.LocalDateTime;
 
 
 /**
- * @EntityListeners(SoftDeleteListener.class)
- * @SQLDelete(sql = "UPDATE ** SET deleted_at = NOW(), deleted_by = ? WHERE id = ?")
  * @Where(clause = "deleted_at IS NULL")
- * 상속 받고 위 어노테이션 달아주세요! ** 부분은 엔티티에 맞게 맞춰주세요.
+ * 상속 받고 위 어노테이션 달아주세요!
+ * Pull Request에 있는 방법에 따라 Delete 부분 구현해주세요
  */
 @Getter
 @MappedSuperclass
@@ -46,8 +45,9 @@ public abstract class BaseEntity implements Serializable {
 
     private LocalDateTime deletedAt;
 
-    public void addDeletedBy(Long deletedBy) {
+    public void addDeletedField(Long deletedBy) {
         this.deletedBy = deletedBy;
+        this.deletedAt = LocalDateTime.now();
     }
 
 }
