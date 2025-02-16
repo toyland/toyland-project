@@ -55,6 +55,7 @@ dependencies {
 	// json
 	implementation 'org.json:json:20230227'
 
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.2.0'
 
 }
 def querydslSrcDir = 'src/main/generated'

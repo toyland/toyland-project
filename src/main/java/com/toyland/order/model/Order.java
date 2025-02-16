@@ -1,5 +1,6 @@
 package com.toyland.order.model;
 
+import com.toyland.user.model.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,4 +29,8 @@ public class Order {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "payment_Type")
     private PaymentType paymentType; // 결제유형(카드/현금)
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false) // p_user 테이블의 user_id를 FK로 설정
+    private User user;
 }

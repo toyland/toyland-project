@@ -1,37 +1,32 @@
 package com.toyland.ai.presentation;
 
 
-import com.toyland.ai.presentation.dto.AiRequestDto;
-import com.toyland.ai.presentation.dto.AiResponseDto;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import com.toyland.ai.application.QnaService;
+import com.toyland.ai.model.Qna;
+import com.toyland.ai.presentation.dto.QnaRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
-@Slf4j
-@RequestMapping("/api/v1")
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/qna")
 public class QnaController {
 
-    @Value("${openai.model}")
-    private String model;
+   private final QnaService qnaService;
 
-    @Value("${openai.api.url}")
-    private String apiURL;
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @GetMapping("/qna")
-    public ResponseEntity getAnswer(@RequestParam String qna) {
-        AiRequestDto request = new AiRequestDto(model, qna);
-        AiResponseDto response = restTemplate.postForObject(apiURL, request, AiResponseDto.class);
-        return ResponseEntity.ok(response.getChoices().get(0).getMessage().getContent());
+    /**
+     * AI에게 물어본 질문과 그에대한 답변을 저장합니다.
+     * @param request 음식점의 질문
+     * @return 응답 포함한 객체
+     */
+    @PostMapping("/")
+    public ResponseEntity<Qna> createAiQna(@RequestBody QnaRequestDto request) {
+        Qna qna =  qnaService.createQna(request);
+        return ResponseEntity.ok(qna);
     }
 
 

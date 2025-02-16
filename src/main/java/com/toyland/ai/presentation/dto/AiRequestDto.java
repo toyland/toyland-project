@@ -1,14 +1,14 @@
 package com.toyland.ai.presentation.dto;
 
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 public class AiRequestDto {
-    private String model;
-    private List<Message> messages;
+    private final String model;
+    private final List<Message> messages;
 
     public AiRequestDto(String model, String prompt) {
         this.model = model;
