@@ -47,4 +47,28 @@ class StoreServiceTest extends IntegrationTestSupport {
             tuple("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1")
         );
   }
+
+  @DisplayName("상품을 조회합니다.")
+  @Test
+  void readStore(){
+    // given
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+    Store nene = storeRepository.save(createStore("네네치킨", "네네치킨입니다.", "경기도 성남시 분당구 가로 2"));
+
+    // when
+    Store result = storeService.readStore(goobne.getId());
+
+    // then
+    assertThat(result)
+        .extracting("name", "content", "address")
+        .contains("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1");
+  }
+  
+  private Store createStore(String name, String content, String address){
+    return Store.builder()
+        .name(name)
+        .content(content)
+        .address(address)
+        .build();
+  }
 }
