@@ -1,3 +1,7 @@
+/**
+ * @Date : 2025. 02. 17.
+ * @author : jieun(je-pa)
+ */
 package com.toyland.product.presentaion.ProductController;
 
 import com.toyland.product.application.facade.ProductFacade;
@@ -16,6 +20,11 @@ public class ProductController {
 
   private final ProductFacade productFacade;
 
+  /**
+   * 상품을 생성합니다.
+   * @param dto 상품 생성 정보
+   * @return 200 ok
+   */
   @PostMapping
   public ResponseEntity<Void> createProduct(@RequestBody CreateProductRequestDto dto) {
     productFacade.createProduct(dto);

@@ -1,3 +1,7 @@
+/**
+ * @Date : 2025. 02. 17.
+ * @author : jieun(je-pa)
+ */
 package com.toyland.product.application.usecase.dto;
 
 import com.toyland.product.presentaion.dto.CreateProductRequestDto;

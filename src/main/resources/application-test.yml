@@ -3,11 +3,10 @@ spring:
     import: optional:file:.env.test[.properties]
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:~/ecommerce
+    url: jdbc:h2:mem:~/toyland
     username: admin
     password:
   jpa:
-    database: postgresql
     show-sql: true
     hibernate:
       ddl-auto: create
