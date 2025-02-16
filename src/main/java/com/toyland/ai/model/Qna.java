@@ -1,23 +1,23 @@
 package com.toyland.ai.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.toyland.ai.presentation.dto.QnaRequestDto;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 
-@Entity(name="q_aiqna")
+@Entity(name="p_aiqna")
 @Getter
-@Setter
+@NoArgsConstructor
 public class Qna {
 
     @Id
-    private UUID ai_id = UUID.randomUUID();
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID aiId;
 
-    @Column(name="ai_name")
+    @Column
     private String aiName;
 
     @Column
@@ -29,9 +29,19 @@ public class Qna {
     @Column(name = "store_id")
     private UUID storeId;
 
+    public Qna(String question, String answer, UUID storeId) {
+        this.question = question;
+        this.answer = answer;
+        this.aiName = "OpenAI"; // 기본값 설정
+        this.storeId = storeId;
+    }
 
-    public Qna() {
-        this.aiName = "OpenAI";
+    public static Qna of(QnaRequestDto qnaRequestDto) {
+        return new Qna(
+                qnaRequestDto.getQuestion(),
+                (qnaRequestDto.getAnswer() != null) ? qnaRequestDto.getAnswer() : "No answer provided",
+                qnaRequestDto.getStoreId()
+        );
     }
 
 }
