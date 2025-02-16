@@ -1,6 +1,7 @@
 package com.toyland.product.model.entity;
 
-import com.toyland.product.presentaion.dto.CreateProductRequestDto;
+import com.toyland.global.common.auditing.BaseEntity;
+import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDto;
 import com.toyland.store.model.entity.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,12 +18,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "p_product")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product {
+@Where(clause = "deleted_at IS NULL")
+public class Product extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,7 +38,7 @@ public class Product {
   @Column(name = "product_price", nullable = false)
   private BigDecimal price;
 
-  @Column(name = "store_name", nullable = false)
+  @Column(name = "is_display", nullable = false)
   private boolean isDisplay;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -50,12 +53,12 @@ public class Product {
     this.store = store;
   }
 
-  public static Product of(CreateProductRequestDto dto, Store store) {
+  public static Product from(CreateProductServiceRequestDto dto) {
     return Product.builder()
         .name(dto.name())
         .price(dto.price())
         .isDisplay(dto.isDisplay())
-        .store(store)
+        .store(dto.store())
         .build();
   }
 }
