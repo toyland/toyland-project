@@ -2,34 +2,24 @@ package com.toyland.ai.presentation;
 
 
 import com.toyland.ai.application.QnaService;
+import com.toyland.ai.model.AiComp;
 import com.toyland.ai.model.Qna;
 import com.toyland.ai.presentation.dto.AiRequestDto;
 import com.toyland.ai.presentation.dto.AiResponseDto;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class QnaController {
 
-    @Value("${openai.model}")
-    private String model;
+   private final AiComp aiComp;
+   private final OpenApiFeignClient OpenApiFeignClient;
+   private final QnaService qnaService;
 
-    @Value("${openai.api.url}")
-    private String apiURL;
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    private final QnaService qnaService;
-
-    public QnaController(QnaService qnaService) {
-        this.qnaService = qnaService;
-    }
 
     /**
      * OpenAI로 질문을 보내고 답변을 받습니다.
@@ -38,8 +28,8 @@ public class QnaController {
      */
     @GetMapping("/ai_qna")
     public ResponseEntity<String> getAnswer(@RequestParam String qna) {
-        AiRequestDto request = new AiRequestDto(model, qna);
-        AiResponseDto response = restTemplate.postForObject(apiURL, request, AiResponseDto.class);
+        AiRequestDto request = new AiRequestDto(aiComp.getModel(),qna);
+        AiResponseDto response = OpenApiFeignClient.getAnswer(request);
         String answer = response.getChoices().get(0).getMessage().getContent();
         return ResponseEntity.ok(answer);
     }
