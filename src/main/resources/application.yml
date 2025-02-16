@@ -18,8 +18,10 @@ spring:
         default_batch_fetch_size: 10
 jwt:
   secret_key: ${JWT_SECRET_KEY}
+
+
 openai:
-  model: ${OPENAI_MODEL}
   api:
-    url: ${OPENAI_API_URL}
     key: ${OPENAI_API_KEY}
+  model: ${OPENAI_MODEL}
+
