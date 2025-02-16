@@ -1,6 +1,7 @@
 package com.toyland.orderproduct.model;
 
 
+import com.toyland.order.model.Order;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class OrderProduct {
     @Column(name = "content", nullable = false)
     private String quantity;
 
-    // 주문 ID (FK, 실제 DB에는 존재하지만 엔티티에는 존재하지 않음)
-    // private UUID order_id;
+    @ManyToOne
+    @JoinColumn(name = "order_id") // p_order 테이블의 order_id로 외래키(FK) 설정
+    private Order order;
 }
