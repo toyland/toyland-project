@@ -38,5 +38,8 @@ public class Region {
                 .build();
     }
 
-
+    //테스트 생성자
+    public Region(String regionName) {
+        this.regionName = regionName;
+    }
 }

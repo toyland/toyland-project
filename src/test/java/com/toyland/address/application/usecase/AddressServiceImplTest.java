@@ -5,6 +5,9 @@ import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
 import com.toyland.common.IntegrationTestSupport;
+import com.toyland.global.exception.CustomException;
+import com.toyland.region.model.entity.Region;
+import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
@@ -33,12 +36,17 @@ class AddressServiceImplTest extends IntegrationTestSupport {
     AddressRepository addressRepository;
 
     @Autowired
+    RegionRepository regionRepository;
+
+    @Autowired
     UserRepository userRepository;
 
+    //테스트 케이스 하나 만들고 구성하면 유지보수 쉬울 것 같음
     @AfterEach
     void tearDown() {
         addressRepository.deleteAll();
         userRepository.deleteAll();
+        regionRepository.deleteAll();
     }
 
     @DisplayName("생성된 User가 자신의 주소를 생성하고 검증")
@@ -47,9 +55,11 @@ class AddressServiceImplTest extends IntegrationTestSupport {
         //given
         User user = new User("테스터", "1234", UserRoleEnum.CUSTOMER);
         userRepository.save(user);
+        Region region = new Region("테스트 지역");
+        regionRepository.save(region);
 
         //when
-        AddressResponseDto createdAddress = addressService.createAddress(new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", user.getId()));
+        AddressResponseDto createdAddress = addressService.createAddress(new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", user.getId(), region.getId()));
         Address findBycreatedAddress = addressService.findByAddressId(createdAddress.addressId());
 
         //then
@@ -63,10 +73,12 @@ class AddressServiceImplTest extends IntegrationTestSupport {
     void invalidUser_fail_Test() {
         //given
         Long invalidUser = 123L;
-        CreateAddressRequestDto createAddressRequestDto = new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", invalidUser);
+        Region region = new Region("테스트 지역");
+        regionRepository.save(region);
+        CreateAddressRequestDto createAddressRequestDto = new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", invalidUser, region.getId());
 
         //when
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        CustomException exception = assertThrows(CustomException.class, () -> {
             addressService.createAddress(createAddressRequestDto);
         });
 
@@ -81,10 +93,12 @@ class AddressServiceImplTest extends IntegrationTestSupport {
         //given
         User user = new User("테스터", "1234", UserRoleEnum.CUSTOMER);
         userRepository.save(user);
+        Region region = new Region("테스트 지역");
+        regionRepository.save(region);
 
         //when
-        AddressResponseDto createdAddress = addressService.createAddress(new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", user.getId()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        AddressResponseDto createdAddress = addressService.createAddress(new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", user.getId(), region.getId()));
+        CustomException exception = assertThrows(CustomException.class, () -> {
             addressService.findByAddressId(UUID.fromString("6fa2bafc-a7d3-4597-abaf-92630b435cdc"));
         });
 
