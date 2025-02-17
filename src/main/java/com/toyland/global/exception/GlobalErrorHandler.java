@@ -1,5 +1,6 @@
 package com.toyland.global.exception;
 
+import com.toyland.global.exception.GlobalErrorHandler.Response.ErrorField;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -53,9 +54,9 @@ public class GlobalErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Response> handleMethodArgumentNotValidException(
         MethodArgumentNotValidException e) {
-        List<Response.ErrorField<Object>> errorFields = e.getBindingResult().getFieldErrors()
+        List<Response.ErrorField> errorFields = e.getBindingResult().getFieldErrors()
             .stream()
-            .map(fieldError -> new Response.ErrorField<>(
+            .map(fieldError -> new Response.ErrorField(
                 fieldError.getRejectedValue(),
                 fieldError.getDefaultMessage()))
             .toList();
@@ -72,8 +73,8 @@ public class GlobalErrorHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Response> handleConstraintViolationException(
         ConstraintViolationException e) {
-        List<Response.ErrorField<Object>> errorFields = e.getConstraintViolations().stream()
-            .map(violation -> new Response.ErrorField<>(
+        List<ErrorField> errorFields = e.getConstraintViolations().stream()
+            .map(violation -> new ErrorField(
                 violation.getInvalidValue(),
                 violation.getMessage()))
             .toList();
@@ -84,9 +85,9 @@ public class GlobalErrorHandler {
     }
 
 
-    public record Response(String code, String message, List<ErrorField<Object>> errors) {
+    public record Response(String code, String message, List<ErrorField> errors) {
 
-        public record ErrorField<T>(T value, String message) {
+        public record ErrorField(Object value, String message) {
 
         }
 
