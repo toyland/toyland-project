@@ -4,6 +4,7 @@ import com.toyland.ai.presentation.dto.QnaRequestDto;
 import com.toyland.store.model.entity.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,15 +33,16 @@ public class Qna {
   @Column
   private String answer;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "store_Id")
-  private Store storeId;
+  private Store store;
 
-  public Qna(String question, String answer, UUID storeId) {
+
+  public Qna(String question, String answer, Store store) {
     this.question = question;
     this.answer = answer;
     this.aiName = "OpenAI"; // 기본값 설정
-    //this.storeId = storeId;
+    this.store = store;
   }
 
   public static Qna of(QnaRequestDto qnaRequestDto) {

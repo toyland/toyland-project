@@ -3,6 +3,7 @@ package com.toyland.ai.presentation;
 
 import com.toyland.ai.application.QnaService;
 import com.toyland.ai.model.Qna;
+import com.toyland.ai.presentation.dto.PagedResponse;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
 import com.toyland.ai.presentation.dto.QnaResponseDto;
 import com.toyland.global.config.security.UserDetailsImpl;
@@ -45,9 +46,9 @@ public class QnaController {
    * @return 질문과 답변
    */
   @GetMapping("/{qnaId}")
-  public ResponseEntity<QnaResponseDto> getAiQna(@PathVariable UUID qnaId) {
-    QnaResponseDto responseDto = qnaService.getQna(qnaId);
-    return ResponseEntity.ok(responseDto);
+  public ResponseEntity<Qna> getAiQna(@PathVariable UUID qnaId) {
+    Qna qna = qnaService.getQna(qnaId);
+    return ResponseEntity.ok(qna);
   }
 
   /**
@@ -62,13 +63,15 @@ public class QnaController {
    * @return 질문/답변 리스트
    */
   @GetMapping("/search")
-  public Page<QnaResponseDto> getAiQnaList(@RequestParam("page") int page,
+  public ResponseEntity<PagedResponse<QnaResponseDto>> getAiQnaList(@RequestParam("page") int page,
       @RequestParam("size") int size,
       @RequestParam("sortBy") String sortBy,
       @RequestParam("isAsc") boolean isAsc,
       @RequestParam UUID storeId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    return qnaService.getQnaList(userDetails.getUser(), page - 1, size, sortBy, isAsc, storeId);
+    Page<QnaResponseDto> qnaList = qnaService.getQnaList(userDetails.getUser(), page - 1, size,
+        sortBy, isAsc, storeId);
+    return ResponseEntity.ok(new PagedResponse<>(qnaList));
   }
 
 

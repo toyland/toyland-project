@@ -38,7 +38,7 @@ public class QnaService {
   }
 
 
-  public QnaResponseDto getQna(UUID qnaId) {
+  public Qna getQna(UUID qnaId) {
     return qnaRepository.findByAiId(qnaId).orElseThrow(
         () -> new IllegalArgumentException("존재하지 않는 qna입니다. qna id를 확인해주세요."));
   }
@@ -62,10 +62,10 @@ public class QnaService {
     // 사용자 권한 가져와서 ADMIN 이면 전체 조회, OWNER 면 본인이 추가한 부분 조회
     if (userRoleEnum == UserRoleEnum.OWNER) {
       // 사용자 권한이 OWNER 일 경우
-      qnaList = qnaRepository.findAllByOwner(userId, pageable, storeId);
+      qnaList = qnaRepository.findAllByOwner(userId, storeId, pageable);
     } else {
       //Manager 혹은 ADMIN 일 경우
-      qnaList = qnaRepository.findAllByStoreId(pageable, storeId);
+      qnaList = qnaRepository.findAllByStoreId(storeId, pageable);
     }
 
     return qnaList.map(QnaResponseDto::new);
