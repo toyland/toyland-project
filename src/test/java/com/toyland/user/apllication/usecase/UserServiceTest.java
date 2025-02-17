@@ -1,10 +1,7 @@
 package com.toyland.user.apllication.usecase;
 
-import com.toyland.address.application.usecase.AddressService;
-import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.global.config.security.UserDetailsImpl;
-import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.user.application.UserService;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
@@ -36,29 +33,10 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private AddressService addressService;
-
-    @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private RegionRepository regionRepository;
-
     @AfterEach
     void tearDown() {
         userRepository.deleteAllInBatch();
     }
-
-//    @BeforeEach
-//    void setUp() {
-//        //임의 유저생성
-//        userDetails = new UserDetailsImpl(
-//                new User(1L,
-//                "testuser",
-//                passwordEncoder.encode("password123"),
-//                UserRoleEnum.MASTER));
-//    }
 
     @DisplayName("회원 정보 저장")
     @Test
