@@ -7,10 +7,12 @@ import com.toyland.ai.presentation.OpenApiFeignClient;
 import com.toyland.ai.presentation.dto.AiRequestDto;
 import com.toyland.ai.presentation.dto.AiResponseDto;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
+import com.toyland.ai.presentation.dto.QnaResponseDto;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.ProductErrorCode;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,9 +40,9 @@ public class QnaService {
         );
     }
 
-//    public Page<QnaResponseDto> getQnaList(int i, int size, String sortBy, boolean isAsc,
-//        UUID storeId) {
-//        //페이징 처리
+    public Page<QnaResponseDto> getQnaList(int i, int size, String sortBy, boolean isAsc,
+        UUID storeId) {
+        //페이징 처리
 //        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
 //        Sort sort = Sort.by(direction, sortBy);
 //        Pageable pageable = PageRequest.of(i, size, sort);
@@ -50,7 +52,8 @@ public class QnaService {
 //        Page<QnaResponseDto> qnaList = qnaPage.map(QnaResponseDto::from);
 //
 //        return qnaList;
-//    }
+        return null;
+    }
 
 
 }

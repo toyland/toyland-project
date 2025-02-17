@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author : hanjihoon
  * @Date : 2025. 02. 15.
  */
-
 class AddressServiceImplTest extends IntegrationTestSupport {
 
     @Autowired

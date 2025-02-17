@@ -3,15 +3,19 @@ package com.toyland.ai.presentation;
 
 import com.toyland.ai.application.QnaService;
 import com.toyland.ai.model.Qna;
+import com.toyland.ai.presentation.dto.PagedResponse;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
+import com.toyland.ai.presentation.dto.QnaResponseDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -55,16 +59,17 @@ public class QnaController {
      * @param storeId
      * @return 질문/답변 리스트
      */
-//  @GetMapping("/search")
-//  public ResponseEntity<PagedResponse<QnaResponseDto>> getAiQnaList(@RequestParam("page") int page,
-//      @RequestParam("size") int size,
-//      @RequestParam("sortBy") String sortBy,
-//      @RequestParam("isAsc") boolean isAsc,
-//      @RequestParam UUID storeId) {
-//    Page<QnaResponseDto> qnaList = qnaService.getQnaList(page - 1, size,
-//        sortBy, isAsc, storeId);
-//    return ResponseEntity.ok(new PagedResponse<>(qnaList));
-//  }
+    @GetMapping("/search")
+    public ResponseEntity<PagedResponse<QnaResponseDto>> getAiQnaList(
+        @RequestParam("page") int page,
+        @RequestParam("size") int size,
+        @RequestParam("sortBy") String sortBy,
+        @RequestParam("isAsc") boolean isAsc,
+        @RequestParam UUID storeId) {
+        Page<QnaResponseDto> qnaList = qnaService.getQnaList(page - 1, size,
+            sortBy, isAsc, storeId);
+        return ResponseEntity.ok(new PagedResponse<>(qnaList));
+    }
 
 
 }
