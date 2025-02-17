@@ -19,8 +19,8 @@ public class AddressFacadeImpl implements AddressFacade {
 
 
     @Override
-    public AddressResponseDto createAddress(CreateAddressRequestDto requestDto) {
-        return addressService.createAddress(requestDto);
+    public AddressResponseDto createAddress(CreateAddressRequestDto requestDto, Long userId) {
+        return addressService.createAddress(requestDto, userId);
     }
 
     @Override

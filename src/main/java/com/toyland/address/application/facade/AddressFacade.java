@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public interface AddressFacade {
 
-    AddressResponseDto createAddress(CreateAddressRequestDto requestDto);
+    AddressResponseDto createAddress(CreateAddressRequestDto requestDto, Long userId);
 
     AddressResponseDto findByAddressId(UUID addressId);
 

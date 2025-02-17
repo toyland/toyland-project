@@ -31,9 +31,9 @@ public class AddressServiceImpl implements AddressService {
     private final RegionService regionService;
 
     @Override
-    public AddressResponseDto createAddress(CreateAddressRequestDto requestDto) {
+    public AddressResponseDto createAddress(CreateAddressRequestDto requestDto, Long userId) {
 
-        User user = userRepository.findById(requestDto.userId())
+        User user = userRepository.findById(userId)
             .orElseThrow(() ->
                 CustomException.from(UserErrorCode.USER_NOT_FOUND));
 

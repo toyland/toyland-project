@@ -31,8 +31,9 @@ public class AddressController {
 
     @PostMapping
     public ResponseEntity<AddressResponseDto> createAddress(
-        @Valid @RequestBody CreateAddressRequestDto dto) {
-        return ResponseEntity.ok(addressFacade.createAddress(dto));
+        @Valid @RequestBody CreateAddressRequestDto dto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok(addressFacade.createAddress(dto, userDetails.getUser().getId()));
     }
 
     @GetMapping("/{addressId}")
