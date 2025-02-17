@@ -4,7 +4,6 @@ import com.toyland.ai.presentation.dto.QnaRequestDto;
 import com.toyland.store.model.entity.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,7 +32,7 @@ public class Qna {
   @Column
   private String answer;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "store_Id")
   private Store store;
 
@@ -45,7 +44,7 @@ public class Qna {
     this.store = store;
   }
 
-  public static Qna of(QnaRequestDto qnaRequestDto) {
+  public static Qna from(QnaRequestDto qnaRequestDto) {
     return new Qna(
         qnaRequestDto.getQuestion(),
         (qnaRequestDto.getAnswer() != null) ? qnaRequestDto.getAnswer() : "No answer provided",

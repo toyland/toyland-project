@@ -6,12 +6,10 @@ import com.toyland.ai.model.Qna;
 import com.toyland.ai.presentation.dto.PagedResponse;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
 import com.toyland.ai.presentation.dto.QnaResponseDto;
-import com.toyland.global.config.security.UserDetailsImpl;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +57,6 @@ public class QnaController {
    * @param sortBy
    * @param isAsc
    * @param storeId
-   * @param userDetails
    * @return 질문/답변 리스트
    */
   @GetMapping("/search")
@@ -67,9 +64,8 @@ public class QnaController {
       @RequestParam("size") int size,
       @RequestParam("sortBy") String sortBy,
       @RequestParam("isAsc") boolean isAsc,
-      @RequestParam UUID storeId,
-      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    Page<QnaResponseDto> qnaList = qnaService.getQnaList(userDetails.getUser(), page - 1, size,
+      @RequestParam UUID storeId) {
+    Page<QnaResponseDto> qnaList = qnaService.getQnaList(page - 1, size,
         sortBy, isAsc, storeId);
     return ResponseEntity.ok(new PagedResponse<>(qnaList));
   }
