@@ -7,9 +7,12 @@ package com.toyland.category.application.usecase;
 import com.toyland.category.model.entity.Category;
 import com.toyland.category.model.repository.CategoryRepository;
 import com.toyland.category.presentation.dto.CreateCategoryRequestDto;
-import java.util.UUID;
+import com.toyland.global.exception.CustomException;
+import com.toyland.global.exception.type.domain.CategoryErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -24,7 +27,7 @@ public class CategoryServiceImpl implements CategoryService {
 
   private Category findCategoryById(UUID id) {
     return categoryRepository.findById(id).orElseThrow(
-        () -> new IllegalArgumentException("존재하지 않는 카테고리입니다. 카테고리 id를 확인해주세요.")
+        () -> CustomException.from(CategoryErrorCode.CATEGORY_NOT_FOUND)
     );
   }
 

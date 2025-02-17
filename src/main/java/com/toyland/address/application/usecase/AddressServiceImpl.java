@@ -5,7 +5,8 @@ import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
 import com.toyland.global.exception.CustomException;
-import com.toyland.global.exception.type.BusinessErrorCode;
+import com.toyland.global.exception.type.domain.AddressErrorCode;
+import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.region.application.usecase.RegionService;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.presentation.dto.RegionResponseDto;
@@ -27,13 +28,15 @@ import java.util.UUID;
 public class AddressServiceImpl implements AddressService{
 
     private final AddressRepository addressRepository;
-    // userRepository 이 부분은 정길님이 UserService에서 findByUserId 만들면 service를 // 가져오도록 리팩토링 예정
+    // userRepository 이 부분은 정길님이 UserService에서 findByUserId 만들면 service를 가져오도록 리팩토링 예정
     private final UserRepository userRepository;
     private final RegionService regionService;
     @Override
     public AddressResponseDto createAddress(CreateAddressRequestDto requestDto) {
+
         User user = userRepository.findById(requestDto.userId())
-                .orElseThrow(() -> new CustomException(BusinessErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() ->
+                        CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
         RegionResponseDto findByRegionId = regionService.findByRegionId(requestDto.regionId());
 
@@ -47,6 +50,6 @@ public class AddressServiceImpl implements AddressService{
     public Address findByAddressId(UUID addressId) {
         return addressRepository.findById(addressId)
                 .orElseThrow(() ->
-                        new CustomException(BusinessErrorCode.ADDRESS_NOT_FOUND));
+                        CustomException.from(AddressErrorCode.ADDRESS_NOT_FOUND));
     }
 }

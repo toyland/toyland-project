@@ -1,9 +1,15 @@
 package com.toyland.global.exception;
 
+import jakarta.validation.ConstraintViolationException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.List;
 
 /**
  * @author : hanjihoon
@@ -39,4 +45,59 @@ public class GlobalErrorHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse("INTERNAL_SERVER_ERROR", "서버 내부 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
+
+    /**
+     * 요청 받는 DTO 검증 에러 ExceptionHandler
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Response> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        List<Response.ErrorField> errorFields = e.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> new Response.ErrorField(
+                        fieldError.getRejectedValue(),
+                        fieldError.getDefaultMessage()))
+                .toList();
+
+        return ResponseEntity
+                .badRequest()
+                .body(new Response("INVALID_REQUEST_400", "입력값이 올바르지 않습니다.", errorFields));
+    }
+
+
+    /**
+     * @PathVariable에서 Valid 검증 에러 ExceptionHandler
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Response> handleConstraintViolationException(ConstraintViolationException e) {
+        List<Response.ErrorField> errors = e.getConstraintViolations().stream()
+                .map(violation -> new Response.ErrorField(
+                        violation.getInvalidValue(),
+                        violation.getMessage()))
+                .toList();
+
+        return ResponseEntity
+                .badRequest()
+                .body(new Response("INVALID_ARGUMENT_400", "요청값이 올바르지 않습니다.", errors));
+    }
+
+
+    @Getter
+    @AllArgsConstructor
+    public static class Response{
+        private String code;
+        private String message;
+        private List<ErrorField> errors;
+
+        @Getter
+        @AllArgsConstructor
+        public static class ErrorField {
+            private Object value;
+            private String message;
+        }
+    }
+
+
+
+
+
+
 }
