@@ -1,7 +1,7 @@
 ### Address 생성
 POST http://localhost:8080/api/v1/addresses
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3NjI5NTcsImlhdCI6MTczOTc1OTM1N30.ElcfPYtUBdA3iJICd7Cy-ORMrzU_37yYssfOh5LNQo0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3NzcxMzYsImlhdCI6MTczOTc3MzUzNn0.mm0Y70xvtJV1Z2wog7kD29Adjz0xBdNHEGE-eY2zc4w
 
 {
   "addressName": null,
