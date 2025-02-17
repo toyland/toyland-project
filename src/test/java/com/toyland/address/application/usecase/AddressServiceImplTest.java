@@ -1,6 +1,9 @@
 package com.toyland.address.application.usecase;
 
-import com.toyland.address.model.entity.Address;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
@@ -11,16 +14,11 @@ import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
@@ -44,9 +42,9 @@ class AddressServiceImplTest extends IntegrationTestSupport {
     //테스트 케이스 하나 만들고 구성하면 유지보수 쉬울 것 같음
     @AfterEach
     void tearDown() {
-        addressRepository.deleteAll();
-        userRepository.deleteAll();
-        regionRepository.deleteAll();
+        addressRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+        regionRepository.deleteAllInBatch();
     }
 
     @DisplayName("생성된 User가 자신의 주소를 생성하고 검증")
@@ -59,12 +57,14 @@ class AddressServiceImplTest extends IntegrationTestSupport {
         regionRepository.save(region);
 
         //when
-        AddressResponseDto createdAddress = addressService.createAddress(new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", user.getId(), region.getId()));
-        Address findBycreatedAddress = addressService.findByAddressId(createdAddress.addressId());
+        AddressResponseDto createdAddress = addressService.createAddress(
+            new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", user.getId(), region.getId()));
+        AddressResponseDto findByAddress = addressService.findByAddressId(
+            createdAddress.addressId());
 
         //then
         assertThat(createdAddress.addressName()).isEqualTo("경기도 성남시 분당구 정자일로 95");
-        assertThat(createdAddress.addressId()).isEqualTo(findBycreatedAddress.getId());
+        assertThat(createdAddress.addressId()).isEqualTo(findByAddress.addressId());
 
     }
 
@@ -75,7 +75,8 @@ class AddressServiceImplTest extends IntegrationTestSupport {
         Long invalidUser = 123L;
         Region region = new Region("테스트 지역");
         regionRepository.save(region);
-        CreateAddressRequestDto createAddressRequestDto = new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", invalidUser, region.getId());
+        CreateAddressRequestDto createAddressRequestDto = new CreateAddressRequestDto(
+            "경기도 성남시 분당구 정자일로 95", invalidUser, region.getId());
 
         //when
         CustomException exception = assertThrows(CustomException.class, () -> {
@@ -97,7 +98,8 @@ class AddressServiceImplTest extends IntegrationTestSupport {
         regionRepository.save(region);
 
         //when
-        AddressResponseDto createdAddress = addressService.createAddress(new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", user.getId(), region.getId()));
+        AddressResponseDto createdAddress = addressService.createAddress(
+            new CreateAddressRequestDto("경기도 성남시 분당구 정자일로 95", user.getId(), region.getId()));
         CustomException exception = assertThrows(CustomException.class, () -> {
             addressService.findByAddressId(UUID.fromString("6fa2bafc-a7d3-4597-abaf-92630b435cdc"));
         });
@@ -106,7 +108,6 @@ class AddressServiceImplTest extends IntegrationTestSupport {
         assertEquals("존재하지 않는 주소 입니다. 올바른 주소 ID를 입력해주세요.", exception.getMessage());
 
     }
-
 
 
 }

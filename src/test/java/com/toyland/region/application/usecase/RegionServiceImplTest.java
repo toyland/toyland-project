@@ -1,5 +1,8 @@
 package com.toyland.region.application.usecase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
@@ -12,9 +15,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author : hanjihoon
@@ -32,8 +32,8 @@ class RegionServiceImplTest extends IntegrationTestSupport {
 
     @AfterEach
     void tearDown() {
-        regionRepository.deleteAll();
-        userRepository.deleteAll();
+        regionRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
     }
 
     @DisplayName("지역 단 건 조회 테스트")
@@ -59,7 +59,8 @@ class RegionServiceImplTest extends IntegrationTestSupport {
         CreateRegionRequestDto createRegionRequestDto = new CreateRegionRequestDto("부산");
 
         //when
-        RegionResponseDto regionResponseDto = regionService.updateRegion(savedRegion.getId(), createRegionRequestDto);
+        RegionResponseDto regionResponseDto = regionService.updateRegion(savedRegion.getId(),
+            createRegionRequestDto);
 
         //then
         assertThat(regionResponseDto.regionName()).isEqualTo(createRegionRequestDto.regionName());
@@ -76,13 +77,13 @@ class RegionServiceImplTest extends IntegrationTestSupport {
         User savedUser = userRepository.save(user);
         //when
         Region deleteBeforeRegion = regionRepository.findById(savedRegion.getId())
-                .orElseThrow(() -> new RuntimeException("없는 지역 입니다."));
+            .orElseThrow(() -> new RuntimeException("없는 지역 입니다."));
         regionService.deleteByRegionId(savedRegion.getId(), savedUser.getId());
 
         // then 삭제 후 조회하면 예외가 발생해야 함
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             regionRepository.findById(savedRegion.getId())
-                    .orElseThrow(() -> new RuntimeException("삭제된 지역이 조회되지 않음"));
+                .orElseThrow(() -> new RuntimeException("삭제된 지역이 조회되지 않음"));
         });
 
         assertThat(exception.getMessage()).isEqualTo("삭제된 지역이 조회되지 않음");

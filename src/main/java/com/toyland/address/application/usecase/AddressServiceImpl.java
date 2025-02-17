@@ -12,11 +12,10 @@ import com.toyland.region.model.entity.Region;
 import com.toyland.region.presentation.dto.RegionResponseDto;
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 /**
  * @author : hanjihoon
@@ -25,31 +24,49 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AddressServiceImpl implements AddressService{
+public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
-    // userRepository 이 부분은 정길님이 UserService에서 findByUserId 만들면 service를 가져오도록 리팩토링 예정
     private final UserRepository userRepository;
     private final RegionService regionService;
+
     @Override
     public AddressResponseDto createAddress(CreateAddressRequestDto requestDto) {
 
         User user = userRepository.findById(requestDto.userId())
-                .orElseThrow(() ->
-                        CustomException.from(UserErrorCode.USER_NOT_FOUND));
+            .orElseThrow(() ->
+                CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
         RegionResponseDto findByRegionId = regionService.findByRegionId(requestDto.regionId());
 
-        Address savedAddress = addressRepository.save(Address.of(requestDto, user, Region.from(findByRegionId)));
+        Address savedAddress = addressRepository.save(
+            Address.of(requestDto, user, Region.from(findByRegionId)));
 
         return AddressResponseDto.from(savedAddress);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Address findByAddressId(UUID addressId) {
-        return addressRepository.findById(addressId)
-                .orElseThrow(() ->
-                        CustomException.from(AddressErrorCode.ADDRESS_NOT_FOUND));
+    public AddressResponseDto findByAddressId(UUID addressId) {
+        return AddressResponseDto.from(addressRepository.findById(addressId)
+            .orElseThrow(() ->
+                CustomException.from(AddressErrorCode.ADDRESS_NOT_FOUND)));
+    }
+
+    @Override
+    public AddressResponseDto updateAddress(UUID addressId, CreateAddressRequestDto requestDto) {
+        Address findAddress = addressRepository.findById(addressId)
+            .orElseThrow(() ->
+                CustomException.from(AddressErrorCode.ADDRESS_NOT_FOUND));
+        findAddress.updateAddress(requestDto);
+        return AddressResponseDto.from(findAddress);
+    }
+
+    @Override
+    public void deleteAddress(UUID addressId, Long userId) {
+        Address findAddress = addressRepository.findById(addressId)
+            .orElseThrow(() ->
+                CustomException.from(AddressErrorCode.ADDRESS_NOT_FOUND));
+        findAddress.addDeletedField(userId);
     }
 }
