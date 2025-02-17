@@ -24,78 +24,78 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 class StoreServiceTest extends IntegrationTestSupport {
 
-  @Autowired
-  private StoreService storeService;
+    @Autowired
+    private StoreService storeService;
 
-  @Autowired
-  private StoreRepository storeRepository;
+    @Autowired
+    private StoreRepository storeRepository;
 
-  @Autowired
-  private RegionRepository regionRepository;
+    @Autowired
+    private RegionRepository regionRepository;
 
-  @Autowired
-  private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-  @AfterEach
-  void tearDown() {
-    storeRepository.deleteAllInBatch();
-    regionRepository.deleteAll();
-    userRepository.deleteAll();
-  }
+    @AfterEach
+    void tearDown() {
+        storeRepository.deleteAllInBatch();
+        regionRepository.deleteAllInBatch();
+        userRepository.deleteAllInBatch();
+    }
 
-  @DisplayName("상점을 저장한다.")
-  @Test
-  void createStore() {
-    // given
-    Region region = regionRepository.save(createRegion("서울"));
-    User owner = userRepository.save(createMaster("홍길동"));
+    @DisplayName("상점을 저장한다.")
+    @Test
+    void createStore() {
+        // given
+        Region region = regionRepository.save(createRegion("서울"));
+        User owner = userRepository.save(createMaster("홍길동"));
 
-    // when
-    storeService.createStore(new CreateStoreRequestDto(
-        "굽네치킨",
-        "굽네치킨입니다.",
-        "경기도 성남시 분당구 가로 1",
-        region.getId(),
-        owner.getId()));
+        // when
+        storeService.createStore(new CreateStoreRequestDto(
+            "굽네치킨",
+            "굽네치킨입니다.",
+            "경기도 성남시 분당구 가로 1",
+            region.getId(),
+            owner.getId()));
 
-    // then
-    List<Store> all = storeRepository.findAll();
-    assertThat(all).hasSize(1)
-        .extracting("name", "content", "address")
-        .containsExactlyInAnyOrder(
-            tuple("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1")
-        );
-  }
+        // then
+        List<Store> all = storeRepository.findAll();
+        assertThat(all).hasSize(1)
+            .extracting("name", "content", "address")
+            .containsExactlyInAnyOrder(
+                tuple("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1")
+            );
+    }
 
-  @DisplayName("상품을 조회합니다.")
-  @Test
-  void readStore(){
-    // given
-    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
-    Store nene = storeRepository.save(createStore("네네치킨", "네네치킨입니다.", "경기도 성남시 분당구 가로 2"));
+    @DisplayName("상품을 조회합니다.")
+    @Test
+    void readStore() {
+        // given
+        Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+        Store nene = storeRepository.save(createStore("네네치킨", "네네치킨입니다.", "경기도 성남시 분당구 가로 2"));
 
-    // when
-    Store result = storeService.readStore(goobne.getId());
+        // when
+        Store result = storeService.readStore(goobne.getId());
 
-    // then
-    assertThat(result)
-        .extracting("name", "content", "address")
-        .contains("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1");
-  }
+        // then
+        assertThat(result)
+            .extracting("name", "content", "address")
+            .contains("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1");
+    }
 
-  private User createMaster(String username) {
-    return new User(username, "password", UserRoleEnum.MASTER);
-  }
+    private User createMaster(String username) {
+        return new User(username, "password", UserRoleEnum.MASTER);
+    }
 
-  private Region createRegion(String name) {
-    return new Region("서울");
-  }
+    private Region createRegion(String name) {
+        return new Region("서울");
+    }
 
-  private Store createStore(String name, String content, String address){
-    return Store.builder()
-        .name(name)
-        .content(content)
-        .address(address)
-        .build();
-  }
+    private Store createStore(String name, String content, String address) {
+        return Store.builder()
+            .name(name)
+            .content(content)
+            .address(address)
+            .build();
+    }
 }
