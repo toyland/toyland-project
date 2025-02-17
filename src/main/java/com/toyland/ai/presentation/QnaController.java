@@ -50,6 +50,17 @@ public class QnaController {
     return ResponseEntity.ok(responseDto);
   }
 
+  /**
+   * 해당 유저의 음식점에서 질문한 질문과 답변을 페이징하여 가져온다.
+   *
+   * @param page
+   * @param size
+   * @param sortBy
+   * @param isAsc
+   * @param storeId
+   * @param userDetails
+   * @return 질문/답변 리스트
+   */
   @GetMapping("/search")
   public Page<QnaResponseDto> getAiQnaList(@RequestParam("page") int page,
       @RequestParam("size") int size,
