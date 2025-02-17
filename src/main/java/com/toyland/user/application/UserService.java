@@ -1,7 +1,7 @@
 package com.toyland.user.application;
 
 import com.toyland.global.exception.CustomException;
-import com.toyland.global.exception.type.BusinessErrorCode;
+import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
@@ -34,6 +34,6 @@ public class UserService {
 
     public User findbyUserId(Long userId){
         return userRepository.findById(userId).orElseThrow(()->
-                new CustomException(BusinessErrorCode.USER_NOT_FOUND));
+                CustomException.from(UserErrorCode.USER_NOT_FOUND));
     }
 }

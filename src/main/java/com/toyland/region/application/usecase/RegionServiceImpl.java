@@ -1,7 +1,7 @@
 package com.toyland.region.application.usecase;
 
 import com.toyland.global.exception.CustomException;
-import com.toyland.global.exception.type.BusinessErrorCode;
+import com.toyland.global.exception.type.domain.RegionErrorCode;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.region.presentation.dto.CreateRegionRequestDto;
@@ -33,7 +33,7 @@ public class RegionServiceImpl implements RegionService{
     public RegionResponseDto findByRegionId(UUID regionId) {
         return RegionResponseDto.from(regionRepository.findById(regionId)
                 .orElseThrow(() ->
-                        new CustomException(BusinessErrorCode.REGION_NOT_FOUND)));
+                        CustomException.from(RegionErrorCode.REGION_NOT_FOUND)));
 
     }
 
@@ -41,7 +41,7 @@ public class RegionServiceImpl implements RegionService{
     public RegionResponseDto updateRegion(UUID regionId, CreateRegionRequestDto requestDto) {
         Region findRegion = regionRepository.findById(regionId)
                 .orElseThrow(() ->
-                        new CustomException(BusinessErrorCode.REGION_NOT_FOUND));
+                        CustomException.from(RegionErrorCode.REGION_NOT_FOUND));
         findRegion.updateRegion(requestDto.regionName());
         return RegionResponseDto.from(findRegion);
     }
@@ -50,7 +50,7 @@ public class RegionServiceImpl implements RegionService{
     public void deleteByRegionId(UUID regionId, Long userId) {
         Region findRegion = regionRepository.findById(regionId)
                 .orElseThrow(() ->
-                        new CustomException(BusinessErrorCode.REGION_NOT_FOUND));
+                        CustomException.from(RegionErrorCode.REGION_NOT_FOUND));
         findRegion.addDeletedField(userId);
     }
 
