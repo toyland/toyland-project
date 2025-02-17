@@ -5,11 +5,20 @@
 package com.toyland.store.presentation.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import java.util.UUID;
 
 public record CreateStoreRequestDto(
-    @NotEmpty String name,
+    @NotEmpty
+    String name,
+
     String content,
-    @NotEmpty String address
+
+    @NotEmpty
+    String address,
+
+    UUID regionId,
+
+    Long ownerId
 ) {
 
 }
