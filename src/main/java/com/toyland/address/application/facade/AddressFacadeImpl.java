@@ -1,13 +1,11 @@
 package com.toyland.address.application.facade;
 
 import com.toyland.address.application.usecase.AddressService;
-import com.toyland.address.model.entity.Address;
 import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 /**
  * @author : hanjihoon
@@ -15,18 +13,28 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 @Component
-public class AddressFacadeImpl implements AddressFacade{
+public class AddressFacadeImpl implements AddressFacade {
 
     private final AddressService addressService;
 
 
     @Override
-    public AddressResponseDto createAddress(CreateAddressRequestDto requestDto) {
-        return addressService.createAddress(requestDto);
+    public AddressResponseDto createAddress(CreateAddressRequestDto requestDto, Long userId) {
+        return addressService.createAddress(requestDto, userId);
     }
 
     @Override
-    public Address findByAddressId(UUID addressId) {
+    public AddressResponseDto findByAddressId(UUID addressId) {
         return addressService.findByAddressId(addressId);
+    }
+
+    @Override
+    public AddressResponseDto updateAddress(UUID addressId, CreateAddressRequestDto requestDto) {
+        return addressService.updateAddress(addressId, requestDto);
+    }
+
+    @Override
+    public void deleteAddress(UUID addressId, Long userId) {
+        addressService.deleteAddress(addressId, userId);
     }
 }

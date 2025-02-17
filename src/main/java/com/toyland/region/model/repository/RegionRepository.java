@@ -1,7 +1,6 @@
 package com.toyland.region.model.repository;
 
 import com.toyland.region.model.entity.Region;
-
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,5 +17,5 @@ public interface RegionRepository {
     void deleteById(UUID regionId);
 
     //테스트
-    void deleteAll();
+    void deleteAllInBatch();
 }
