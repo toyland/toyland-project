@@ -1,7 +1,6 @@
 package com.toyland.region.application.facade;
 
 import com.toyland.region.application.usecase.RegionService;
-import com.toyland.region.model.entity.Region;
 import com.toyland.region.presentation.dto.CreateRegionRequestDto;
 import com.toyland.region.presentation.dto.RegionResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,17 @@ public class RegionFacadeImpl implements RegionFacade{
     }
 
     @Override
-    public Region findByRegionId(UUID regionId) {
+    public RegionResponseDto findByRegionId(UUID regionId) {
         return regionService.findByRegionId(regionId);
+    }
+
+    @Override
+    public RegionResponseDto updateRegion(UUID regionId, CreateRegionRequestDto requestDto) {
+        return regionService.updateRegion(regionId, requestDto);
+    }
+
+    @Override
+    public void deleteByRegionId(UUID regionId, Long userId) {
+        regionService.deleteByRegionId(regionId, userId);
     }
 }

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 
 /**
- * @Where(clause = "deleted_at IS NULL")
+ * @SQLRestriction("deleted_at IS NULL")
  * 상속 받고 위 어노테이션 달아주세요!
  * Pull Request에 있는 방법에 따라 Delete 부분 구현해주세요
  */

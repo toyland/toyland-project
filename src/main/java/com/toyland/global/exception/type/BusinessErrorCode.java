@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum BusinessErrorCode implements ErrorCode{
     //각 에러처리에 따른 Enum 필드 추가해야함. (더 좋은 방법 있는지 찾아보도록 하겠음)
+    //각 도메인별로 에러코드 분리해서 저장하도록 나중에 리팩토링
     USER_NOT_FOUND("BUSINESS_001", "존재하지 않는 사용자입니다.", HttpStatus.NOT_FOUND),
     INVALID_PASSWORD("BUSINESS_002", "비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     CATEGORY_NOT_FOUND("BUSINESS_003","존재하지 않는 카테고리입니다. 카테고리 id를 확인해주세요.", HttpStatus.NOT_FOUND),
