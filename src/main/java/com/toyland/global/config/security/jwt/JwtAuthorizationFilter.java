@@ -1,6 +1,8 @@
 package com.toyland.global.config.security.jwt;
 
 import com.toyland.global.config.security.UserDetailsServiceImpl;
+import com.toyland.global.exception.CustomException;
+import com.toyland.global.exception.type.ApiErrorCode;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -34,8 +36,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(tokenValue)) {
 
             if (!jwtUtil.validateToken(tokenValue)) {
-                log.error("Token Error");
-                return;
+                throw new CustomException(ApiErrorCode.UNAUTHORIZED);
             }
 
             Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
