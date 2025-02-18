@@ -1,6 +1,5 @@
 package com.toyland.ai.application;
 
-import com.toyland.ai.infrastructure.QnaRepositoryCustom;
 import com.toyland.ai.model.AiComp;
 import com.toyland.ai.model.Qna;
 import com.toyland.ai.model.repository.QnaRepository;
@@ -15,7 +14,6 @@ import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,21 +27,7 @@ public class QnaService {
   private final QnaRepository qnaRepository;
   private final AiComp aiComp;
   private final OpenApiFeignClient openApiFeignClient;
-  private final QnaRepositoryCustom qnaRepositoryCustom;
   private final StoreRepository storeRepository;
-
-  @Autowired
-  public QnaService(
-      QnaRepository qnaRepository,
-      QnaRepositoryCustom qnaRepositoryCustom,
-      AiComp aiComp,
-      OpenApiFeignClient openApiFeignClient, StoreRepository storeRepository) {
-    this.qnaRepository = qnaRepository;
-    this.qnaRepositoryCustom = qnaRepositoryCustom;
-    this.aiComp = aiComp;
-    this.openApiFeignClient = openApiFeignClient;
-    this.storeRepository = storeRepository;
-  }
 
   @Transactional
   public QnaResponseDto createQna(QnaRequestDto qnaRequestDto) {
@@ -92,7 +76,7 @@ public class QnaService {
 
 
   public Page<QnaResponseDto> getQnaList(Pageable pageable, UUID storeId) {
-    Page<Qna> qnaPage = qnaRepositoryCustom.searchQna(storeId, pageable);
+    Page<Qna> qnaPage = qnaRepository.searchQna(storeId, pageable);
     Page<QnaResponseDto> qnaList = qnaPage.map(QnaResponseDto::of);
     return qnaList;
   }

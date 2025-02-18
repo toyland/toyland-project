@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,8 @@ import org.hibernate.annotations.SQLRestriction;
 
 
 @SQLRestriction("deleted_at IS NULL")
-@Entity(name = "p_aiqna")
+@Entity
+@Table(name = "p_aiqna")
 @Getter
 @NoArgsConstructor
 public class Qna extends BaseEntity {
