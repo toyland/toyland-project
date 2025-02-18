@@ -1,17 +1,15 @@
-package com.toyland.ai.model.repository;
+package com.toyland.ai.infrastructure;
 
 import com.toyland.ai.model.Qna;
-import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface QnaRepository {
-
-    Qna save(Qna qna);
-
-    Optional<Qna> findById(UUID qnaId);
+/**
+ * @author : hanjihoon
+ * @Date : 2025. 02. 18.
+ */
+public interface QnaRepositoryCustom {
 
     Page<Qna> searchQna(UUID storeId, Pageable pageable);
-
 }

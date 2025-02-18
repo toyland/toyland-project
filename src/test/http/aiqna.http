@@ -12,7 +12,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNUR
 GET http://localhost:8080/api/v1/qna/search?page=1&size=10&sortBy=answer&isAsc=true&
     storeId=123e4567-e89b-12d3-a456-426614174000
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQxODUsImlhdCI6MTczOTc5MDU4NX0.m6zzzFHfou4fGr897VOO9O8j4ZpeOoTP8jJwivV-Kyk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODQ2MzA2LCJpYXQiOjE3Mzk4NDI3MDZ9.fQP1_MqQbglyj2Tgkz1JN7QtL_A1be3hCJxXuwKIYzE
 
 ###Qna 단건 조회
 GET http://localhost:8080/api/v1/qna/qnaId=5e38653c-cff0-4b16-9f25-e99e3ea6f506

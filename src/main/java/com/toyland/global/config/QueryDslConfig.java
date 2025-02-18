@@ -2,18 +2,22 @@ package com.toyland.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author : hanjihoon
  * @Date : 2025. 02. 17.
  */
-@Component
+@Configuration
+@RequiredArgsConstructor
 public class QueryDslConfig {
 
+    private final EntityManager em;
+
     @Bean
-    private JPAQueryFactory jpaQueryFactory(EntityManager em) {
+    public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(em);
     }
 
