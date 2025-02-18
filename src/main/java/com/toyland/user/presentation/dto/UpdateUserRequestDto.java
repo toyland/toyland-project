@@ -28,4 +28,8 @@ public class UpdateUserRequestDto {
         this.password = password;
         this.role = role;
     }
+
+    public void encodePassword(String password) {
+        this.password = password;
+    }
 }

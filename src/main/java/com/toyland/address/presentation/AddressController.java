@@ -5,18 +5,12 @@ import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
 import com.toyland.global.config.security.UserDetailsImpl;
 import jakarta.validation.Valid;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 /**
  * @author : hanjihoon
@@ -33,7 +27,7 @@ public class AddressController {
     public ResponseEntity<AddressResponseDto> createAddress(
         @Valid @RequestBody CreateAddressRequestDto dto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok(addressFacade.createAddress(dto, userDetails.getUser().getId()));
+        return ResponseEntity.ok(addressFacade.createAddress(dto, userDetails.getId()));
     }
 
     @GetMapping("/{addressId}")
@@ -53,6 +47,6 @@ public class AddressController {
     public void deleteAddressByAddressId(
         @PathVariable UUID addressId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        addressFacade.deleteAddress(addressId, userDetails.getUser().getId());
+        addressFacade.deleteAddress(addressId, userDetails.getId());
     }
 }
