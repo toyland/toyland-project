@@ -9,7 +9,7 @@ import com.toyland.global.exception.type.domain.AddressErrorCode;
 import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.region.application.usecase.RegionService;
 import com.toyland.region.model.entity.Region;
-import com.toyland.region.presentation.dto.RegionResponseDto;
+import com.toyland.region.presentation.dto.response.RegionResponseDto;
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
 import java.util.UUID;

@@ -4,13 +4,16 @@ import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.RegionErrorCode;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
-import com.toyland.region.presentation.dto.CreateRegionRequestDto;
-import com.toyland.region.presentation.dto.RegionResponseDto;
+import com.toyland.region.presentation.dto.repuest.CreateRegionRequestDto;
+import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
+import com.toyland.region.presentation.dto.response.RegionResponseDto;
+import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.UUID;
 
 /**
  * @author : hanjihoon
@@ -19,9 +22,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class RegionServiceImpl implements RegionService{
+public class RegionServiceImpl implements RegionService {
 
     private final RegionRepository regionRepository;
+
     @Override
     public RegionResponseDto createRegion(CreateRegionRequestDto requestDto) {
         Region savedRegion = regionRepository.save(Region.from(requestDto));
@@ -32,16 +36,16 @@ public class RegionServiceImpl implements RegionService{
     @Transactional(readOnly = true)
     public RegionResponseDto findByRegionId(UUID regionId) {
         return RegionResponseDto.from(regionRepository.findById(regionId)
-                .orElseThrow(() ->
-                        CustomException.from(RegionErrorCode.REGION_NOT_FOUND)));
+            .orElseThrow(() ->
+                CustomException.from(RegionErrorCode.REGION_NOT_FOUND)));
 
     }
 
     @Override
     public RegionResponseDto updateRegion(UUID regionId, CreateRegionRequestDto requestDto) {
         Region findRegion = regionRepository.findById(regionId)
-                .orElseThrow(() ->
-                        CustomException.from(RegionErrorCode.REGION_NOT_FOUND));
+            .orElseThrow(() ->
+                CustomException.from(RegionErrorCode.REGION_NOT_FOUND));
         findRegion.updateRegion(requestDto.regionName());
         return RegionResponseDto.from(findRegion);
     }
@@ -49,9 +53,15 @@ public class RegionServiceImpl implements RegionService{
     @Override
     public void deleteByRegionId(UUID regionId, Long userId) {
         Region findRegion = regionRepository.findById(regionId)
-                .orElseThrow(() ->
-                        CustomException.from(RegionErrorCode.REGION_NOT_FOUND));
+            .orElseThrow(() ->
+                CustomException.from(RegionErrorCode.REGION_NOT_FOUND));
         findRegion.addDeletedField(userId);
+    }
+
+    @Override
+    public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
+        Pageable pageable) {
+        return regionRepository.searchRegion(searchRequestDto, pageable);
     }
 
 }

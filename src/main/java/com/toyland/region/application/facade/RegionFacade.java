@@ -1,9 +1,12 @@
 package com.toyland.region.application.facade;
 
-import com.toyland.region.presentation.dto.CreateRegionRequestDto;
-import com.toyland.region.presentation.dto.RegionResponseDto;
-
+import com.toyland.region.presentation.dto.repuest.CreateRegionRequestDto;
+import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
+import com.toyland.region.presentation.dto.response.RegionResponseDto;
+import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author : hanjihoon
@@ -12,8 +15,13 @@ import java.util.UUID;
 public interface RegionFacade {
 
     RegionResponseDto createRegion(CreateRegionRequestDto requestDto);
+
     RegionResponseDto findByRegionId(UUID regionId);
+
     RegionResponseDto updateRegion(UUID regionId, CreateRegionRequestDto requestDto);
 
     void deleteByRegionId(UUID regionId, Long userId);
+
+    Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
+        Pageable pageable);
 }
