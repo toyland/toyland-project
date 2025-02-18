@@ -1,0 +1,21 @@
+### 주문 생성
+POST http://localhost:8080/api/v1/orders
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk4NzUyMTgsImlhdCI6MTczOTg3MTYxOH0.xtgYoz42Dpw9jAQsGoTppejSXZdHZIsbeJWix4Uzsz4
+
+{
+  "orderProducts": [
+    {
+      "productId": "303a3572-67eb-4ce1-9df6-ca5e38a5082e",
+      "price": 10000.00,
+      "quantity": 1
+    },
+    {
+      "productId": "0f9a2a88-4522-427e-8bef-13ac1e44307f",
+      "price": 20000.00,
+      "quantity": 2
+    }
+  ],
+  "orderType": "DELIVERY",
+  "paymentType": "CARD"
+}
