@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,8 +29,6 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Table(name = "p_region")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at IS NULL")
 public class Region extends BaseEntity {
 
@@ -43,11 +40,11 @@ public class Region extends BaseEntity {
     @Column(name = "region_name", nullable = false, length = 100)
     private String regionName;
 
-    @Builder.Default
+
     @OneToMany(mappedBy = "region")
     private List<Address> addressList = new ArrayList<>();
 
-    @Builder.Default
+
     @OneToMany(mappedBy = "region")
     private List<Store> storeList = new ArrayList<>();
 
@@ -63,6 +60,12 @@ public class Region extends BaseEntity {
         return Region.builder()
             .regionName(dto.regionName())
             .build();
+    }
+
+    @Builder
+    public Region(UUID id, String regionName) {
+        this.id = id;
+        this.regionName = regionName;
     }
 
     //update 메서드

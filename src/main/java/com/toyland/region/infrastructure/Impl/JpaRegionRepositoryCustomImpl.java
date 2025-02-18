@@ -1,19 +1,23 @@
 package com.toyland.region.infrastructure.Impl;
 
 import static com.toyland.region.model.entity.QRegion.region;
-import static com.toyland.store.model.entity.QStore.store;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Wildcard;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toyland.region.infrastructure.JpaRegionRepositoryCustom;
+import com.toyland.region.model.entity.Region;
 import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
 import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +28,7 @@ import org.springframework.data.domain.Sort;
  * @Date : 2025. 02. 18.
  */
 @RequiredArgsConstructor
+@Slf4j
 public class JpaRegionRepositoryCustomImpl implements JpaRegionRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -33,38 +38,35 @@ public class JpaRegionRepositoryCustomImpl implements JpaRegionRepositoryCustom 
         Pageable pageable) {
         List<OrderSpecifier<?>> orderSpecifierList = dynamicOrder(pageable);
 
-        List<RegionSearchResponseDto> searchRegionResponseList = queryFactory.select(
-                Projections.fields(RegionSearchResponseDto.class,
-                    region.id,
-                    region.regionName,
-                    store.id,
-                    store.name))
-            .from(region)
-            .join(region.storeList, store).fetchJoin()
-            .where(
-                store.region.id.eq(searchRequestDto.regionId()),
-                regionNameContains(searchRequestDto.regionName()),
-                storeNameContains(searchRequestDto.storeName())
-            )
+        List<Region> fetch = query(region, searchRequestDto)
             .orderBy(orderSpecifierList.toArray(new OrderSpecifier[0]))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
+            .distinct()
             .fetch();
 
-        Long totalCount = queryFactory.select(region.countDistinct())
-            .from(region)
-            .where(
-                store.region.id.eq(searchRequestDto.regionId()),
-                regionNameContains(searchRequestDto.regionName()),
-                storeNameContains(searchRequestDto.storeName())
-            ).fetchOne();
+        // RegionSearchResponseDto로 변환
+        List<RegionSearchResponseDto> regionSearchResponseDtos = fetch.stream()
+            .map(RegionSearchResponseDto::from)
+            .collect(Collectors.toList());
+
+        Long totalCount = query(Wildcard.count, searchRequestDto).fetchOne();
 
         if (totalCount == null) {
             totalCount = 0L;
         }
 
-        return new PageImpl<>(searchRegionResponseList, pageable, totalCount);
+        return new PageImpl<>(regionSearchResponseDtos, pageable, totalCount);
 
+    }
+
+    private <T> JPAQuery<T> query(Expression<T> expr, RegionSearchRequestDto searchRequestDto) {
+        return queryFactory
+            .select(expr)
+            .from(region)
+            .where(
+                regionNameContains(searchRequestDto.regionName())
+            );
     }
 
     private List<OrderSpecifier<?>> dynamicOrder(Pageable pageable) {
@@ -90,10 +92,6 @@ public class JpaRegionRepositoryCustomImpl implements JpaRegionRepositoryCustom 
             orderSpecifierList.add(new OrderSpecifier<>(Order.ASC, region.createdAt));
         }
         return orderSpecifierList;
-    }
-
-    private BooleanExpression storeNameContains(String storeName) {
-        return storeName != null ? store.name.containsIgnoreCase(storeName) : null;
     }
 
     private BooleanExpression regionNameContains(String regionName) {
