@@ -17,27 +17,27 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 public class QnaRepositoryCustomImpl implements QnaRepositoryCustom {
 
-    private final JPAQueryFactory queryFactory;
+  private final JPAQueryFactory queryFactory;
 
-    @Override
-    public Page<Qna> searchQna(UUID storeId, Pageable pageable) {
-        List<Qna> contents = queryFactory
-            .selectFrom(qna)
-            .where(qna.store.id.eq(storeId))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize() + 1)
-            // .orderBy(qna.createdDate.desc())
-            .fetch();
+  @Override
+  public Page<Qna> searchQna(UUID storeId, Pageable pageable) {
+    List<Qna> contents = queryFactory
+        .selectFrom(qna)
+        .where(qna.store.id.eq(storeId))
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize() + 1)
+        .orderBy(qna.createdAt.desc())
+        .fetch();
 
-        // 전체 개수 조회
-        long total = queryFactory
-            .select(QQna.qna.count())
-            .from(QQna.qna)
-            .where(QQna.qna.store.id.eq(storeId))
-            .fetchOne();
+    // 전체 개수 조회
+    long total = queryFactory
+        .select(QQna.qna.count())
+        .from(QQna.qna)
+        .where(QQna.qna.store.id.eq(storeId))
+        .fetchOne();
 
-        return new PageImpl<>(contents, pageable, total);
-    }
+    return new PageImpl<>(contents, pageable, total);
+  }
 
 
 }

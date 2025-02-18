@@ -1,8 +1,5 @@
 package com.toyland.ai.application;
 
-import static org.springframework.data.domain.Sort.Direction;
-import static org.springframework.data.domain.Sort.by;
-
 import com.toyland.ai.model.AiComp;
 import com.toyland.ai.model.Qna;
 import com.toyland.ai.model.repository.QnaRepository;
@@ -30,21 +27,7 @@ public class QnaService {
   private final QnaRepository qnaRepository;
   private final AiComp aiComp;
   private final OpenApiFeignClient openApiFeignClient;
-  private final QnaRepositoryCustom qnaRepositoryCustom;
   private final StoreRepository storeRepository;
-
-  @Autowired
-  public QnaService(
-      QnaRepository qnaRepository,
-      @Qualifier("qnaRepositoryCustomImpl") QnaRepositoryCustom qnaRepositoryCustom,
-      AiComp aiComp,
-      OpenApiFeignClient openApiFeignClient, StoreRepository storeRepository) {
-    this.qnaRepository = qnaRepository;
-    this.qnaRepositoryCustom = qnaRepositoryCustom;
-    this.aiComp = aiComp;
-    this.openApiFeignClient = openApiFeignClient;
-    this.storeRepository = storeRepository;
-  }
 
   @Transactional
   public QnaResponseDto createQna(QnaRequestDto qnaRequestDto) {
@@ -93,7 +76,7 @@ public class QnaService {
 
 
   public Page<QnaResponseDto> getQnaList(Pageable pageable, UUID storeId) {
-    Page<Qna> qnaPage = qnaRepositoryCustom.searchQnas(storeId, pageable);
+    Page<Qna> qnaPage = qnaRepository.searchQna(storeId, pageable);
     Page<QnaResponseDto> qnaList = qnaPage.map(QnaResponseDto::of);
     return qnaList;
   }
