@@ -32,5 +32,5 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODg5MjE5LCJpYXQiOjE3Mzk4ODU2MTl9.l5z3hPhX5w25NV3R4G9Nr30gmBJHkQY7kXxh-Ox9yK0
 
 {
-  "regionName": "시"
+  "regionName": "서울시"
 }
