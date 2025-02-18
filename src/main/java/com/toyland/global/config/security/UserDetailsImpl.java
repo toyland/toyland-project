@@ -2,13 +2,12 @@ package com.toyland.global.config.security;
 
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
+import java.util.Collection;
+import java.util.List;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 
 @Getter
 public class UserDetailsImpl implements UserDetails {
@@ -24,6 +23,10 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<GrantedAuthority> generateAuthorities(UserRoleEnum role) {
         return List.of(new SimpleGrantedAuthority(role.getAuthority()));
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 
     @Override
