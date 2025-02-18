@@ -4,8 +4,10 @@ import com.toyland.ai.model.Qna;
 import com.toyland.ai.model.repository.QnaRepository;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-
-public interface JpaQnaRepository extends QnaRepository, JpaRepository<Qna, UUID> {
+@Repository
+public interface JpaQnaRepository extends QnaRepository, JpaRepository<Qna, UUID>,
+    QnaRepositoryCustom {
 
 }

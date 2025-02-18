@@ -1,4 +1,4 @@
-package com.toyland.ai.infrastructure.custom;
+package com.toyland.ai.infrastructure;
 
 import com.toyland.ai.model.Qna;
 import java.util.UUID;

@@ -4,7 +4,7 @@ package com.toyland.ai.infrastructure.impl;
 import static com.toyland.ai.model.QQna.qna;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.toyland.ai.infrastructure.custom.QnaRepositoryCustom;
+import com.toyland.ai.infrastructure.QnaRepositoryCustom;
 import com.toyland.ai.model.QQna;
 import com.toyland.ai.model.Qna;
 import java.util.List;

@@ -1,5 +1,8 @@
 package com.toyland.ai.application;
 
+import static org.springframework.data.domain.Sort.Direction;
+import static org.springframework.data.domain.Sort.by;
+
 import com.toyland.ai.model.AiComp;
 import com.toyland.ai.model.Qna;
 import com.toyland.ai.model.repository.QnaRepository;
@@ -13,6 +16,9 @@ import com.toyland.global.exception.type.domain.ProductErrorCode;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,16 +49,16 @@ public class QnaService {
     public Page<QnaResponseDto> getQnaList(int i, int size, String sortBy, boolean isAsc,
         UUID storeId) {
         //페이징 처리
-//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-//        Sort sort = Sort.by(direction, sortBy);
-//        Pageable pageable = PageRequest.of(i, size, sort);
-//
-//        Page<Qna> qnaPage = qnaRepository.searchQna(storeId, pageable);
-//
-//        Page<QnaResponseDto> qnaList = qnaPage.map(QnaResponseDto::from);
-//
-//        return qnaList;
-        return null;
+        Direction direction = isAsc ? Direction.ASC : Direction.DESC;
+        Sort sort = by(direction, sortBy);
+        Pageable pageable = PageRequest.of(i, size, sort);
+
+        Page<Qna> qnaPage = qnaRepository.searchQna(storeId, pageable);
+
+        Page<QnaResponseDto> qnaList = qnaPage.map(QnaResponseDto::from);
+
+        return qnaList;
+
     }
 
 
