@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "username": "master",
-  "password": "master",
+  "password": "!Master123",
   "role": "MASTER"
 }
 
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 {
   "username": "master",
-  "password": "master1234"
+  "password": "!Master123"
 }
 
 ### 회원 정보 수정

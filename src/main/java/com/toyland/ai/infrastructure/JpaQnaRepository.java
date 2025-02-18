@@ -1,6 +1,5 @@
 package com.toyland.ai.infrastructure;
 
-import com.toyland.ai.infrastructure.custom.QnaRepositoryCustom;
 import com.toyland.ai.model.Qna;
 import com.toyland.ai.model.repository.QnaRepository;
 import java.util.UUID;
