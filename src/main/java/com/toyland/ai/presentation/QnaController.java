@@ -2,17 +2,21 @@ package com.toyland.ai.presentation;
 
 
 import com.toyland.ai.application.QnaService;
-import com.toyland.ai.model.Qna;
 import com.toyland.ai.presentation.dto.PagedResponse;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
 import com.toyland.ai.presentation.dto.QnaResponseDto;
+import com.toyland.global.config.security.UserDetailsImpl;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,9 +35,9 @@ public class QnaController {
    * @param request 음식점의 질문
    * @return qna 내용
    */
-  @PostMapping("/")
-  public ResponseEntity<Qna> createAiQna(@RequestBody QnaRequestDto request) {
-    Qna qna = qnaService.createQna(request);
+  @PostMapping
+  public ResponseEntity<QnaResponseDto> createAiQna(@RequestBody QnaRequestDto request) {
+    QnaResponseDto qna = qnaService.createQna(request);
     return ResponseEntity.ok(qna);
   }
 
@@ -44,31 +48,44 @@ public class QnaController {
    * @return 질문과 답변
    */
   @GetMapping("/{qnaId}")
-  public ResponseEntity<Qna> getAiQna(@PathVariable UUID qnaId) {
-    Qna qna = qnaService.getQna(qnaId);
+  public ResponseEntity<QnaResponseDto> getAiQna(@PathVariable UUID qnaId) {
+    QnaResponseDto qna = qnaService.getQna(qnaId);
     return ResponseEntity.ok(qna);
   }
 
   /**
    * 해당 유저의 음식점에서 질문한 질문과 답변을 페이징하여 가져온다.
    *
-   * @param page
-   * @param size
-   * @param sortBy
-   * @param isAsc
+   * @param pageable
    * @param storeId
    * @return 질문/답변 리스트
    */
   @GetMapping("/search")
-  public ResponseEntity<PagedResponse<QnaResponseDto>> getAiQnaList(@RequestParam("page") int page,
-      @RequestParam("size") int size,
-      @RequestParam("sortBy") String sortBy,
-      @RequestParam("isAsc") boolean isAsc,
+  public ResponseEntity<PagedResponse<QnaResponseDto>> getAiQnaList(Pageable pageable,
       @RequestParam UUID storeId) {
-    Page<QnaResponseDto> qnaList = qnaService.getQnaList(page - 1, size,
-        sortBy, isAsc, storeId);
+    Page<QnaResponseDto> qnaList = qnaService.getQnaList(pageable, storeId);
     return ResponseEntity.ok(new PagedResponse<>(qnaList));
   }
 
+
+  /**
+   * AI의 질문,답변을 수정한다.
+   *
+   * @param request
+   * @param qnaId
+   * @return
+   */
+  @PutMapping("/{qnaId}")
+  public ResponseEntity<QnaResponseDto> updateAiQna(@RequestBody QnaRequestDto request,
+      @PathVariable UUID qnaId) {
+    QnaResponseDto responseDto = qnaService.updateQna(request, qnaId);
+    return ResponseEntity.ok(responseDto);
+  }
+
+  @DeleteMapping("/{qnaId}")
+  public void deleteAiQna(@PathVariable UUID qnaId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    qnaService.delete(qnaId, userDetails.getUser().getId());
+  }
 
 }
