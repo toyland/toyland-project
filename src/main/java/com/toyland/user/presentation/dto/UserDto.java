@@ -9,5 +9,5 @@ public record UserDto (Long id,
 
     public static UserDto of(Long id, String username, String password, UserRoleEnum role) {
         return new UserDto(id, username, password, role);
-    };
+    }
 }
