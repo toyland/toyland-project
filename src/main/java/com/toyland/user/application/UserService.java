@@ -49,7 +49,7 @@ public class UserService {
                 CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
         if (userRepository.existsByUsername(requestDto.getUsername())) {
-            throw new IllegalArgumentException("이미 사용 중인 사용자 이름입니다.");
+            throw new CustomException(UserErrorCode.USER_NOT_FOUND);
         }
 
         requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
@@ -67,7 +67,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(()->
                         CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
-        if (!Objects.equals(userDetail.getUser().getId(), userId)) {
+        if (!Objects.equals(userDetail.getId(), userId)) {
             if (userDetail.getRole() != UserRoleEnum.MASTER) {
                 throw new IllegalArgumentException("삭제 권한이 없습니다.");
             }

@@ -8,6 +8,7 @@ import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
 import com.toyland.user.presentation.dto.SignupRequestDto;
 import com.toyland.user.presentation.dto.UpdateUserRequestDto;
+import com.toyland.user.presentation.dto.UserDto;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -97,7 +98,7 @@ public class UserServiceTest extends IntegrationTestSupport {
     void deleteUser() {
         // given
         userDetails = new UserDetailsImpl(
-                new User(100L,
+                    UserDto.of(100L,
                         "master",
                         passwordEncoder.encode("password123"),
                         UserRoleEnum.MASTER));
@@ -114,6 +115,6 @@ public class UserServiceTest extends IntegrationTestSupport {
         User deletedUser = userRepository.findById(testUser.getId()).orElse(null);
         assertNotNull(deletedUser);
         assertNotNull(deletedUser.getDeletedAt());
-        assertEquals(userDetails.getUser().getId(), deletedUser.getDeletedBy());
+        assertEquals(userDetails.getId(), deletedUser.getDeletedBy());
     }
 }

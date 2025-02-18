@@ -1,7 +1,7 @@
 package com.toyland.global.config.security;
 
-import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
+import com.toyland.user.presentation.dto.UserDto;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,16 +13,22 @@ import java.util.List;
 @Getter
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
-
     private final Long id;
+
+    private final String username;
+
+    private final String password;
+
+    private final UserRoleEnum role;
 
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(User user) {
-        this.user = user;
-        this.id = user.getId();
-        this.authorities = generateAuthorities(user.getRole());
+    public UserDetailsImpl(UserDto user) {
+        this.id = user.id();
+        this.username = user.username();
+        this.password = user.password();
+        this.role = user.role();
+        this.authorities = generateAuthorities(user.role());
     }
 
     private Collection<GrantedAuthority> generateAuthorities(UserRoleEnum role) {
@@ -34,21 +40,17 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    public Long getUserId() { return user.getId();}
+    public Long getUserId() { return this.id;}
 
-    public UserRoleEnum getRole() {
-        return user.getRole();
-    }
+    public UserRoleEnum getRole() { return this.role; }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return this.password;
     }
 
     @Override
-    public String getUsername() {
-        return user.getUsername();
-    }
+    public String getUsername() { return this.username;}
 
     @Override
     public boolean isAccountNonExpired() {

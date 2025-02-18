@@ -27,7 +27,7 @@ public class UserController {
         return ResponseEntity.ok().body(responseDto);
     }
     /**
-     * 회원조회 수정 API
+     * 회원정보 조회 API
      * @param userId 조회할 유저
      * @return 조회한 회원정보를 포함한 성공적인 응답 생성
      */
@@ -36,6 +36,7 @@ public class UserController {
         UserResponseDto userResponseDto = userService.findbyUserId(userId);
         return ResponseEntity.ok().body(userResponseDto);
     }
+
     /**
      * 회원정보 수정 API
      * @param requestDto 수정할 유저 정보
