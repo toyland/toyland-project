@@ -27,10 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/qna")
 public class QnaController {
 
-  private final QnaService qnaService;
+    private final QnaService qnaService;
+
 
   /**
-   * AI에게 물어본 질문과 그에대한 답변을 저장합니다.
+   * AI에게 물어본 질문과 그에대한 답변을 저장한한다.
    *
    * @param request 음식점의 질문
    * @return qna 내용
@@ -73,7 +74,7 @@ public class QnaController {
    *
    * @param request
    * @param qnaId
-   * @return
+   * @return 수정된 내용
    */
   @PutMapping("/{qnaId}")
   public ResponseEntity<QnaResponseDto> updateAiQna(@RequestBody QnaRequestDto request,
@@ -82,6 +83,12 @@ public class QnaController {
     return ResponseEntity.ok(responseDto);
   }
 
+  
+  /**
+   * AI의 질문,답변을 삭제한다.
+   *
+   * @param qnaId
+   */
   @DeleteMapping("/{qnaId}")
   public void deleteAiQna(@PathVariable UUID qnaId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {

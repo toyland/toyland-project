@@ -1,11 +1,29 @@
 ### Address 생성
 POST http://localhost:8080/api/v1/addresses
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3ODA1MTgsImlhdCI6MTczOTc3NjkxOH0.3owJxPJMN1lLZBW1Hr1UPosUdVgfKpGl-UtxtvqLo3A
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
 
 {
-  "addressName": null,
-  "userId": 1,
-  "regionId": "b589d444-87ae-44f8-ba23-d213aea994f5"
+  "addressName": "경기도 성남시 분당구 정자일로 95",
+  "regionId": "609ee92b-6a53-4e41-934c-af8eda047d96"
 }
+
+### Address 단 건 조회
+GET http://localhost:8080/api/v1/addresses/9a6b4446-40f5-4166-9dc7-9f6644c7951e
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
+
+
+### Address 수정
+PUT http://localhost:8080/api/v1/addresses/9a6b4446-40f5-4166-9dc7-9f6644c7951e
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
+
+{
+  "addressName": "수정된 주소",
+  "regionId": "609ee92b-6a53-4e41-934c-af8eda047d96"
+}
+
+### Address 삭제
+DELETE http://localhost:8080/api/v1/addresses/9a6b4446-40f5-4166-9dc7-9f6644c7951e
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
 

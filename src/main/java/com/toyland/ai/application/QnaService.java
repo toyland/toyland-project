@@ -1,9 +1,11 @@
 package com.toyland.ai.application;
 
+import static org.springframework.data.domain.Sort.Direction;
+import static org.springframework.data.domain.Sort.by;
+
 import com.toyland.ai.model.AiComp;
 import com.toyland.ai.model.Qna;
 import com.toyland.ai.model.repository.QnaRepository;
-import com.toyland.ai.model.repository.QnaRepositoryCustom;
 import com.toyland.ai.presentation.OpenApiFeignClient;
 import com.toyland.ai.presentation.dto.AiRequestDto;
 import com.toyland.ai.presentation.dto.AiResponseDto;
@@ -15,8 +17,6 @@ import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class QnaService {
+
 
   private final QnaRepository qnaRepository;
   private final AiComp aiComp;
@@ -47,16 +48,10 @@ public class QnaService {
 
   @Transactional
   public QnaResponseDto createQna(QnaRequestDto qnaRequestDto) {
-
     String answer = fetchAiAnswer(qnaRequestDto.getQuestion());
     qnaRequestDto.setAnswer(answer);
-
-    // 2. Store 찾기
     Store store = findStoreById(qnaRequestDto.getStoreId());
-
-    // 3. Qna 객체 생성 및 저장
     Qna result = saveQna(qnaRequestDto, store);
-
     return QnaResponseDto.of(result);
   }
 
@@ -112,6 +107,7 @@ public class QnaService {
     return QnaResponseDto.of(qna);
 
   }
+
 
   @Transactional
   public void delete(UUID qnaId, Long id) {

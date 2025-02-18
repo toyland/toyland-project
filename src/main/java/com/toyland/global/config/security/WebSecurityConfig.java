@@ -4,7 +4,6 @@ import com.toyland.global.config.security.jwt.JwtAuthenticationFilter;
 import com.toyland.global.config.security.jwt.JwtAuthorizationFilter;
 import com.toyland.global.config.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,7 +57,6 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/api/v1/users/**").permitAll()
                         .anyRequest().authenticated()
         );

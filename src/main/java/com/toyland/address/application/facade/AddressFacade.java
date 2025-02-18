@@ -1,9 +1,7 @@
 package com.toyland.address.application.facade;
 
-import com.toyland.address.model.entity.Address;
 import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
-
 import java.util.UUID;
 
 /**
@@ -12,6 +10,11 @@ import java.util.UUID;
  */
 public interface AddressFacade {
 
-    AddressResponseDto createAddress(CreateAddressRequestDto requestDto);
-    Address findByAddressId(UUID addressId);
+    AddressResponseDto createAddress(CreateAddressRequestDto requestDto, Long userId);
+
+    AddressResponseDto findByAddressId(UUID addressId);
+
+    AddressResponseDto updateAddress(UUID addressId, CreateAddressRequestDto requestDto);
+
+    void deleteAddress(UUID addressId, Long userId);
 }

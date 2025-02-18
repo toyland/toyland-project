@@ -14,6 +14,7 @@ GET http://localhost:8080/api/v1/qna/search?page=0&size=10&sort=answer,asc&
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6Ik9XTkVSIiwiZXhwIjoxNzM5ODU5Mjk1LCJpYXQiOjE3Mzk4NTU2OTV9.lTZUP8QLfG0L2g3Zld6ma5uhvgQxbniD_G2PQ0GYGmo
 
+
 ###Qna 단건 조회
 GET http://localhost:8080/api/v1/qna/qnaId=5e38653c-cff0-4b16-9f25-e99e3ea6f506
 Content-Type: application/json

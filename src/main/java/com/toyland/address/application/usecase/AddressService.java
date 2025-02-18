@@ -1,9 +1,7 @@
 package com.toyland.address.application.usecase;
 
-import com.toyland.address.model.entity.Address;
 import com.toyland.address.presentation.dto.AddressResponseDto;
 import com.toyland.address.presentation.dto.CreateAddressRequestDto;
-
 import java.util.UUID;
 
 /**
@@ -12,7 +10,11 @@ import java.util.UUID;
  */
 public interface AddressService {
 
-    AddressResponseDto createAddress(CreateAddressRequestDto requestDto);
+    AddressResponseDto createAddress(CreateAddressRequestDto requestDto, Long userId);
 
-    Address findByAddressId(UUID addressId);
+    AddressResponseDto findByAddressId(UUID addressId);
+
+    AddressResponseDto updateAddress(UUID addressId, CreateAddressRequestDto requestDto);
+
+    void deleteAddress(UUID addressId, Long userId);
 }
