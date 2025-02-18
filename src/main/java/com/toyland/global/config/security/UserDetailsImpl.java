@@ -15,10 +15,13 @@ public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
+    private final Long id;
+
     private final Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(User user) {
         this.user = user;
+        this.id = user.getId();
         this.authorities = generateAuthorities(user.getRole());
     }
 
@@ -30,6 +33,8 @@ public class UserDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
+
+    public Long getUserId() { return user.getId();}
 
     public UserRoleEnum getRole() {
         return user.getRole();

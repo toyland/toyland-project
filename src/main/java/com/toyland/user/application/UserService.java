@@ -6,14 +6,10 @@ import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
-import com.toyland.user.presentation.dto.SignupRequestDto;
-import com.toyland.user.presentation.dto.SignupResponseDto;
-import com.toyland.user.presentation.dto.UpdateUserRequestDto;
-import com.toyland.user.presentation.dto.UpdateUserResponseDto;
+import com.toyland.user.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -35,9 +31,8 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());
         UserRoleEnum role = requestDto.getRole();
 
-        // 사용자 이름 중복 검사
         if (userRepository.existsByUsername(username)) {
-            throw new IllegalArgumentException("이미 사용 중인 사용자 이름입니다.");
+            throw new CustomException(UserErrorCode.USER_NOT_FOUND);
         }
 
         User user = userRepository.save(new User(username, password, role));
@@ -48,42 +43,29 @@ public class UserService {
                 .build();
     }
 
-    public UpdateUserResponseDto updateUserInfo(UpdateUserRequestDto requestDto, Long userId, UserDetailsImpl userDetail) {
+    public UpdateUserResponseDto updateUserInfo(UpdateUserRequestDto requestDto, Long userId) {
 
-        User user = findbyUserId(userId);
+        User user = userRepository.findById(userId).orElseThrow(()->
+                CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
-        String updateUsername = user.getUsername();
-        String updatePassword = user.getPassword();
-        UserRoleEnum updateRole = user.getRole();
-
-        if (StringUtils.hasText(requestDto.getUsername())) {
-            if (userRepository.existsByUsername(requestDto.getUsername())) {
-                throw new IllegalArgumentException("이미 사용 중인 사용자 이름입니다.");
-            }
-            updateUsername = requestDto.getUsername();
+        if (userRepository.existsByUsername(requestDto.getUsername())) {
+            throw new IllegalArgumentException("이미 사용 중인 사용자 이름입니다.");
         }
 
-        if (StringUtils.hasText(requestDto.getPassword())) {
-            updatePassword = passwordEncoder.encode(requestDto.getPassword());
-        }
+        requestDto.encodePassword(passwordEncoder.encode(requestDto.getPassword()));
 
-        if (userDetail.getRole() == UserRoleEnum.MASTER && requestDto.getRole() != null) {
-            updateRole = requestDto.getRole();
-        }
-
-        user.updateUser(updateUsername, updatePassword, updateRole);
-
-        User updatedUser = userRepository.save(user);
+        user.updateUser(requestDto);
 
         return UpdateUserResponseDto.builder()
-                .username(updatedUser.getUsername())
-                .role(updatedUser.getRole())
+                .username(user.getUsername())
+                .password(user.getPassword())
                 .build();
     }
 
     public void deleteUser(Long userId, UserDetailsImpl userDetail) {
 
-        User user = findbyUserId(userId);
+        User user = userRepository.findById(userId).orElseThrow(()->
+                        CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
         if (!Objects.equals(userDetail.getUser().getId(), userId)) {
             if (userDetail.getRole() != UserRoleEnum.MASTER) {
@@ -91,16 +73,13 @@ public class UserService {
             }
         }
 
-        Long deletedBy = userDetail.getUser().getId();
-        user.addDeletedField(deletedBy);
-
-        userRepository.save(user);
+        user.addDeletedField(userDetail.getId());
     }
 
 
-    public User findbyUserId(Long userId){
-        return userRepository.findById(userId).orElseThrow(()->
-                CustomException.from(UserErrorCode.USER_NOT_FOUND));
+    public UserResponseDto findbyUserId(Long userId){
+        return UserResponseDto.of(userRepository.findById(userId).orElseThrow(()->
+                CustomException.from(UserErrorCode.USER_NOT_FOUND)));
     }
 
 }

@@ -2,10 +2,7 @@ package com.toyland.user.presentation;
 
 import com.toyland.global.config.security.UserDetailsImpl;
 import com.toyland.user.application.UserService;
-import com.toyland.user.presentation.dto.SignupRequestDto;
-import com.toyland.user.presentation.dto.SignupResponseDto;
-import com.toyland.user.presentation.dto.UpdateUserRequestDto;
-import com.toyland.user.presentation.dto.UpdateUserResponseDto;
+import com.toyland.user.presentation.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +26,16 @@ public class UserController {
         SignupResponseDto responseDto = userService.signup(requestDto);
         return ResponseEntity.ok().body(responseDto);
     }
-
+    /**
+     * 회원조회 수정 API
+     * @param userId 조회할 유저
+     * @return 조회한 회원정보를 포함한 성공적인 응답 생성
+     */
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<UserResponseDto> search(@PathVariable Long userId) {
+        UserResponseDto userResponseDto = userService.findbyUserId(userId);
+        return ResponseEntity.ok().body(userResponseDto);
+    }
     /**
      * 회원정보 수정 API
      * @param requestDto 수정할 유저 정보
@@ -37,9 +43,8 @@ public class UserController {
      */
     @PutMapping("/users/{userId}")
     public ResponseEntity<UpdateUserResponseDto> update(@Valid @RequestBody UpdateUserRequestDto requestDto,
-                                                        @PathVariable Long userId,
-                                                        @AuthenticationPrincipal UserDetailsImpl userDetail) {
-        UpdateUserResponseDto updateUserResponseDto = userService.updateUserInfo(requestDto, userId, userDetail);
+                                                        @PathVariable Long userId) {
+        UpdateUserResponseDto updateUserResponseDto = userService.updateUserInfo(requestDto, userId);
         return ResponseEntity.ok().body(updateUserResponseDto);
     }
 
@@ -52,7 +57,5 @@ public class UserController {
         userService.deleteUser(userId, userDetail);
         return ResponseEntity.ok().build();
     }
-
-
 
 }
