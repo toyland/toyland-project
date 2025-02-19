@@ -15,6 +15,8 @@ public interface CategoryRepository {
 
   Optional<Category> findById(UUID id);
 
+  List<Category> findAllById(Iterable<UUID> ids);
+
   // test 용
   void deleteAllInBatch();
   List<Category> findAll();
