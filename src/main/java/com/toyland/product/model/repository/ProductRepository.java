@@ -6,6 +6,8 @@ package com.toyland.product.model.repository;
 
 import com.toyland.product.model.entity.Product;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public interface ProductRepository {
   Product save(Product product);
@@ -15,4 +17,6 @@ public interface ProductRepository {
   void deleteAllInBatch();
 
   List<Product> findAll();
+
+  Optional<Product> findById(UUID id);
 }
