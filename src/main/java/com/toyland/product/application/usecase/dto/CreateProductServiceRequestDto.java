@@ -4,7 +4,7 @@
  */
 package com.toyland.product.application.usecase.dto;
 
-import com.toyland.product.presentaion.dto.CreateProductRequestDto;
+import com.toyland.product.presentation.dto.CreateProductRequestDto;
 import com.toyland.store.model.entity.Store;
 import java.math.BigDecimal;
 import lombok.Builder;
@@ -19,12 +19,13 @@ public record CreateProductServiceRequestDto(
 
     Store store
 ) {
-  public static CreateProductServiceRequestDto of(CreateProductRequestDto dto, Store store) {
-    return CreateProductServiceRequestDto.builder()
-        .name(dto.name())
-        .price(dto.price())
-        .isDisplay(dto.isDisplay())
-        .store(store)
-        .build();
-  }
+
+    public static CreateProductServiceRequestDto of(CreateProductRequestDto dto, Store store) {
+        return CreateProductServiceRequestDto.builder()
+            .name(dto.name())
+            .price(dto.price())
+            .isDisplay(dto.isDisplay())
+            .store(store)
+            .build();
+    }
 }

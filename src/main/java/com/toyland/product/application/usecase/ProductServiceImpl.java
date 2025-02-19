@@ -11,7 +11,7 @@ import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDt
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
-import com.toyland.product.presentaion.dto.ProductResponseDto;
+import com.toyland.product.presentation.dto.ProductResponseDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,36 +20,37 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-  private final ProductRepository productRepository;
 
-  @Override
-  public void createProduct(CreateProductServiceRequestDto dto) {
-    productRepository.save(Product.from(dto));
-  }
+    private final ProductRepository productRepository;
 
-  @Override
-  public ProductResponseDto readProduct(UUID productId) {
-    Product product = findProductById(productId);
-    return ProductResponseDto.from(product);
-  }
+    @Override
+    public void createProduct(CreateProductServiceRequestDto dto) {
+        productRepository.save(Product.from(dto));
+    }
 
-  @Override
-  @Transactional
-  public ProductResponseDto updateProduct(UpdateProductServiceRequestDto dto) {
-    Product product = findProductById(dto.id());
-    product.update(dto);
-    return ProductResponseDto.from(product);
-  }
+    @Override
+    public ProductResponseDto readProduct(UUID productId) {
+        Product product = findProductById(productId);
+        return ProductResponseDto.from(product);
+    }
 
-  @Override
-  @Transactional
-  public void deleteProduct(DeleteProductServiceRequestDto dto) {
-    Product product = findProductById(dto.productId());
-    product.delete(dto.eventDateTime(), dto.actorId());
-  }
+    @Override
+    @Transactional
+    public ProductResponseDto updateProduct(UpdateProductServiceRequestDto dto) {
+        Product product = findProductById(dto.id());
+        product.update(dto);
+        return ProductResponseDto.from(product);
+    }
 
-  private Product findProductById(UUID productId) {
-    return productRepository.findById(productId)
-        .orElseThrow(() -> CustomException.from(ProductErrorCode.NOT_FOUND));
-  }
+    @Override
+    @Transactional
+    public void deleteProduct(DeleteProductServiceRequestDto dto) {
+        Product product = findProductById(dto.productId());
+        product.delete(dto.eventDateTime(), dto.actorId());
+    }
+
+    private Product findProductById(UUID productId) {
+        return productRepository.findById(productId)
+            .orElseThrow(() -> CustomException.from(ProductErrorCode.NOT_FOUND));
+    }
 }
