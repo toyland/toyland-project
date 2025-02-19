@@ -19,23 +19,24 @@ import org.hibernate.annotations.SQLRestriction;
 
 
 @SQLRestriction("deleted_at IS NULL")
-@Entity(name = "p_aiqna")
+@Entity
+@Table(name = "p_aiqna")
 @Getter
 @NoArgsConstructor
 public class Qna extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID aiId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID aiId;
 
-    @Column
-    private String aiName;
+  @Column
+  private String aiName;
 
-    @Column
-    private String question;
+  @Column
+  private String question;
 
-    @Column
-    private String answer;
+  @Column
+  private String answer;
 
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -43,12 +44,12 @@ public class Qna extends BaseEntity {
   private Store store;
 
 
-    public Qna(String question, String answer, Store store) {
-        this.question = question;
-        this.answer = answer;
-        this.aiName = "OpenAI"; // 기본값 설정
-        this.store = store;
-    }
+  public Qna(String question, String answer, Store store) {
+    this.question = question;
+    this.answer = answer;
+    this.aiName = "OpenAI"; // 기본값 설정
+    this.store = store;
+  }
 
 
   public static Qna from(QnaRequestDto qnaRequestDto, Store store) {

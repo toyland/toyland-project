@@ -14,7 +14,11 @@ import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
 import com.toyland.user.presentation.dto.SignupRequestDto;
 import com.toyland.user.presentation.dto.UpdateUserRequestDto;
+
+import com.toyland.user.presentation.dto.UserDto;
+import jakarta.transaction.Transactional;
 import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -68,11 +72,10 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Disabled
     @DisplayName("회원 정보 수정")
     @Test
+    @Transactional
     void updateUser() {
-        //given
-        userDetails = new UserDetailsImpl(
-            new User(100L,
-                "master",
+        // given
+        User savedUser = userRepository.save(new User("testuser",
                 passwordEncoder.encode("password123"),
                 UserRoleEnum.MASTER));
 
@@ -82,31 +85,31 @@ public class UserServiceTest extends IntegrationTestSupport {
 
         // when
         UpdateUserRequestDto updateUserRequestDto = UpdateUserRequestDto
-            .builder()
-            .username("updateuser")
-            .password("password123")
-            .role(UserRoleEnum.OWNER)
-            .build();
+                .builder()
+                .username("updateuser")
+                .password("password1231234") // 새로운 비밀번호
+                .build();
 
-        userService.updateUserInfo(updateUserRequestDto, 1L, userDetails);
+        userService.updateUserInfo(updateUserRequestDto, savedUser.getId());
+
         // then
-        User updatedUser = userRepository.findById(1L)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+        User updatedUser = userRepository.findById(savedUser.getId()).orElseThrow(() -> new RuntimeException("User not found"));
 
         assertEquals("updateuser", updatedUser.getUsername());
-        assertTrue(passwordEncoder.matches("password123", updatedUser.getPassword()));
-        assertEquals(UserRoleEnum.OWNER, updatedUser.getRole());
+        assertTrue(passwordEncoder.matches("password1231234", updatedUser.getPassword()));
     }
+
 
     @DisplayName("회원 탈퇴")
     @Test
+    @Transactional
     void deleteUser() {
         // given
         userDetails = new UserDetailsImpl(
-            new User(100L,
-                "master",
-                passwordEncoder.encode("password123"),
-                UserRoleEnum.MASTER));
+                    UserDto.of(100L,
+                        "master",
+                        passwordEncoder.encode("password123"),
+                        UserRoleEnum.MASTER));
 
         User testUser = new User("testuser",
             passwordEncoder.encode("password123"),
@@ -120,6 +123,6 @@ public class UserServiceTest extends IntegrationTestSupport {
         User deletedUser = userRepository.findById(testUser.getId()).orElse(null);
         assertNotNull(deletedUser);
         assertNotNull(deletedUser.getDeletedAt());
-        assertEquals(userDetails.getUser().getId(), deletedUser.getDeletedBy());
+        assertEquals(userDetails.getId(), deletedUser.getDeletedBy());
     }
 }

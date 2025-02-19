@@ -9,11 +9,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6Ik9XTkVSI
 }
 
 ###Qna 전체 조회
-GET http://localhost:8080/api/v1/qna/search?page=0&size=10&sort=answer,asc&
-    storeId=123e4567-e89b-12d3-a456-426614174000
+GET http://localhost:8080/api/v1/qna/search?page=0&size=10&sort=created_at,asc&
+    storeId=e645f203-54f7-4a29-bcd7-3c2a293400a9
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6Ik9XTkVSIiwiZXhwIjoxNzM5ODU5Mjk1LCJpYXQiOjE3Mzk4NTU2OTV9.lTZUP8QLfG0L2g3Zld6ma5uhvgQxbniD_G2PQ0GYGmo
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6Ik9XTkVSIiwiZXhwIjoxNzM5ODc3MzYzLCJpYXQiOjE3Mzk4NzM3NjN9.gE0HRliG70bIcecwqwdwH71A6peNS6oRHZnliddBluw
 
 ###Qna 단건 조회
 GET http://localhost:8080/api/v1/qna/qnaId=5e38653c-cff0-4b16-9f25-e99e3ea6f506

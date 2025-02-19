@@ -61,7 +61,8 @@ public class RegionController {
 
     @DeleteMapping("/{regionId}")
     public void deleteRegionByRegionId(@PathVariable UUID regionId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        regionFacade.deleteByRegionId(regionId, userDetails.getUser().getId());
+                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        regionFacade.deleteByRegionId(regionId, userDetails.getId());
+
     }
 }
