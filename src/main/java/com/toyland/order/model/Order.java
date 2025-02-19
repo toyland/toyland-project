@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLRestriction("deleted_at IS NULL")
 @Entity
 @Table(name = "p_order")
 public class Order extends BaseEntity {
@@ -76,5 +78,29 @@ public class Order extends BaseEntity {
     public void addOrderProduct(OrderProduct orderProduct) {
         this.orderProductList.add(orderProduct);  // 주문 상품 리스트에 추가
         orderProduct.associateOrder(this); // OrderProduct에도 해당 Order 정보 설정 (양방향 관계 유지), setter 대신 associateOrder 메서드 사용
+    }
+
+
+    // 비즈니스 로직
+    /**
+     * 주문 삭제(취소)
+     */
+    public void cancel() {
+        if (this.orderStatus == OrderStatus.PREPARING || this.orderStatus == OrderStatus.DELIVERING || this.orderStatus == OrderStatus.DELIVERY_COMPLETED) {
+            throw new IllegalStateException("[조리중/배달중/배달완료] 상태에서는 주문을 취소할 수 없습니다.");
+        }
+
+        // 후에 결제 취소 로직 추가
+
+        // 주문 취소 상태로 수정
+        this.orderStatus = OrderStatus.ORDER_CANCELED;
+
+        // 주문 논리적 삭제 처리
+        this.addDeletedField(user.getId());
+
+        // 주문 상품 논리적 삭제 처리
+        for(OrderProduct orderProduct : orderProductList) {
+            orderProduct.addDeletedField(user.getId()); // OrderProduct에도 삭제 정보 추가
+        }
     }
 }

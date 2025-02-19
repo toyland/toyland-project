@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -58,5 +59,26 @@ public class OrderService {
         return order;
     }
 
+
+
+    /**
+     * 주문 삭제(취소)
+     */
+    @Transactional
+    public void deleteOrder(UUID orderId, String username) {
+
+        // 회원 조회
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+
+
+        //주문 엔티티 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException(" 해당 주문을 찾을 수 없습니다"));
+
+
+        //주문 취소
+        order.cancel();
+    }
 
 }
