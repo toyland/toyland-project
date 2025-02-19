@@ -1,9 +1,10 @@
 ### 카테고리 생성
 POST http://localhost:8080/api/v1/categories
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODU5NjQ5LCJpYXQiOjE3Mzk4NTYwNDl9.VC0YwrVoNFo_9VMyovczvf1YBC82gIgQ4_m6QlsohCQ
 
 {
-  "name": "가게배달",
-  "patentId": null
+  "name": "야식",
+  "patentId": "144abe1b-3206-4011-8b5b-ca464572ab7c"
 }
 

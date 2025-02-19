@@ -21,4 +21,6 @@ public interface ProductRepository {
   void deleteAllInBatch();
 
   List<Product> findAll();
+
+  Optional<Product> findById(UUID id);
 }

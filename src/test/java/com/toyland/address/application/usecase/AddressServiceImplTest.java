@@ -4,9 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.toyland.address.model.entity.Address;
 import com.toyland.address.model.repository.AddressRepository;
-import com.toyland.address.presentation.dto.AddressResponseDto;
-import com.toyland.address.presentation.dto.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.request.AddressSearchRequestDto;
+import com.toyland.address.presentation.dto.request.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.response.AddressResponseDto;
+import com.toyland.address.presentation.dto.response.AddressSearchResponseDto;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.global.exception.CustomException;
 import com.toyland.region.model.entity.Region;
@@ -14,10 +17,17 @@ import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -178,6 +188,74 @@ class AddressServiceImplTest extends IntegrationTestSupport {
         assertThat(exception.getMessage()).isEqualTo("삭제된 주소 입니다.");
         //삭제 이전에 정상 조회 되는지 검증
         assertThat(deleteBeforeAddress.addressName()).isEqualTo(createdAddress.addressName());
+    }
+
+    @DisplayName("주소 동적 쿼리 테스트")
+    @Test
+    @Transactional
+    void dynamicSearch_Address() {
+        // given
+        User owner = userRepository.save(createMaster("홍길동"));
+
+        Region seoulRegion = regionRepository.save(Region.builder()
+            .regionName("서울시").build());
+
+        Region busanRegion = regionRepository.save(Region.builder()
+            .regionName("부산시").build());
+
+        List<Address> addressList1 = IntStream.rangeClosed(1, 10)
+            .mapToObj(i -> Address.builder()
+                .addressName("서울 용산구 한강대로 " + (405 + i - 1))
+                .region(seoulRegion)
+                .user(owner)
+                .build())
+            .collect(Collectors.toList());
+
+        List<Address> addressList2 = IntStream.rangeClosed(1, 10)
+            .mapToObj(i -> Address.builder()
+                .addressName("부산 동구 중앙대로 " + (206 + i - 1))
+                .region(busanRegion)
+                .user(owner)
+                .build())
+            .collect(Collectors.toList());
+
+        addressRepository.saveAll(addressList1);
+        addressRepository.saveAll(addressList2);
+        // when
+
+        //검색 조건1
+        AddressSearchRequestDto case1 = new AddressSearchRequestDto("서울");
+        //검색 조건2
+        AddressSearchRequestDto case2 = new AddressSearchRequestDto("부산");
+        //페이징 조건1
+        Pageable pageable1 = PageRequest.of(0, 5, Sort.by("createdAt").ascending());
+        //페이징 조건2
+        Pageable pageable2 = PageRequest.of(1, 5, Sort.by("createdAt").ascending());
+
+        Page<AddressSearchResponseDto> result1 = addressRepository.searchAddress(
+            case1, pageable1);
+
+        Page<AddressSearchResponseDto> result2 = addressRepository.searchAddress(
+            case2, pageable2);
+
+        // then
+        //case1 검증
+        assertThat(result1).isNotEmpty();
+        assertThat(result1.getTotalElements()).isEqualTo(10);
+        assertThat(result1.getTotalPages()).isEqualTo(2);
+        assertThat(result1.getContent().get(0).addressName()).isEqualTo("서울 용산구 한강대로 405");
+        assertThat(result1.getContent().get(4).addressName()).isEqualTo("서울 용산구 한강대로 409");
+
+        //case2 검증
+        assertThat(result2).isNotEmpty();
+        assertThat(result2.getTotalElements()).isEqualTo(10);
+        assertThat(result1.getTotalPages()).isEqualTo(2);
+        assertThat(result2.getContent().get(0).addressName()).isEqualTo("부산 동구 중앙대로 211");
+        assertThat(result2.getContent().get(4).addressName()).isEqualTo("부산 동구 중앙대로 215");
+    }
+
+    private User createMaster(String username) {
+        return new User(username, "password", UserRoleEnum.MASTER);
     }
 
 

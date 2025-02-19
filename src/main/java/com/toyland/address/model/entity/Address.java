@@ -1,6 +1,6 @@
 package com.toyland.address.model.entity;
 
-import com.toyland.address.presentation.dto.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.request.CreateAddressRequestDto;
 import com.toyland.global.common.auditing.BaseEntity;
 import com.toyland.region.model.entity.Region;
 import com.toyland.user.model.User;
@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Entity
 @Table(name = "p_address")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at IS NULL")
 public class Address extends BaseEntity {
 
@@ -38,7 +39,7 @@ public class Address extends BaseEntity {
     @Column(name = "address_name", nullable = false, length = 100)
     private String addressName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -47,11 +48,18 @@ public class Address extends BaseEntity {
     private Region region;
 
 
-    //테스트나 null 허용하는 곳에서 사용
     @Builder
     public Address(String addressName, User user, Region region) {
         this.addressName = addressName;
         this.user = user;
+    }
+
+    @Builder
+    public Address(UUID id, String addressName, User user, Region region) {
+        this.id = id;
+        this.addressName = addressName;
+        this.user = user;
+        this.region = region;
     }
 
     //Dto를 통해 생성하는 Address의 비즈니스 로직에선 아래 정적 메서드 사용

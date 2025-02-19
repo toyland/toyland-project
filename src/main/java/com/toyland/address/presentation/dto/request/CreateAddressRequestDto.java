@@ -1,4 +1,4 @@
-package com.toyland.address.presentation.dto;
+package com.toyland.address.presentation.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
