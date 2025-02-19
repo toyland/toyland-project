@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @RestController
@@ -71,7 +70,7 @@ public class ProductController {
   /**
    * 상품을 삭제합니다.
    * @param productId 삭제할 상품 id
-   * @return 조회 상품 dto
+   * @return 204 no content
    */
   @DeleteMapping("/{productId}")
   public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId,
@@ -80,9 +79,6 @@ public class ProductController {
     productService.deleteProduct(
         DeleteProductServiceRequestDto.of(currentLoginUserId, productId, LocalDateTime.now()));
 
-    return ResponseEntity.ok().location(
-        UriComponentsBuilder.fromUriString("/api/v1/products/{productId}")
-            .buildAndExpand(productId)
-            .toUri()).build();
+    return ResponseEntity.noContent().build();
   }
 }
