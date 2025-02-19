@@ -9,6 +9,4 @@ import lombok.NoArgsConstructor;
 public class UserSearchRequestDto {
     private String username;
     private UserRoleEnum role;
-    private Boolean isDeleted;
-
 }

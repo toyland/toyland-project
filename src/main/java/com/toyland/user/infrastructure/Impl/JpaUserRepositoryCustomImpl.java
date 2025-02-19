@@ -9,7 +9,6 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toyland.user.infrastructure.JpaUserRepositoryCustom;
 import com.toyland.user.infrastructure.UserSortEnum;
-import com.toyland.user.model.QUser;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.presentation.dto.UserSearchRequestDto;
@@ -24,13 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.toyland.user.model.QUser.user;
+
 @RequiredArgsConstructor
 @Slf4j
 public class JpaUserRepositoryCustomImpl implements JpaUserRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-
-    private static final QUser user = QUser.user;
 
     @Override
     public Page<User> search(UserSearchRequestDto requestDto, Pageable pageable) {
@@ -55,9 +54,8 @@ public class JpaUserRepositoryCustomImpl implements JpaUserRepositoryCustom {
                 .select(expr)
                 .from(user)
                 .where(
-                        usernameEq(requestDto.getUsername()),
-                        userRoleEq(requestDto.getRole()),
-                        userStatusEq(requestDto.getIsDeleted())
+                        userContainsName(requestDto.getUsername()),
+                        userRoleEq(requestDto.getRole())
                 );
     }
 
@@ -80,21 +78,20 @@ public class JpaUserRepositoryCustomImpl implements JpaUserRepositoryCustom {
                 orderSpecifierList.add(
                         createOrderSpecifier(direction, sortEnum));
             }
+        }else{
+            orderSpecifierList.add(
+                    createOrderSpecifier(Order.ASC, UserSortEnum.CREATED_AT));
         }
 
         return orderSpecifierList;
     }
 
-    private BooleanExpression usernameEq(String username) {
-        return Objects.nonNull(username) ? user.username.eq(username) : null;
+    private BooleanExpression userContainsName(String username) {
+        return Objects.nonNull(username) ? user.username.containsIgnoreCase(username) : null;
     }
 
     private BooleanExpression userRoleEq(UserRoleEnum role) {
         return Objects.nonNull(role) ? user.role.eq(role) : null;
-    }
-
-    private BooleanExpression userStatusEq(boolean isDeleted) {
-        return isDeleted ? user.deletedAt.isNotNull() : user.deletedAt.isNull();
     }
 
     private OrderSpecifier createOrderSpecifier(Order direction, UserSortEnum sortEnum) {
