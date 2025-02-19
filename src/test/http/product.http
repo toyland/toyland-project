@@ -1,11 +1,27 @@
 ### 상품 생성
 POST http://localhost:8080/api/v1/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjY3NjUsImlhdCI6MTczOTcyMzE2NX0.3jFPg6vcGzkp4U-l0JnCZt9Qnx8N1qBxG0VB0kjC39Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
 
 {
-  "name": "고추바사삭",
+  "name": "고추바사삭2",
   "price": 10000,
   "isDisplay": false,
   "storeId": "4a242e8e-7682-4d32-931c-0b43dbf4eb0f"
+}
+
+### 상품 단건 조회
+GET http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
+### 상품 수정
+PUT http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
+{
+  "name": "고바",
+  "price": 25000,
+  "isDisplay": true
 }

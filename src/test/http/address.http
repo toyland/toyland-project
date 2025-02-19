@@ -1,11 +1,11 @@
 ### Address 생성
 POST http://localhost:8080/api/v1/addresses
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTMzMzg1LCJpYXQiOjE3Mzk5Mjk3ODV9.575F3TPMGFNLLvSmzadwnNRjTPVudyLYFc5m_gmA5nM
 
 {
-  "addressName": "경기도 성남시 분당구 정자일로 95",
-  "regionId": "609ee92b-6a53-4e41-934c-af8eda047d96"
+  "addressName": "seoul",
+  "regionId": "46ed2e02-850e-4102-a598-137d899706ec"
 }
 
 ### Address 단 건 조회
@@ -27,3 +27,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNUR
 DELETE http://localhost:8080/api/v1/addresses/9a6b4446-40f5-4166-9dc7-9f6644c7951e
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
 
+### Address 동적 검색 //page=0&size=10&sort=createdAt,asc
+GET http://localhost:8080/api/v1/addresses/search?page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM2NzU2LCJpYXQiOjE3Mzk5MzMxNTZ9.rpers-KaRo18e8wCmSmxapaE5z-jrEBMrHUlM4IQjlc
+
+{
+  "addressName": "busan"
+}

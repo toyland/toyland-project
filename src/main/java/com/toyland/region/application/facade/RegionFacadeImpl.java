@@ -1,12 +1,15 @@
 package com.toyland.region.application.facade;
 
 import com.toyland.region.application.usecase.RegionService;
-import com.toyland.region.presentation.dto.CreateRegionRequestDto;
-import com.toyland.region.presentation.dto.RegionResponseDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
+import com.toyland.region.presentation.dto.repuest.CreateRegionRequestDto;
+import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
+import com.toyland.region.presentation.dto.response.RegionResponseDto;
+import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 /**
  * @author : hanjihoon
@@ -14,7 +17,7 @@ import java.util.UUID;
  */
 @Component
 @RequiredArgsConstructor
-public class RegionFacadeImpl implements RegionFacade{
+public class RegionFacadeImpl implements RegionFacade {
 
     private final RegionService regionService;
 
@@ -36,5 +39,11 @@ public class RegionFacadeImpl implements RegionFacade{
     @Override
     public void deleteByRegionId(UUID regionId, Long userId) {
         regionService.deleteByRegionId(regionId, userId);
+    }
+
+    @Override
+    public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
+        Pageable pageable) {
+        return regionService.searchRegion(searchRequestDto, pageable);
     }
 }

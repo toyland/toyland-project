@@ -1,0 +1,37 @@
+###review 생성
+POST http://localhost:8080/api/v1/reviews
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTI2MzQ3LCJpYXQiOjE3Mzk5MjI3NDd9.ru8vceM7qInsuLvqeN_RPpWM3Q4_06UxksKnqfyPYz4
+
+{
+  "orderId": "d34d784d-16b4-43eb-9922-2cc810353cae",
+  "storeId": "2e11ee82-82a9-41cc-ac52-3b532887d5e6",
+  "reviewContent": "좋습니다",
+  "rating": 4
+}
+
+###review 한 건 조회
+GET http://localhost:8080/api/v1/reviews/45535217-6bb1-41fb-873f-34ce31eb436a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTMwMDY0LCJpYXQiOjE3Mzk5MjY0NjR9.TESUcToteKlNFH52d4XUtsevA3Aonb_NlhzgT7Xe1Hw
+
+###review 페이징 조회
+GET http://localhost:8080/api/v1/reviews/search?page=0&size=10&sort=created_at,asc&
+    storeId=2e11ee82-82a9-41cc-ac52-3b532887d5e6
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTMwMDY0LCJpYXQiOjE3Mzk5MjY0NjR9.TESUcToteKlNFH52d4XUtsevA3Aonb_NlhzgT7Xe1Hw
+
+###review 수정
+PUT http://localhost:8080/api/v1/reviews/45535217-6bb1-41fb-873f-34ce31eb436a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTMwMDY0LCJpYXQiOjE3Mzk5MjY0NjR9.TESUcToteKlNFH52d4XUtsevA3Aonb_NlhzgT7Xe1Hw
+
+{
+  "reviewContent": "좋습니다  변경",
+  "rating": 3
+}
+
+###review 삭제
+DELETE http://localhost:8080/api/v1/reviews/45535217-6bb1-41fb-873f-34ce31eb436a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTMwNjc3LCJpYXQiOjE3Mzk5MjcwNzd9.NTwdcwVM9rvCohRRCJPd35Hun6R654rwAQGY9UAsh9k

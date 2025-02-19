@@ -1,10 +1,14 @@
 package com.toyland.address.application.facade;
 
 import com.toyland.address.application.usecase.AddressService;
-import com.toyland.address.presentation.dto.AddressResponseDto;
-import com.toyland.address.presentation.dto.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.request.AddressSearchRequestDto;
+import com.toyland.address.presentation.dto.request.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.response.AddressResponseDto;
+import com.toyland.address.presentation.dto.response.AddressSearchResponseDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,6 +32,7 @@ public class AddressFacadeImpl implements AddressFacade {
         return addressService.findByAddressId(addressId);
     }
 
+
     @Override
     public AddressResponseDto updateAddress(UUID addressId, CreateAddressRequestDto requestDto) {
         return addressService.updateAddress(addressId, requestDto);
@@ -36,5 +41,11 @@ public class AddressFacadeImpl implements AddressFacade {
     @Override
     public void deleteAddress(UUID addressId, Long userId) {
         addressService.deleteAddress(addressId, userId);
+    }
+
+    @Override
+    public Page<AddressSearchResponseDto> searchAddress(AddressSearchRequestDto requestDto,
+        Pageable pageable) {
+        return addressService.searchAddress(requestDto, pageable);
     }
 }

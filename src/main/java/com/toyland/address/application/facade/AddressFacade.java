@@ -1,8 +1,12 @@
 package com.toyland.address.application.facade;
 
-import com.toyland.address.presentation.dto.AddressResponseDto;
-import com.toyland.address.presentation.dto.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.request.AddressSearchRequestDto;
+import com.toyland.address.presentation.dto.request.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.response.AddressResponseDto;
+import com.toyland.address.presentation.dto.response.AddressSearchResponseDto;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author : hanjihoon
@@ -17,4 +21,7 @@ public interface AddressFacade {
     AddressResponseDto updateAddress(UUID addressId, CreateAddressRequestDto requestDto);
 
     void deleteAddress(UUID addressId, Long userId);
+
+    Page<AddressSearchResponseDto> searchAddress(AddressSearchRequestDto requestDto,
+        Pageable pageable);
 }
