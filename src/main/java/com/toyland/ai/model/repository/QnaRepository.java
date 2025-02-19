@@ -6,12 +6,13 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+
 public interface QnaRepository {
 
-    Qna save(Qna qna);
+  Qna save(Qna qna);
 
-    Optional<Qna> findById(UUID qnaId);
+  Optional<Qna> findById(UUID qnaId);
 
-    Page<Qna> searchQna(UUID storeId, Pageable pageable);
+  Page<Qna> searchQna(UUID storeId, Pageable pageable);
 
 }

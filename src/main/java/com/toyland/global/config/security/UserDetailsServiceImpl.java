@@ -3,6 +3,7 @@ package com.toyland.global.config.security;
 
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
+import com.toyland.user.presentation.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +21,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Not Found " + username));
 
-        return new UserDetailsImpl(user);
+        return new UserDetailsImpl(UserDto.of(user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole()));
     }
 }

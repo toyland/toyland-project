@@ -2,6 +2,7 @@ package com.toyland.user.model;
 
 
 import com.toyland.global.common.auditing.BaseEntity;
+import com.toyland.user.presentation.dto.UpdateUserRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,9 +36,8 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    public void updateUser(String username, String password, UserRoleEnum role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
+    public void updateUser(UpdateUserRequestDto dto) {
+        this.username = dto.getUsername();
+        this.password = dto.getPassword();
     }
 }
