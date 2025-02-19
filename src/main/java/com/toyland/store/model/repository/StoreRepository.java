@@ -11,13 +11,15 @@ import java.util.UUID;
 
 public interface StoreRepository {
 
-  Store save(Store from);
+    Store save(Store from);
 
-  Optional<Store> findById(UUID id);
+    Optional<Store> findById(UUID id);
 
-  // test code 용
-  void deleteAllInBatch();
+    // test code 용
+    void deleteAllInBatch();
 
-  List<Store> findAll();
+    List<Store> findAll();
+
+    <S extends Store> Iterable<S> saveAll(Iterable<S> entities);
 
 }
