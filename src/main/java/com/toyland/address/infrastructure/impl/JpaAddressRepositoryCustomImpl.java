@@ -38,14 +38,14 @@ public class JpaAddressRepositoryCustomImpl implements JpaAddressRepositoryCusto
     public Page<AddressSearchResponseDto> searchAddress(AddressSearchRequestDto requestDto,
         Pageable pageable) {
 
-        validatePageSize(pageable.getPageSize());
+        int pageSize = validatePageSize(pageable.getPageSize());
 
         List<OrderSpecifier<?>> orderSpecifierList = dynamicOrder(pageable);
 
         List<Address> fetch = query(address, requestDto)
             .orderBy(orderSpecifierList.toArray(new OrderSpecifier[0]))
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
+            .limit(pageSize)
             .fetch();
 
         List<AddressSearchResponseDto> addressSearchResponseDtoList = fetch.stream()
