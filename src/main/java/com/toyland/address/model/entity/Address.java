@@ -1,6 +1,6 @@
 package com.toyland.address.model.entity;
 
-import com.toyland.address.presentation.dto.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.request.CreateAddressRequestDto;
 import com.toyland.global.common.auditing.BaseEntity;
 import com.toyland.region.model.entity.Region;
 import com.toyland.user.model.User;
@@ -39,7 +39,7 @@ public class Address extends BaseEntity {
     @Column(name = "address_name", nullable = false, length = 100)
     private String addressName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -52,6 +52,14 @@ public class Address extends BaseEntity {
     public Address(String addressName, User user, Region region) {
         this.addressName = addressName;
         this.user = user;
+    }
+
+    @Builder
+    public Address(UUID id, String addressName, User user, Region region) {
+        this.id = id;
+        this.addressName = addressName;
+        this.user = user;
+        this.region = region;
     }
 
     //Dto를 통해 생성하는 Address의 비즈니스 로직에선 아래 정적 메서드 사용
