@@ -63,7 +63,7 @@ public class JpaAddressRepositoryCustomImpl implements JpaAddressRepositoryCusto
             .select(expr)
             .from(address)
             .where(
-                addressNameContains(requestDto.AddressName())
+                addressNameContains(requestDto.addressName())
             );
     }
 
