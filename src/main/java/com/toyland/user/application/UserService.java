@@ -8,6 +8,8 @@ import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
 import com.toyland.user.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -82,4 +84,8 @@ public class UserService {
                 CustomException.from(UserErrorCode.USER_NOT_FOUND)));
     }
 
+    public Page<UserSearchResponseDto> search(UserSearchRequestDto dto, Pageable pageable) {
+        return userRepository.search(dto,pageable)
+                .map(UserSearchResponseDto::from);
+    }
 }

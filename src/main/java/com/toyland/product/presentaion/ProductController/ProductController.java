@@ -4,15 +4,19 @@
  */
 package com.toyland.product.presentaion.ProductController;
 
+import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.product.application.facade.ProductFacade;
 import com.toyland.product.application.usecase.ProductService;
+import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.presentaion.dto.CreateProductRequestDto;
 import com.toyland.product.presentaion.dto.ProductResponseDto;
 import com.toyland.product.presentaion.dto.UpdateProductRequestDto;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,5 +65,20 @@ public class ProductController {
       @RequestBody UpdateProductRequestDto request) {
     return ResponseEntity.ok(productService.updateProduct(
         UpdateProductServiceRequestDto.of(request, productId)));
+  }
+
+  /**
+   * 상품을 삭제합니다.
+   * @param productId 삭제할 상품 id
+   * @return 204 no content
+   */
+  @DeleteMapping("/{productId}")
+  public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId,
+      @CurrentLoginUserId Long currentLoginUserId) {
+
+    productService.deleteProduct(
+        DeleteProductServiceRequestDto.of(currentLoginUserId, productId, LocalDateTime.now()));
+
+    return ResponseEntity.noContent().build();
   }
 }

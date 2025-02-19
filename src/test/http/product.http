@@ -25,3 +25,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
   "price": 25000,
   "isDisplay": true
 }
+
+### 상품 삭제
+DELETE http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
