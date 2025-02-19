@@ -16,6 +16,7 @@ import com.toyland.address.presentation.dto.request.AddressSearchRequestDto;
 import com.toyland.address.presentation.dto.response.AddressSearchResponseDto;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,78 +31,85 @@ import org.springframework.data.domain.Sort;
 @RequiredArgsConstructor
 public class JpaAddressRepositoryCustomImpl implements JpaAddressRepositoryCustom {
 
-  private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
 
-  @Override
-  public Page<AddressSearchResponseDto> searchAddress(AddressSearchRequestDto requestDto,
-      Pageable pageable) {
-    List<OrderSpecifier<?>> orderSpecifierList = dynamicOrder(pageable);
+    @Override
+    public Page<AddressSearchResponseDto> searchAddress(AddressSearchRequestDto requestDto,
+        Pageable pageable) {
 
-    List<Address> fetch = query(address, requestDto)
-        .orderBy(orderSpecifierList.toArray(new OrderSpecifier[0]))
-        .offset(pageable.getOffset())
-        .limit(pageable.getPageSize())
-        .fetch();
+        validatePageSize(pageable.getPageSize());
 
-    List<AddressSearchResponseDto> addressSearchResponseDtoList = fetch.stream()
-        .map(AddressSearchResponseDto::from)
-        .collect(Collectors.toList());
+        List<OrderSpecifier<?>> orderSpecifierList = dynamicOrder(pageable);
 
-    Long totalCount = query(Wildcard.count, requestDto).fetchOne();
+        List<Address> fetch = query(address, requestDto)
+            .orderBy(orderSpecifierList.toArray(new OrderSpecifier[0]))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
-    if (totalCount == null) {
-      totalCount = 0L;
-    }
+        List<AddressSearchResponseDto> addressSearchResponseDtoList = fetch.stream()
+            .map(AddressSearchResponseDto::from)
+            .collect(Collectors.toList());
 
-    return new PageImpl<>(addressSearchResponseDtoList, pageable, totalCount);
+        Long totalCount = query(Wildcard.count, requestDto).fetchOne();
 
-
-  }
-
-  private <T> JPAQuery<T> query(Expression<T> expr, AddressSearchRequestDto requestDto) {
-    return queryFactory
-        .select(expr)
-        .from(address)
-        .where(
-            addressNameContains(requestDto.addressName())
-        );
-  }
-
-
-  private BooleanExpression addressNameContains(String addressName) {
-    return addressName != null ? address.addressName.containsIgnoreCase(addressName) : null;
-  }
-
-
-  private List<OrderSpecifier<?>> dynamicOrder(Pageable pageable) {
-    List<OrderSpecifier<?>> orderSpecifierList = new ArrayList<>();
-
-    if (pageable.getSort() != null) {
-      for (Sort.Order sortOrder : pageable.getSort()) {
-        Order direction = sortOrder.isAscending() ? Order.ASC : Order.DESC;
-
-        switch (sortOrder.getProperty()) {
-          case "createdAt":
-            orderSpecifierList.add(new OrderSpecifier<>(direction, address.createdAt));
-            break;
-          case "updatedAt":
-            orderSpecifierList.add(new OrderSpecifier<>(direction, address.updatedAt));
-            break;
-          case "addressName":
-            orderSpecifierList.add(
-                new OrderSpecifier<>(direction, address.addressName));
-            break;
-          default:
-            throw new IllegalArgumentException(
-                "잘못된 정렬 필드입니다. : " + sortOrder.getProperty());
+        if (totalCount == null) {
+            totalCount = 0L;
         }
-      }
-    } else {
-      orderSpecifierList.add(new OrderSpecifier<>(Order.ASC, address.createdAt));
-    }
-    return orderSpecifierList;
 
-  }
+        return new PageImpl<>(addressSearchResponseDtoList, pageable, totalCount);
+
+
+    }
+
+    private int validatePageSize(int pageSize) {
+        return Set.of(10, 30, 50).contains(pageSize) ? pageSize : 10;
+    }
+
+    private <T> JPAQuery<T> query(Expression<T> expr, AddressSearchRequestDto requestDto) {
+        return queryFactory
+            .select(expr)
+            .from(address)
+            .where(
+                addressNameContains(requestDto.addressName())
+            );
+    }
+
+
+    private BooleanExpression addressNameContains(String addressName) {
+        return addressName != null ? address.addressName.containsIgnoreCase(addressName) : null;
+    }
+
+
+    private List<OrderSpecifier<?>> dynamicOrder(Pageable pageable) {
+        List<OrderSpecifier<?>> orderSpecifierList = new ArrayList<>();
+
+        if (pageable.getSort() != null) {
+            for (Sort.Order sortOrder : pageable.getSort()) {
+                Order direction = sortOrder.isAscending() ? Order.ASC : Order.DESC;
+
+                switch (sortOrder.getProperty()) {
+                    case "createdAt":
+                        orderSpecifierList.add(new OrderSpecifier<>(direction, address.createdAt));
+                        break;
+                    case "updatedAt":
+                        orderSpecifierList.add(new OrderSpecifier<>(direction, address.updatedAt));
+                        break;
+                    case "addressName":
+                        orderSpecifierList.add(
+                            new OrderSpecifier<>(direction, address.addressName));
+                        break;
+                    default:
+                        throw new IllegalArgumentException(
+                            "잘못된 정렬 필드입니다. : " + sortOrder.getProperty());
+                }
+            }
+        } else {
+            orderSpecifierList.add(new OrderSpecifier<>(Order.ASC, address.createdAt));
+        }
+        return orderSpecifierList;
+
+    }
 
 }
