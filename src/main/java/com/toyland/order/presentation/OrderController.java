@@ -39,7 +39,7 @@ public class OrderController {
      * @param orderId
      * @return 주문 정보(OrderResponseDto)를 담은 HTTP 응답
      */
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('MASTER', 'MANAGER', 'OWNER')")
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> findOrderByOrderId(@PathVariable UUID orderId,
                                                                @CurrentLoginUserId Long loginUserId) {

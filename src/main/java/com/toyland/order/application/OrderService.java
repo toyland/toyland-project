@@ -12,11 +12,8 @@ import com.toyland.orderproduct.presentation.dto.OrderProductRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
 import com.toyland.user.model.User;
-import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,18 +68,10 @@ public class OrderService {
     /**
      * 주문 조회(단 건 조회)
      */
-
-
     public OrderResponseDto findByOrderId(UUID orderId, Long loginUserId) {
         // 주문 조회
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CustomException(OrderErrorCode.ORDER_NOT_FOUND));
-
-        // 주문을 생성한 사용자와 로그인된 사용자가 일치 or [MASTER, MANAGER, OWNER] Role 있는지 확인
-        if (!order.getUser().getId().equals(loginUserId) && !hasOrderRole()) {
-            throw new CustomException(OrderErrorCode.UNAUTHORIZED_ACCESS);
-        }
-
         return OrderResponseDto.from(order);
     }
 
@@ -106,20 +95,5 @@ public class OrderService {
 
         //주문 취소
         order.cancel();
-    }
-
-
-
-    /**
-     * 현재 사용자가 주문 조회 권한을 가지고 있는지 확인
-     */
-    private boolean hasOrderRole() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority ->
-                        grantedAuthority.getAuthority().equals(UserRoleEnum.Authority.MASTER) ||
-                        grantedAuthority.getAuthority().equals(UserRoleEnum.Authority.MANAGER) ||
-                        grantedAuthority.getAuthority().equals(UserRoleEnum.Authority.OWNER)
-                );
     }
 }
