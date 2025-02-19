@@ -1,7 +1,7 @@
 package com.toyland.review.presentation;
 
 import com.toyland.ai.presentation.dto.PagedResponse;
-import com.toyland.global.config.security.UserDetailsImpl;
+import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.review.application.facade.ReviewFacade;
 import com.toyland.review.presentation.dto.ReviewRequestDto;
 import com.toyland.review.presentation.dto.ReviewResponseDto;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,7 +71,6 @@ public class ReviewController {
    * @param review   내용과 점수
    * @return 수정된 리뷰
    */
-
   @PutMapping("/{reviewId}")
   public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable UUID reviewId,
       @Valid @RequestBody ReviewRequestDto review) {
@@ -83,12 +81,12 @@ public class ReviewController {
    * 리뷰 한 건 삭제한다.
    *
    * @param reviewId
-   * @param userDetails
+   * @param loginUserId
    */
   @DeleteMapping("/{reviewId}")
   public void deleteReview(@PathVariable UUID reviewId,
-      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    reviewFacade.deleteReview(reviewId, userDetails.getUserId());
+      @CurrentLoginUserId Long loginUserId) {
+    reviewFacade.deleteReview(reviewId, loginUserId);
   }
 
 
