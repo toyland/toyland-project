@@ -30,8 +30,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNUR
 ### Address 동적 검색 //page=0&size=10&sort=createdAt,asc
 GET http://localhost:8080/api/v1/addresses/search?page=0&size=10&sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTMzODYwLCJpYXQiOjE3Mzk5MzAyNjB9.QSQDzZbz-KrqSyvnfnEfymVmUEJ3PYwYV_KYlln-nbY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM2NzU2LCJpYXQiOjE3Mzk5MzMxNTZ9.rpers-KaRo18e8wCmSmxapaE5z-jrEBMrHUlM4IQjlc
 
 {
-  "addressName": "seoul"
+  "addressName": "busan"
 }

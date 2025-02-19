@@ -2,8 +2,8 @@ package com.toyland.region.model.entity;
 
 import com.toyland.address.model.entity.Address;
 import com.toyland.global.common.auditing.BaseEntity;
-import com.toyland.region.presentation.dto.CreateRegionRequestDto;
-import com.toyland.region.presentation.dto.RegionResponseDto;
+import com.toyland.region.presentation.dto.repuest.CreateRegionRequestDto;
+import com.toyland.region.presentation.dto.response.RegionResponseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,7 +39,7 @@ public class Region extends BaseEntity {
     @Column(name = "region_name", nullable = false, length = 100)
     private String regionName;
 
-    
+
     @OneToMany(mappedBy = "region")
     private List<Address> addressList = new ArrayList<>();
 
