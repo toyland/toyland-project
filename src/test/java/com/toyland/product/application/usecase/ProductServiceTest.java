@@ -9,6 +9,7 @@ import static org.assertj.core.groups.Tuple.tuple;
 
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDto;
+import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
@@ -16,7 +17,11 @@ import com.toyland.product.presentaion.dto.CreateProductRequestDto;
 import com.toyland.product.presentaion.dto.ProductResponseDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
+import com.toyland.user.model.User;
+import com.toyland.user.model.UserRoleEnum;
+import com.toyland.user.model.repository.UserRepository;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +38,9 @@ class ProductServiceTest extends IntegrationTestSupport {
 
   @Autowired
   private StoreRepository storeRepository;
+
+  @Autowired
+  private UserRepository userRepository;
 
   @DisplayName("상품을 생성합니다.")
   @Test
@@ -79,7 +87,7 @@ class ProductServiceTest extends IntegrationTestSupport {
 
   @DisplayName("상품을 업데이트합니다.")
   @Test
-  void test(){
+  void updateProduct(){
     // given
     Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
     Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
@@ -101,6 +109,33 @@ class ProductServiceTest extends IntegrationTestSupport {
     assertThat(result)
         .extracting("name", "id", "price", "isDisplay")
         .contains(newName, product1.getId(), newPrice, newIsDisplay);
+  }
+
+  @DisplayName("상품을 삭제합니다.")
+  @Test
+  void deleteProduct(){
+    // given
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+    Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
+    User user = userRepository.save(createMaster("유저1"));
+    LocalDateTime now = LocalDateTime.now();
+
+    // when
+    productService.deleteProduct(
+            DeleteProductServiceRequestDto.builder()
+                .actorId(user.getId())
+                .productId(product1.getId())
+                .eventDateTime(now)
+                .build()
+        );
+
+    // then
+    List<Product> result = productRepository.findAll();
+    assertThat(result).hasSize(0);
+  }
+
+  private User createMaster(String username) {
+    return new User(username, "password", UserRoleEnum.MASTER);
   }
 
   private Product createProduct(String name, Store store) {
