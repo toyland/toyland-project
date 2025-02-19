@@ -2,8 +2,10 @@ package com.toyland.address.application.usecase;
 
 import com.toyland.address.model.entity.Address;
 import com.toyland.address.model.repository.AddressRepository;
-import com.toyland.address.presentation.dto.AddressResponseDto;
-import com.toyland.address.presentation.dto.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.request.AddressSearchRequestDto;
+import com.toyland.address.presentation.dto.request.CreateAddressRequestDto;
+import com.toyland.address.presentation.dto.response.AddressResponseDto;
+import com.toyland.address.presentation.dto.response.AddressSearchResponseDto;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.AddressErrorCode;
 import com.toyland.global.exception.type.domain.UserErrorCode;
@@ -14,6 +16,8 @@ import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,5 +72,11 @@ public class AddressServiceImpl implements AddressService {
             .orElseThrow(() ->
                 CustomException.from(AddressErrorCode.ADDRESS_NOT_FOUND));
         findAddress.addDeletedField(userId);
+    }
+
+    @Override
+    public Page<AddressSearchResponseDto> searchAddress(AddressSearchRequestDto requestDto,
+        Pageable pageable) {
+        return addressRepository.searchAddress(requestDto, pageable);
     }
 }

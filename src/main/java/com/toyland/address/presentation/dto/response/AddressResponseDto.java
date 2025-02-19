@@ -1,7 +1,6 @@
-package com.toyland.address.presentation.dto;
+package com.toyland.address.presentation.dto.response;
 
 import com.toyland.address.model.entity.Address;
-
 import java.util.UUID;
 
 /**
@@ -15,8 +14,8 @@ public record AddressResponseDto(UUID addressId,
 
     public static AddressResponseDto from(Address address) {
         return new AddressResponseDto(address.getId(),
-                address.getAddressName(),
-                address.getUser().getId());
+            address.getAddressName(),
+            address.getUser().getId());
     }
 
 }
