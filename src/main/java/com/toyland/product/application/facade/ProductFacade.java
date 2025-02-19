@@ -4,9 +4,9 @@
  */
 package com.toyland.product.application.facade;
 
-import com.toyland.product.presentaion.dto.CreateProductRequestDto;
+import com.toyland.product.presentation.dto.CreateProductRequestDto;
 
 public interface ProductFacade {
 
-  void createProduct(CreateProductRequestDto dto);
+    void createProduct(CreateProductRequestDto dto);
 }
