@@ -12,6 +12,7 @@ import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDt
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
 import com.toyland.product.presentaion.dto.CreateProductRequestDto;
+import com.toyland.product.presentaion.dto.ReadProductResponseDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import java.math.BigDecimal;
@@ -62,6 +63,33 @@ class ProductServiceTest extends IntegrationTestSupport {
             tuple("고추바사삭", BigDecimal.valueOf(100000), false, "굽네치킨")
         );
 
+  }
+
+  @DisplayName("상품을 단건 조회합니다.")
+  @Test
+  void readProduct(){
+    // given
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+    Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
+    Product product2 = productRepository.save(createProduct("고추바사삭", goobne));
+
+    // when
+    ReadProductResponseDto result = productService.readProduct(product1.getId());
+
+    // then
+    assertThat(result)
+        .extracting("name", "id")
+        .contains(product1.getName(), product1.getId());
+
+  }
+
+  private Product createProduct(String name, Store store) {
+    return Product.builder()
+        .name(name)
+        .price(BigDecimal.valueOf(20000))
+        .isDisplay(true)
+        .store(store)
+        .build();
   }
 
   private Store createStore(String name, String content, String address){
