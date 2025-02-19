@@ -1,4 +1,4 @@
-### 유저 생성
+### 유저 생성 (MASTER)
 POST http://localhost:8080/api/v1/users/signup
 Content-Type: application/json
 
@@ -8,7 +8,7 @@ Content-Type: application/json
   "role": "MASTER"
 }
 
-### 유저 로그인
+### 유저 로그인 (MASTER)
 GET http://localhost:8080/api/v1/users/login
 Content-Type: application/json
 
@@ -35,3 +35,60 @@ Content-Type: application/json
 ### 회원 탈퇴
 DELETE http://localhost:8080/api/v1/users/1
 Content-Type: application/json
+
+### 유저 생성(CUSTOMER)
+POST http://localhost:8080/api/v1/users/signup
+Content-Type: application/json
+
+{
+  "username": "customer",
+  "password": "!Customer123",
+  "role": "CUSTOMER"
+}
+
+### 유저 로그인 (CUSTOMER)
+GET http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "customer",
+  "password": "!Customer123"
+}
+
+### 유저 생성(OWNER)
+POST http://localhost:8080/api/v1/users/signup
+Content-Type: application/json
+
+{
+  "username": "owner",
+  "password": "!Owner123",
+  "role": "OWNER"
+}
+
+### 유저 로그인 (OWNER)
+GET http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "owner",
+  "password": "!Owner123"
+}
+
+### 유저 생성(MANAGER)
+POST http://localhost:8080/api/v1/users/signup
+Content-Type: application/json
+
+{
+  "username": "manager",
+  "password": "!Manager123",
+  "role": "MANAGER"
+}
+
+### 유저 로그인 (MANAGER)
+GET http://localhost:8080/api/v1/users/login
+Content-Type: application/json
+
+{
+  "username": "manager",
+  "password": "!Manager123"
+}
