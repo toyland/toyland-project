@@ -93,7 +93,8 @@ public class QnaController {
   @DeleteMapping("/{qnaId}")
   public void deleteAiQna(@PathVariable UUID qnaId,
       @AuthenticationPrincipal UserDetailsImpl userDetails) {
-    qnaService.delete(qnaId, userDetails.getId());
+    qnaService.delete(qnaId, userDetails.getUserId());
+
   }
 
 }
