@@ -1,5 +1,8 @@
 package com.toyland.order.application;
 
+import com.toyland.global.exception.CustomException;
+import com.toyland.global.exception.type.domain.OrderErrorCode;
+import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
@@ -69,12 +72,12 @@ public class OrderService {
 
         // 회원 조회
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
 
         //주문 엔티티 조회
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException(" 해당 주문을 찾을 수 없습니다"));
+                .orElseThrow(() -> new CustomException(OrderErrorCode.ORDER_NOT_FOUND));
 
 
         //주문 취소

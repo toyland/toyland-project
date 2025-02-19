@@ -1,6 +1,8 @@
 package com.toyland.order.model;
 
 import com.toyland.global.common.auditing.BaseEntity;
+import com.toyland.global.exception.CustomException;
+import com.toyland.global.exception.type.domain.OrderErrorCode;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
 import com.toyland.orderproduct.model.OrderProduct;
 import com.toyland.user.model.User;
@@ -87,7 +89,7 @@ public class Order extends BaseEntity {
      */
     public void cancel() {
         if (this.orderStatus == OrderStatus.PREPARING || this.orderStatus == OrderStatus.DELIVERING || this.orderStatus == OrderStatus.DELIVERY_COMPLETED) {
-            throw new IllegalStateException("[조리중/배달중/배달완료] 상태에서는 주문을 취소할 수 없습니다.");
+            throw new CustomException(OrderErrorCode.INVALID_STATUS);
         }
 
         // 후에 결제 취소 로직 추가
