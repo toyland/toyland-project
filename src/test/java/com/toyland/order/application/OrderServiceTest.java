@@ -81,7 +81,7 @@ class OrderServiceTest extends IntegrationTestSupport {
 
         /** when **/
         // 주문 생성
-        Order order = orderService.createOrder(createOrderRequestDto, user.getUsername());
+        Order order = orderService.createOrder(createOrderRequestDto, user.getId());
 
 
 
@@ -140,13 +140,13 @@ class OrderServiceTest extends IntegrationTestSupport {
         CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts, OrderType.DELIVERY, PaymentType.CARD);
 
         // 주문 생성
-        Order order = orderService.createOrder(createOrderRequestDto, user.getUsername());
+        Order order = orderService.createOrder(createOrderRequestDto, user.getId());
 
 
 
         /** when **/
         // 주문 삭제(취소)
-        orderService.deleteOrder(order.getId(), user.getUsername());
+        orderService.deleteOrder(order.getId(), user.getId());
 
 
 
