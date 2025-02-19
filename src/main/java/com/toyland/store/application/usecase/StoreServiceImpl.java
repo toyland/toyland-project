@@ -73,7 +73,7 @@ public class StoreServiceImpl implements StoreService {
 
   private List<Category> getCategories(CreateStoreCategoryListServiceRequestDto dto) {
     if(dto.existsDuplicateCategoryId()) {
-      throw CustomException.from(CategoryErrorCode.CATEGORY_NOT_FOUND);
+      throw CustomException.from(CategoryErrorCode.ID_DUPLICATE);
     }
     return categoryRepository.findAllById(dto.categoryIdList());
   }

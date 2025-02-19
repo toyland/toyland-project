@@ -14,10 +14,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNUR
 ### 음식점에 카테고리 생성
 POST http://localhost:8080/api/v1/stores/df41f705-a5d4-419c-a372-f9c43c585e07/categories
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODg1NDM0LCJpYXQiOjE3Mzk4ODE4MzR9.e9dZu0n-hsQLgXXUC2k-0nzKe7p9reZmAZWT8S57J10
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM1MjQzLCJpYXQiOjE3Mzk5MzE2NDN9.EH1k06aEe9SfHvEYfNk-IWOB8osI6cJutl07gvokFiI
 
 {
   "categoryIdList": [
+    "2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7",
+    "72f705b4-97ee-4ee3-8c02-78b38b15a5bc"
+  ]
+}
+
+### 음식점에 카테고리 생성 - 중복 오류
+POST http://localhost:8080/api/v1/stores/df41f705-a5d4-419c-a372-f9c43c585e07/categories
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM1MjQzLCJpYXQiOjE3Mzk5MzE2NDN9.EH1k06aEe9SfHvEYfNk-IWOB8osI6cJutl07gvokFiI
+
+{
+  "categoryIdList": [
+    "2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7",
     "2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7",
     "72f705b4-97ee-4ee3-8c02-78b38b15a5bc"
   ]
