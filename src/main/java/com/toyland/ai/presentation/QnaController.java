@@ -84,16 +84,16 @@ public class QnaController {
     }
 
 
-    /**
-     * AI의 질문,답변을 삭제한다.
-     *
-     * @param qnaId
-     * @param userDetails
-     */
-    @DeleteMapping("/{qnaId}")
-    public void deleteAiQna(@PathVariable UUID qnaId,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        qnaService.delete(qnaId, userDetails.getId());
-    }
+  /**
+   * AI의 질문,답변을 삭제한다.
+   *
+   * @param qnaId
+   * @param userDetails
+   */
+  @DeleteMapping("/{qnaId}")
+  public void deleteAiQna(@PathVariable UUID qnaId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    qnaService.delete(qnaId, userDetails.getId());
+  }
 
 }
