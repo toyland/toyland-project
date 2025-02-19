@@ -3,9 +3,9 @@ POST http://localhost:8080/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "master",
+  "username": "customer6",
   "password": "!Master123",
-  "role": "MASTER"
+  "role": "CUSTOMER"
 }
 
 ### 유저 로그인
@@ -18,8 +18,17 @@ Content-Type: application/json
 }
 
 ### 회원 조회
-POST http://localhost:8080/api/v1/users/1
+GET http://localhost:8080/api/v1/users/1
 Content-Type: application/json
+
+### 회원 조회(동적쿼리)
+GET http://localhost:8080/api/v1/users/search?page=0&size=3&sort=createdAt,asc
+Content-Type: application/json
+
+{
+  "role": "CUSTOMER",
+  "isDeleted": true
+}
 
 
 ### 회원 정보 수정
@@ -35,3 +44,4 @@ Content-Type: application/json
 ### 회원 탈퇴
 DELETE http://localhost:8080/api/v1/users/1
 Content-Type: application/json
+
