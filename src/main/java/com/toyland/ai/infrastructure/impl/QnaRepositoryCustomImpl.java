@@ -5,7 +5,6 @@ import static com.toyland.ai.model.QQna.qna;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toyland.ai.infrastructure.QnaRepositoryCustom;
-import com.toyland.ai.model.QQna;
 import com.toyland.ai.model.Qna;
 import java.util.List;
 import java.util.UUID;
@@ -31,9 +30,9 @@ public class QnaRepositoryCustomImpl implements QnaRepositoryCustom {
 
     // 전체 개수 조회
     long total = queryFactory
-        .select(QQna.qna.count())
-        .from(QQna.qna)
-        .where(QQna.qna.store.id.eq(storeId))
+        .select(qna.count())
+        .from(qna)
+        .where(qna.store.id.eq(storeId))
         .fetchOne();
 
     return new PageImpl<>(contents, pageable, total);
