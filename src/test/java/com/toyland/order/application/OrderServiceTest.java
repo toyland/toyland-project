@@ -7,7 +7,7 @@ import com.toyland.order.model.OrderType;
 import com.toyland.order.model.PaymentType;
 import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
-import com.toyland.orderproduct.model.repository.OrderProductRepository;
+import com.toyland.orderproduct.model.OrderProduct;
 import com.toyland.orderproduct.presentation.dto.OrderProductRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
@@ -16,7 +16,6 @@ import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
@@ -33,9 +33,6 @@ class OrderServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private OrderService orderService;
-
-    @Autowired
-    private OrderProductRepository orderProductRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -50,15 +47,6 @@ class OrderServiceTest extends IntegrationTestSupport {
     private OrderRepository orderRepository;
 
 
-
-    @AfterEach
-    void tearDown() {
-        orderProductRepository.deleteAllInBatch();
-        orderRepository.deleteAllInBatch();
-        productRepository.deleteAllInBatch();
-        storeRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
-    }
 
 
     @DisplayName("주문을 생성 및 조회한다.")
@@ -119,6 +107,70 @@ class OrderServiceTest extends IntegrationTestSupport {
                         tuple("오리지널", BigDecimal.valueOf(30000), 3)
                 );
     }
+
+
+
+
+    @DisplayName("주문을 삭제한다.")
+    @Test
+    @Transactional
+    void deleteOrder() {
+        /** given **/
+        //유저 생성
+        User user = userRepository.save(createUser("master", "1234", UserRoleEnum.MASTER));
+
+        //상점 생성
+        Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+
+        // 상품 생성
+        Product product1 = createProduct("고추바사삭", BigDecimal.valueOf(10000), goobne);
+        Product product2 = createProduct("볼케이노", BigDecimal.valueOf(20000), goobne);
+        Product product3 = createProduct("오리지널", BigDecimal.valueOf(30000), goobne);
+        productRepository.saveAll(List.of(product1, product2, product3));
+
+
+        // 주문 상품 리스트 생성
+        List<OrderProductRequestDto> orderProducts = List.of(
+                new OrderProductRequestDto(product1.getId(), product1.getPrice(), 1),
+                new OrderProductRequestDto(product2.getId(), product2.getPrice(), 2),
+                new OrderProductRequestDto(product3.getId(), product3.getPrice(), 3)
+        );
+
+        // 주문 요청 DTO 생성
+        CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts, OrderType.DELIVERY, PaymentType.CARD);
+
+        // 주문 생성
+        Order order = orderService.createOrder(createOrderRequestDto, user.getUsername());
+
+
+
+        /** when **/
+        // 주문 삭제(취소)
+        orderService.deleteOrder(order.getId(), user.getUsername());
+
+
+
+        /** then **/
+        // 삭제 처리된 주문 조회 (논리 삭제: deleted_at IS NOT NULL)
+        Optional<Order> deletedOrder = orderRepository.findById(order.getId());
+
+        // 삭제 처리된 주문이 여전히 물리적으로는 존재하는 확인
+        assertThat(deletedOrder).isPresent();
+
+        // 삭제 처리된 주문이 논리적으로 삭제되었는지 확인
+        assertThat(deletedOrder.get().getDeletedAt()).isNotNull();
+
+        // 삭제 처리된 주문의 상태가 ORDER_CANCELED로 변경되었는지 확인
+        assertThat(deletedOrder.get().getOrderStatus()).isEqualTo(OrderStatus.ORDER_CANCELED);
+
+        // 삭제 처리된 주문에 속한 OrderProduct도 논리 삭제되었는지 확인
+        List<OrderProduct> deletedOrderProducts = deletedOrder.get().getOrderProductList();
+        assertThat(deletedOrderProducts).hasSize(3)
+                .allMatch(orderProduct -> orderProduct.getDeletedAt() != null);
+    }
+
+
+
 
 
 
