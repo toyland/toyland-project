@@ -1,3 +1,7 @@
+/**
+ * @Date : 2025. 02. 19.
+ * @author : jieun(je-pa)
+ */
 package com.toyland.product.application.usecase.dto;
 
 import java.time.LocalDateTime;
