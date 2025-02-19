@@ -31,7 +31,9 @@ public class QnaService {
 
   @Transactional
   public QnaResponseDto createQna(QnaRequestDto qnaRequestDto) {
-    String answer = fetchAiAnswer(qnaRequestDto.getQuestion());
+    String question = qnaRequestDto.getQuestion();
+    question = question.concat("답변은 최대한 간결하게 50자 이하로");
+    String answer = fetchAiAnswer(question);
     qnaRequestDto.setAnswer(answer);
     Store store = findStoreById(qnaRequestDto.getStoreId());
     Qna result = saveQna(qnaRequestDto, store);

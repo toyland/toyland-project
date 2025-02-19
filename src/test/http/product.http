@@ -1,11 +1,11 @@
 ### 상품 생성
 POST http://localhost:8080/api/v1/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjY3NjUsImlhdCI6MTczOTcyMzE2NX0.3jFPg6vcGzkp4U-l0JnCZt9Qnx8N1qBxG0VB0kjC39Q
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTI5NDgwLCJpYXQiOjE3Mzk5MjU4ODB9.Mo2R7Ji0_sq9CzBo1xAxYPCV2aI7NjxiZ0Evls5qVsI
 
 {
-  "name": "고추바사삭",
+  "name": "고추바사삭2",
   "price": 10000,
   "isDisplay": false,
-  "storeId": "4a242e8e-7682-4d32-931c-0b43dbf4eb0f"
+  "storeId": "2e11ee82-82a9-41cc-ac52-3b532887d5e6"
 }

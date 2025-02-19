@@ -4,7 +4,6 @@ import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.ProductErrorCode;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.repository.OrderRepository;
-import com.toyland.review.infrastructure.ReviewRepositoryCustom;
 import com.toyland.review.model.Review;
 import com.toyland.review.model.repository.ReviewRepository;
 import com.toyland.review.presentation.dto.ReviewRequestDto;
@@ -25,7 +24,6 @@ public class ReviewServiceImpl implements ReviewService {
   private final ReviewRepository reviewRepository;
   private final StoreRepository storeRepository;
   private final OrderRepository orderRepository;
-  private final ReviewRepositoryCustom reviewRepositoryCustom;
 
   @Override
   @Transactional
@@ -53,9 +51,27 @@ public class ReviewServiceImpl implements ReviewService {
 
   @Override
   public Page<ReviewResponseDto> searchReview(Pageable pageable, UUID storeId) {
-    Page<Review> reviewPage = reviewRepositoryCustom.searchReviews(storeId, pageable);
+    Page<Review> reviewPage = reviewRepository.searchReviews(storeId, pageable);
     Page<ReviewResponseDto> reviewList = reviewPage.map(ReviewResponseDto::of);
     return reviewList;
+  }
+
+
+  @Override
+  @Transactional
+  public ReviewResponseDto updateReview(ReviewRequestDto reviewDto, UUID reviewId) {
+    Review review = reviewRepository.findById(reviewId)
+        .orElseThrow(() -> CustomException.from(ProductErrorCode.NOT_FOUND));
+    review.update(reviewDto);
+    return ReviewResponseDto.of(review);
+  }
+
+  @Override
+  @Transactional
+  public void deleteReview(UUID reviewId, Long id) {
+    Review review = reviewRepository.findById(reviewId)
+        .orElseThrow(() -> CustomException.from(ProductErrorCode.NOT_FOUND));
+    review.addDeletedField(id);
   }
 
 

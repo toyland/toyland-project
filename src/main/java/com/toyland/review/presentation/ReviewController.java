@@ -1,17 +1,22 @@
 package com.toyland.review.presentation;
 
 import com.toyland.ai.presentation.dto.PagedResponse;
+import com.toyland.global.config.security.UserDetailsImpl;
 import com.toyland.review.application.facade.ReviewFacade;
 import com.toyland.review.presentation.dto.ReviewRequestDto;
 import com.toyland.review.presentation.dto.ReviewResponseDto;
+import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +36,8 @@ public class ReviewController {
    * @return 생성한 review
    */
   @PostMapping
-  public ResponseEntity<ReviewResponseDto> createReview(@RequestBody ReviewRequestDto review) {
+  public ResponseEntity<ReviewResponseDto> createReview(
+      @Valid @RequestBody ReviewRequestDto review) {
     return ResponseEntity.ok(reviewFacade.createReview(review));
   }
 
@@ -57,6 +63,32 @@ public class ReviewController {
       @RequestParam UUID storeId) {
     Page<ReviewResponseDto> reviews = reviewFacade.searchReview(pageable, storeId);
     return ResponseEntity.ok(new PagedResponse<>(reviews));
+  }
+
+  /**
+   * 리뷰의 내용과 점수를 수정한다.
+   *
+   * @param reviewId
+   * @param review   내용과 점수
+   * @return 수정된 리뷰
+   */
+
+  @PutMapping("/{reviewId}")
+  public ResponseEntity<ReviewResponseDto> updateReview(@PathVariable UUID reviewId,
+      @Valid @RequestBody ReviewRequestDto review) {
+    return ResponseEntity.ok(reviewFacade.updateReview(review, reviewId));
+  }
+
+  /**
+   * 리뷰 한 건 삭제한다.
+   *
+   * @param reviewId
+   * @param userDetails
+   */
+  @DeleteMapping("/{reviewId}")
+  public void deleteReview(@PathVariable UUID reviewId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    reviewFacade.deleteReview(reviewId, userDetails.getUserId());
   }
 
 

@@ -30,5 +30,14 @@ public class ReviewFacadeImpl implements ReviewFacade {
     return reviewService.searchReview(pageable, storeId);
   }
 
+  @Override
+  public ReviewResponseDto updateReview(ReviewRequestDto review, UUID reviewId) {
+    return reviewService.updateReview(review, reviewId);
+  }
+
+  @Override
+  public void deleteReview(UUID reviewId, Long id) {
+    reviewService.deleteReview(reviewId, id);
+  }
 
 }

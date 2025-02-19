@@ -2,7 +2,6 @@ package com.toyland.review.presentation.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReviewRequestDto {
 
-  @NotNull(message = "Order ID is required")
+
   private String orderId;
 
-  @NotNull(message = "Store ID is required")
   private String storeId;
 
-  @NotBlank(message = "Review content cannot be empty")
   private String reviewContent;
 
   @NotNull(message = "Rating is required")

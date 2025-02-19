@@ -14,5 +14,7 @@ public interface ReviewFacade {
 
   Page<ReviewResponseDto> searchReview(Pageable pageable, UUID storeId);
 
+  ReviewResponseDto updateReview(ReviewRequestDto review, UUID reviewId);
 
+  void deleteReview(UUID reviewId, Long id);
 }
