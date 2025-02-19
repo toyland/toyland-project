@@ -7,6 +7,7 @@ package com.toyland.product.application.usecase;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.ProductErrorCode;
 import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDto;
+import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
@@ -38,6 +39,13 @@ public class ProductServiceImpl implements ProductService {
     Product product = findProductById(dto.id());
     product.update(dto);
     return ProductResponseDto.from(product);
+  }
+
+  @Override
+  @Transactional
+  public void deleteProduct(DeleteProductServiceRequestDto dto) {
+    Product product = findProductById(dto.productId());
+    product.delete(dto.eventDateTime(), dto.actorId());
   }
 
   private Product findProductById(UUID productId) {
