@@ -6,6 +6,7 @@ package com.toyland.product.model.entity;
 
 import com.toyland.global.common.auditing.BaseEntity;
 import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDto;
+import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.store.model.entity.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,13 +23,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "p_product")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "deleted_at IS NULL")
+@SQLRestriction("deleted_at IS NULL")
 public class Product extends BaseEntity {
 
   @Id
@@ -64,5 +65,12 @@ public class Product extends BaseEntity {
         .isDisplay(dto.isDisplay())
         .store(dto.store())
         .build();
+  }
+
+  public Product update(UpdateProductServiceRequestDto dto) {
+    this.name = dto.name();
+    this.price = dto.price();
+    this.isDisplay = dto.isDisplay();
+    return this;
   }
 }
