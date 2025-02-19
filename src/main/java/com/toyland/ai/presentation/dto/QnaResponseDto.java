@@ -16,6 +16,7 @@ public class QnaResponseDto {
   private String answer;
 
   public QnaResponseDto(Qna qna) {
+    this.qnaID = qna.getAiId();
     this.question = qna.getQuestion();
     this.answer = qna.getAnswer();
   }
