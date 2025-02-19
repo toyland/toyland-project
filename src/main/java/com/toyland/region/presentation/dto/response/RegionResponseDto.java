@@ -1,7 +1,6 @@
-package com.toyland.region.presentation.dto;
+package com.toyland.region.presentation.dto.response;
 
 import com.toyland.region.model.entity.Region;
-
 import java.util.UUID;
 
 /**
@@ -13,9 +12,9 @@ public record RegionResponseDto(UUID regionId,
 
     public static RegionResponseDto from(Region region) {
         return new RegionResponseDto(
-                region.getId(),
-                region.getRegionName()
-                );
+            region.getId(),
+            region.getRegionName()
+        );
 
     }
 }

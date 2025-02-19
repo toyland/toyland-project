@@ -14,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Entity
 @Table(name = "p_address")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at IS NULL")
 public class Address extends BaseEntity {
 
@@ -47,7 +48,6 @@ public class Address extends BaseEntity {
     private Region region;
 
 
-    //테스트나 null 허용하는 곳에서 사용
     @Builder
     public Address(String addressName, User user, Region region) {
         this.addressName = addressName;
