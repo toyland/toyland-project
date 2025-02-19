@@ -33,10 +33,10 @@ public class OrderService {
      * 주문 생성
      */
     @Transactional
-    public Order createOrder(CreateOrderRequestDto createOrderRequestDto, String username) {
+    public Order createOrder(CreateOrderRequestDto createOrderRequestDto, Long loginUserId) {
 
         // 회원 조회
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findById(loginUserId)
             .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
 
 
@@ -68,10 +68,10 @@ public class OrderService {
      * 주문 삭제(취소)
      */
     @Transactional
-    public void deleteOrder(UUID orderId, String username) {
+    public void deleteOrder(UUID orderId, Long loginUserId) {
 
         // 회원 조회
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findById(loginUserId)
                 .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
 

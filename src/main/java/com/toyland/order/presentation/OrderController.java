@@ -1,12 +1,11 @@
 package com.toyland.order.presentation;
 
-import com.toyland.global.config.security.UserDetailsImpl;
+import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.order.application.OrderService;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -26,8 +25,8 @@ public class OrderController {
      */
     @PostMapping
     public ResponseEntity<Void> createOrder(@Valid @RequestBody CreateOrderRequestDto request,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        orderService.createOrder(request, userDetails.getUsername());
+                                            @CurrentLoginUserId Long loginUserId) {
+        orderService.createOrder(request, loginUserId);
         return ResponseEntity.ok().build();
     }
 
@@ -40,8 +39,8 @@ public class OrderController {
      */
     @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(@PathVariable UUID orderId,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        orderService.deleteOrder(orderId, userDetails.getUsername());
+                                            @CurrentLoginUserId Long loginUserId) {
+        orderService.deleteOrder(orderId, loginUserId);
         return ResponseEntity.ok().build();
     }
 }
