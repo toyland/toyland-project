@@ -88,7 +88,7 @@ public class Order extends BaseEntity {
      * 주문 삭제(취소)
      */
     public void cancel() {
-        if (this.orderStatus == OrderStatus.PREPARING || this.orderStatus == OrderStatus.DELIVERING || this.orderStatus == OrderStatus.DELIVERY_COMPLETED) {
+        if (isAvailableCancelStatus()) {
             throw new CustomException(OrderErrorCode.INVALID_STATUS);
         }
 
@@ -104,5 +104,9 @@ public class Order extends BaseEntity {
         for(OrderProduct orderProduct : orderProductList) {
             orderProduct.addDeletedField(user.getId()); // OrderProduct에도 삭제 정보 추가
         }
+    }
+
+    private boolean isAvailableCancelStatus() {
+        return this.orderStatus == OrderStatus.PREPARING || this.orderStatus == OrderStatus.DELIVERING || this.orderStatus == OrderStatus.DELIVERY_COMPLETED;
     }
 }
