@@ -6,14 +6,17 @@ package com.toyland.product.presentaion.ProductController;
 
 import com.toyland.product.application.facade.ProductFacade;
 import com.toyland.product.application.usecase.ProductService;
+import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.presentaion.dto.CreateProductRequestDto;
-import com.toyland.product.presentaion.dto.ReadProductResponseDto;
+import com.toyland.product.presentaion.dto.ProductResponseDto;
+import com.toyland.product.presentaion.dto.UpdateProductRequestDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +46,20 @@ public class ProductController {
    * @return 조회 상품 dto
    */
   @GetMapping("/{productId}")
-  public ResponseEntity<ReadProductResponseDto> readProduct(@PathVariable UUID productId) {
+  public ResponseEntity<ProductResponseDto> readProduct(@PathVariable UUID productId) {
     return ResponseEntity.ok(productService.readProduct(productId));
+  }
+
+  /**
+   * 상품을 수정합니다.
+   * @param productId 수정할 product id
+   * @param request 수정 내용
+   * @return 수정된 내용
+   */
+  @PutMapping("/{productId}")
+  public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable UUID productId,
+      @RequestBody UpdateProductRequestDto request) {
+    return ResponseEntity.ok(productService.updateProduct(
+        UpdateProductServiceRequestDto.of(request, productId)));
   }
 }

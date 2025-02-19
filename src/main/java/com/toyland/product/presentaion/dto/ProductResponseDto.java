@@ -10,11 +10,11 @@ import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record ReadProductResponseDto(
+public record ProductResponseDto(
     UUID id, String name, BigDecimal price, boolean isDisplay) {
 
-  public static ReadProductResponseDto from(Product product) {
-    return ReadProductResponseDto.builder()
+  public static ProductResponseDto from(Product product) {
+    return ProductResponseDto.builder()
         .id(product.getId())
         .name(product.getName())
         .price(product.getPrice())

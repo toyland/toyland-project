@@ -9,15 +9,15 @@ import static org.assertj.core.groups.Tuple.tuple;
 
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDto;
+import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
 import com.toyland.product.presentaion.dto.CreateProductRequestDto;
-import com.toyland.product.presentaion.dto.ReadProductResponseDto;
+import com.toyland.product.presentaion.dto.ProductResponseDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import java.math.BigDecimal;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +33,6 @@ class ProductServiceTest extends IntegrationTestSupport {
 
   @Autowired
   private StoreRepository storeRepository;
-
-  @AfterEach
-  void tearDown() {
-    productRepository.deleteAllInBatch();
-    storeRepository.deleteAllInBatch();
-  }
 
   @DisplayName("상품을 생성합니다.")
   @Test
@@ -74,13 +68,39 @@ class ProductServiceTest extends IntegrationTestSupport {
     Product product2 = productRepository.save(createProduct("고추바사삭", goobne));
 
     // when
-    ReadProductResponseDto result = productService.readProduct(product1.getId());
+    ProductResponseDto result = productService.readProduct(product1.getId());
 
     // then
     assertThat(result)
         .extracting("name", "id")
         .contains(product1.getName(), product1.getId());
 
+  }
+
+  @DisplayName("상품을 업데이트합니다.")
+  @Test
+  void test(){
+    // given
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+    Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
+    String newName = "new 이름";
+    BigDecimal newPrice = BigDecimal.valueOf(29000);
+    boolean newIsDisplay = true;
+
+
+    // when
+    ProductResponseDto result = productService.updateProduct(
+        UpdateProductServiceRequestDto.builder()
+            .id(product1.getId())
+            .name(newName)
+            .price(newPrice)
+            .isDisplay(newIsDisplay)
+            .build());
+
+    // then
+    assertThat(result)
+        .extracting("name", "id", "price", "isDisplay")
+        .contains(newName, product1.getId(), newPrice, newIsDisplay);
   }
 
   private Product createProduct(String name, Store store) {
