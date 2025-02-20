@@ -1,9 +1,10 @@
 package com.toyland.payment.presentation.dto.response;
 
-import com.toyland.order.model.PaymentType;
 import com.toyland.payment.model.entity.Payment;
-import java.util.UUID;
+import com.toyland.payment.model.entity.PaymentStatus;
 import lombok.Builder;
+
+import java.util.UUID;
 
 /**
  * @author : hanjihoon
@@ -12,12 +13,12 @@ import lombok.Builder;
 @Builder
 public record PaymentResponseDto(UUID paymentId,
                                  UUID orderId,
-                                 PaymentType paymentType) {
+                                 PaymentStatus paymentStatus) {
 
     public static PaymentResponseDto from(Payment payment) {
         return PaymentResponseDto.builder()
             .paymentId(payment.getId())
-            .paymentType(payment.getPaymentType())
+            .paymentStatus(payment.getPaymentStatus())
             .orderId(payment.getOrder().getId())
             .build();
     }

@@ -3,12 +3,14 @@ package com.toyland.payment.presentation;
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.payment.application.facade.PaymentFacade;
 import com.toyland.payment.presentation.dto.request.PaymentRequestDto;
+import com.toyland.payment.presentation.dto.request.PaymentUpdateRequestDto;
 import com.toyland.payment.presentation.dto.response.PaymentResponseDto;
+import com.toyland.payment.presentation.dto.response.PaymentUpdateResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 /**
  * @author : hanjihoon
@@ -22,10 +24,27 @@ public class PaymentController {
     private final PaymentFacade paymentFacade;
 
     @PostMapping
-    public PaymentResponseDto createPayment(
+    public ResponseEntity<PaymentResponseDto> createPayment(
         @RequestBody PaymentRequestDto requestDto,
         @CurrentLoginUserId Long loginUserId) {
-        return paymentFacade.createPayment(requestDto, loginUserId);
+        PaymentResponseDto payment = paymentFacade.createPayment(requestDto, loginUserId);
+        return ResponseEntity.ok().body(payment);
+    }
+
+    @DeleteMapping("/{paymentId}")
+    public ResponseEntity<Void> deletePayment(
+            @PathVariable UUID paymentId,
+            @CurrentLoginUserId Long loginUserId) {
+            paymentFacade.deletePayment(paymentId, loginUserId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<PaymentUpdateResponseDto> updatePayment(
+            @RequestBody PaymentUpdateRequestDto requestDto,
+            @CurrentLoginUserId Long loginUserId) {
+        PaymentUpdateResponseDto responseDto = paymentFacade.updatePayment(requestDto);
+        return ResponseEntity.ok().body(responseDto);
     }
 
 }
