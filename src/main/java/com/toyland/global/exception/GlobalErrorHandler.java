@@ -2,10 +2,10 @@ package com.toyland.global.exception;
 
 import com.toyland.global.exception.GlobalErrorHandler.Response.ErrorField;
 import jakarta.validation.ConstraintViolationException;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -49,7 +49,15 @@ public class GlobalErrorHandler {
             .body(new ErrorResponse("ACCESS_DENIED", "접근이 거부된 권한입니다.",
                 HttpStatus.FORBIDDEN.value()));
     }
-    
+
+    //그 외 모든 예외 처리
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ErrorResponse("INTERNAL_SERVER_ERROR", "서버 내부 오류가 발생했습니다.",
+                HttpStatus.INTERNAL_SERVER_ERROR.value()));
+    }
 
     /**
      * 요청 받는 DTO 검증 에러 ExceptionHandler
