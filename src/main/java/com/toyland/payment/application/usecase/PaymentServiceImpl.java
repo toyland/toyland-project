@@ -35,7 +35,7 @@ public class PaymentServiceImpl implements PaymentService {
         Order order = orderRepository.findById(requestDto.orderId())
             .orElseThrow(() -> CustomException.from(OrderErrorCode.ORDER_NOT_FOUND));
 
-        return PaymentResponseDto.from(paymentRepository.save(Payment.of(requestDto, order)));
+        return PaymentResponseDto.from(paymentRepository.save(Payment.of(order)));
     }
 
     @Override
