@@ -3,7 +3,6 @@ package com.toyland.global.config.security;
 import com.toyland.global.config.security.jwt.JwtAuthenticationFilter;
 import com.toyland.global.config.security.jwt.JwtAuthorizationFilter;
 import com.toyland.global.config.security.jwt.JwtUtil;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -68,15 +67,6 @@ public class WebSecurityConfig {
                     "/swagger-ui/**")
                 .permitAll()
                 .anyRequest().authenticated()
-        );
-
-        http.exceptionHandling(ex -> ex
-            .accessDeniedHandler((request, response, accessDeniedException) -> {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.setContentType("application/json;charset=UTF-8");
-                response.getWriter().write("{\"errorCode\": \"ACCESS_DENIED\", "
-                    + "\"message\": \"허가되지 않은 권한입니다.\"}");
-            })
         );
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
