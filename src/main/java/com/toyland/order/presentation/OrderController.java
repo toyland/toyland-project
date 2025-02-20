@@ -35,6 +35,20 @@ public class OrderController {
 
 
     /**
+     * 주문 수정
+     * @param orderId 주문 번호
+     * @return 200 성공
+     */
+    @PutMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDto> updateOrderByOrderId(@PathVariable UUID orderId,
+                                                                 @RequestBody CreateOrderRequestDto requestDto,
+                                                                 @CurrentLoginUserId Long loginUserId) {
+        return ResponseEntity.ok(orderService.updateOrder(orderId, requestDto, loginUserId));
+    }
+
+
+
+    /**
      * 주문 조회(단 건 조회)
      * @param orderId
      * @return 주문 정보(OrderResponseDto)를 담은 HTTP 응답

@@ -78,6 +78,43 @@ public class OrderService {
 
 
     /**
+     *  주문 수정
+     */
+    @Transactional
+    public OrderResponseDto updateOrder(UUID orderId, CreateOrderRequestDto createOrderRequestDto, Long loginUserId) {
+
+        // 회원 조회
+        User user = userRepository.findById(loginUserId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
+
+
+        // 주문 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomException(OrderErrorCode.ORDER_NOT_FOUND));
+
+
+        // 주문 상품 생성 로직
+        List<OrderProduct> orderProductList = new ArrayList<>();
+        for (OrderProductRequestDto orderProductRequest : createOrderRequestDto.getOrderProducts()) {
+            System.out.println("ㅡㅡㅡ  상품 조회  ㅡㅡㅡ");
+            // 상품 조회
+            Product product = productRepository.findById(orderProductRequest.getProductId())
+                    .orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다: " + orderProductRequest.getProductId()));
+
+            // 주문 상품 생성
+            OrderProduct orderProduct = OrderProduct.createOrderProduct(product, orderProductRequest.getPrice(), orderProductRequest.getQuantity());
+            orderProductList.add(orderProduct);
+        }
+
+        // 주문 수정
+        order.update(user, createOrderRequestDto, orderProductList);
+
+        return OrderResponseDto.from(order);
+    }
+
+
+
+    /**
      * 주문 삭제(취소)
      */
     @Transactional

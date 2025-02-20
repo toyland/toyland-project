@@ -12,6 +12,9 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 
 /**
  * @SQLRestriction("deleted_at IS NULL") 상속 받고 위 어노테이션 달아주세요! Pull Request에 있는 방법에 따라 Delete 부분
@@ -50,5 +53,4 @@ public abstract class BaseEntity implements Serializable {
         this.deletedAt = deleteAt;
         this.deletedBy = deletedBy;
     }
-
 }

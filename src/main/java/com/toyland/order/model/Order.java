@@ -7,27 +7,16 @@ import com.toyland.order.presentation.dto.CreateOrderRequestDto;
 import com.toyland.orderproduct.model.OrderProduct;
 import com.toyland.payment.model.entity.Payment;
 import com.toyland.user.model.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -98,6 +87,35 @@ public class Order extends BaseEntity {
     }
 
 
+
+
+    // 비즈니스 로직
+    /**
+     *  주문 수정
+     */
+    public void update(User user, CreateOrderRequestDto createOrderRequestDto, List<OrderProduct> orderProductList) {
+        if (isModifiableStatus()) {
+            throw new CustomException(OrderErrorCode.INVALID_STATUS);
+        }
+
+        // 주문 업데이트 로직
+        this.user = user;
+        this.orderType = createOrderRequestDto.getOrderType();
+        this.paymentType = createOrderRequestDto.getPaymentType();
+        this.orderStatus = OrderStatus.ORDER_COMPLETED;
+
+
+        // 후에 결제 수정 로직 추가
+
+
+        // 주문 상품 업데이트 로직 (기존 상품 삭제 후 추가)
+        this.orderProductList.clear();
+        for (OrderProduct orderProduct : orderProductList) {
+            this.addOrderProduct(orderProduct);
+        }
+    }
+
+
     // 연관 관계 설정 메서드
     public void addOrderProduct(OrderProduct orderProduct) {
         this.orderProductList.add(orderProduct);  // 주문 상품 리스트에 추가
@@ -111,7 +129,7 @@ public class Order extends BaseEntity {
      * 주문 삭제(취소)
      */
     public void cancel() {
-        if (isAvailableCancelStatus()) {
+        if (isModifiableStatus()) {
             throw new CustomException(OrderErrorCode.INVALID_STATUS);
         }
 
@@ -129,7 +147,7 @@ public class Order extends BaseEntity {
         }
     }
 
-    private boolean isAvailableCancelStatus() {
+    private boolean isModifiableStatus() {
         return this.orderStatus == OrderStatus.PREPARING
             || this.orderStatus == OrderStatus.DELIVERING
             || this.orderStatus == OrderStatus.DELIVERY_COMPLETED;
