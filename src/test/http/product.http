@@ -8,7 +8,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
   "name": "고추바사삭2",
   "price": 10000,
   "isDisplay": false,
-  "storeId": "4a242e8e-7682-4d32-931c-0b43dbf4eb0f"
+  "storeId": "b78fa4b4-920e-457a-96b5-97186bfe6243"
 }
 
 ### 상품 단건 조회
