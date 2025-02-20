@@ -6,6 +6,7 @@ import com.toyland.region.presentation.dto.repuest.CreateRegionRequestDto;
 import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
 import com.toyland.region.presentation.dto.response.RegionResponseDto;
 import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,10 +30,17 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/api/v1/regions")
 @RequiredArgsConstructor
+@Tag(name = "지역", description = "Region API")
 public class RegionController {
 
     private final RegionFacade regionFacade;
 
+    //    @Operation(summary = "예시입니다.", description = "description")
+//    @ApiResponses(value = {
+//        @ApiResponse(responseCode = "200", description = "Success",
+//            content = {@Content(schema = @Schema(implementation = RegionResponseDto.class))}),
+//        @ApiResponse(responseCode = "404", description = "Not Found"),
+//    })
     //권한이 둘 중 하나라도 일치하면 true
     @PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
     @PostMapping
