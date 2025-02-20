@@ -1,6 +1,7 @@
 package com.toyland.review.model.repository;
 
 import com.toyland.review.model.Review;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -13,4 +14,6 @@ public interface ReviewRepository {
   Optional<Review> findById(UUID reviewId);
 
   Page<Review> searchReviews(UUID storeId, Pageable pageable);
+
+  Optional<List<Review>> getReviewList(UUID uuid);
 }

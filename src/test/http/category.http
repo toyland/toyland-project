@@ -8,3 +8,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
   "patentId": "144abe1b-3206-4011-8b5b-ca464572ab7c"
 }
 
+### 카테고리 조회
+GET http://localhost:8080/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
+
+
+### 카테고리 수정
+PUT http://localhost:8080/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Content-Type: application/json
+
+{
+  "name": "포장"
+}
+
+### 카테고리 삭제
+DELETE http://localhost:8080/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0

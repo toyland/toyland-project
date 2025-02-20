@@ -24,7 +24,6 @@ public abstract class IntegrationTestSupport {
     @Autowired
     private TearDownExecutor tearDownExecutor;
 
-
     @AfterEach
     void tearDown() {
         tearDownExecutor.execute();

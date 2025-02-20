@@ -89,5 +89,17 @@ public class ReviewController {
     reviewFacade.deleteReview(reviewId, loginUserId);
   }
 
+  /**
+   * 음식점의 평균 점수를 구한다.
+   *
+   * @param review
+   * @return 평균 점수
+   */
+  @GetMapping("/avgRate")
+  public ResponseEntity<Double> avgRate(@RequestBody ReviewRequestDto review) {
+    Double avgRate = reviewFacade.getAvgRate(review.getStoreId());
+    return ResponseEntity.ok(avgRate);
+  }
+
 
 }
