@@ -55,7 +55,7 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
     private ProductRepository productRepository;
 
     @Autowired
-    PaymentRepository paymentReposiry;
+    PaymentRepository paymentRepository;
 
 
     @DisplayName("결제를 생성합니다.")
@@ -82,6 +82,9 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
             new OrderProductRequestDto(product3.getId(), product3.getPrice(), 3)
         );
 
+
+
+
         CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts,
             OrderType.DELIVERY, PaymentType.CASH);
 
@@ -89,11 +92,12 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
 
         //when
         PaymentResponseDto payment = paymentService.createPayment(
-            PaymentRequestDto.builder().paymentStatus(PaymentStatus.PENDING).orderId(order.getId())
-                .build(), user.getId());
+            PaymentRequestDto.builder()
+                    .orderId(order.getId())
+                    .build(), user.getId());
 
         //then
-        assertThat(payment.paymentStatus()).isEqualTo(PaymentStatus.PENDING);
+        assertThat(payment.paymentStatus()).isEqualTo(PaymentStatus.PRE_PAYMENT);
         assertThat(payment).isNotNull();
     }
 
@@ -128,7 +132,8 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
         Order order = orderService.createOrder(createOrderRequestDto, user.getId());
 
         PaymentResponseDto payment = paymentService.createPayment(
-                PaymentRequestDto.builder().paymentStatus(PaymentStatus.PENDING).orderId(order.getId())
+                PaymentRequestDto.builder()
+                        .orderId(order.getId())
                         .build(), user.getId());
 
 
@@ -141,7 +146,7 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
                         .orderId(order.getId())
                         .build());
 
-        Payment updatedPayment = paymentReposiry.findById(payment.paymentId()).orElse(null);
+        Payment updatedPayment = paymentRepository.findById(payment.paymentId()).orElse(null);
 
         //then
 
@@ -180,13 +185,14 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
 
 
         PaymentResponseDto payment = paymentService.createPayment(
-                PaymentRequestDto.builder().paymentStatus(PaymentStatus.PENDING).orderId(order.getId())
+                PaymentRequestDto.builder()
+                        .orderId(order.getId())
                         .build(), user.getId());
 
         //when
         paymentService.deletePayment(payment.paymentId(), user.getId());
 
-        Payment deletedPayment = paymentReposiry.findById(payment.paymentId()).orElse(null);
+        Payment deletedPayment = paymentRepository.findById(payment.paymentId()).orElse(null);
 
         System.out.println(deletedPayment.getDeletedBy());
         //then
