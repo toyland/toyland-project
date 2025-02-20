@@ -2,7 +2,7 @@
  * @Date : 2025. 02. 19.
  * @author : jieun(je-pa)
  */
-package com.toyland.product.presentaion.dto;
+package com.toyland.product.presentation.dto;
 
 import com.toyland.product.model.entity.Product;
 import java.math.BigDecimal;

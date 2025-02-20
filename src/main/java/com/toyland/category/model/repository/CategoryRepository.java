@@ -18,6 +18,5 @@ public interface CategoryRepository {
   List<Category> findAllById(Iterable<UUID> ids);
 
   // test 용
-  void deleteAllInBatch();
   List<Category> findAll();
 }

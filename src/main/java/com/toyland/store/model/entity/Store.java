@@ -4,6 +4,7 @@
  */
 package com.toyland.store.model.entity;
 
+import com.toyland.global.common.auditing.BaseEntity;
 import com.toyland.region.model.entity.Region;
 import com.toyland.store.presentation.dto.CreateStoreRequestDto;
 import com.toyland.user.model.User;
@@ -21,12 +22,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "p_store")
 @Getter
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Store {
+public class Store extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -68,5 +71,13 @@ public class Store {
         .owner(owner)
         .build();
 
+  }
+
+  public void updateStore(String name, String content, String address, User owner, Region region) {
+    this.name = name;
+    this.content = content;
+    this.address = address;
+    this.owner = owner;
+    this.region = region;
   }
 }

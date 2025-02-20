@@ -2,16 +2,15 @@
  * @Date : 2025. 02. 17.
  * @author : jieun(je-pa)
  */
-package com.toyland.product.presentaion.ProductController;
+package com.toyland.product.presentation.ProductController;
 
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
-import com.toyland.product.application.facade.ProductFacade;
 import com.toyland.product.application.usecase.ProductService;
 import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
-import com.toyland.product.presentaion.dto.CreateProductRequestDto;
-import com.toyland.product.presentaion.dto.ProductResponseDto;
-import com.toyland.product.presentaion.dto.UpdateProductRequestDto;
+import com.toyland.product.presentation.dto.CreateProductRequestDto;
+import com.toyland.product.presentation.dto.ProductResponseDto;
+import com.toyland.product.presentation.dto.UpdateProductRequestDto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/products")
 public class ProductController {
 
-  private final ProductFacade productFacade;
   private final ProductService productService;
 
   /**
@@ -40,7 +38,7 @@ public class ProductController {
    */
   @PostMapping
   public ResponseEntity<Void> createProduct(@RequestBody CreateProductRequestDto dto) {
-    productFacade.createProduct(dto);
+    productService.createProduct(dto);
     return ResponseEntity.ok().build();
   }
 

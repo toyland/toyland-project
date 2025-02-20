@@ -24,8 +24,6 @@ public interface RegionRepository {
         Pageable pageable);
 
     //테스트
-    void deleteAllInBatch();
-
     <S extends Region> Iterable<S> saveAll(Iterable<S> entities);
 
 }

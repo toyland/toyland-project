@@ -4,7 +4,7 @@
  */
 package com.toyland.product.application.usecase.dto;
 
-import com.toyland.product.presentaion.dto.UpdateProductRequestDto;
+import com.toyland.product.presentation.dto.UpdateProductRequestDto;
 import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.Builder;
