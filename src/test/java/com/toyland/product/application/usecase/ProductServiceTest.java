@@ -8,13 +8,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
 import com.toyland.common.IntegrationTestSupport;
-import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
-import com.toyland.product.presentaion.dto.CreateProductRequestDto;
-import com.toyland.product.presentaion.dto.ProductResponseDto;
+import com.toyland.product.presentation.dto.CreateProductRequestDto;
+import com.toyland.product.presentation.dto.ProductResponseDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
@@ -51,10 +50,7 @@ class ProductServiceTest extends IntegrationTestSupport {
 
     // when
     productService.createProduct(
-        CreateProductServiceRequestDto.of(
-            new CreateProductRequestDto("고추바사삭", BigDecimal.valueOf(100000), false, goobne.getId())
-            , goobne
-        )
+        new CreateProductRequestDto("고추바사삭", BigDecimal.valueOf(100000), false, goobne.getId())
     );
 
     // then

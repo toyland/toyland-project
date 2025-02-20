@@ -1,15 +1,36 @@
 ### 음식점 생성
 POST http://localhost:8080/api/v1/stores
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTU3MDgsImlhdCI6MTczOTc5MjEwOH0.yfR9zRaO99qqY1XSFlJl-jN1cq6fa5Ff_RCvLL5cZRI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 {
-  "name": "굽네치킨",
-  "content": "굽네치킨입니다.",
+  "name": "도미노피자",
+  "content": "도미노피자입니다.",
   "address": "경기도 성남시 분당구 가로 1",
   "regionId": "376ddba6-d9ab-4953-aee6-614e1dfeef7e",
   "ownerId": "2"
 }
+
+### 음식점 조회
+GET http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
+### 음식점 수정
+PUT http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
+{
+  "name": "피자에땅",
+  "content": "피자에땅 입니다.",
+  "address": "서울시 강남구",
+  "regionId": "376ddba6-d9ab-4953-aee6-614e1dfeef7e",
+  "ownerId": 3
+}
+
+### 음식점 삭제
+DELETE http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 음식점에 카테고리 생성
 POST http://localhost:8080/api/v1/stores/df41f705-a5d4-419c-a372-f9c43c585e07/categories

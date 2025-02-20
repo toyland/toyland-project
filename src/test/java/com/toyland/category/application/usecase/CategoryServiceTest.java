@@ -12,8 +12,6 @@ import com.toyland.category.model.repository.CategoryRepository;
 import com.toyland.category.presentation.dto.CreateCategoryRequestDto;
 import com.toyland.common.IntegrationTestSupport;
 import java.util.List;
-import org.assertj.core.groups.Tuple;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +23,6 @@ class CategoryServiceTest extends IntegrationTestSupport {
 
   @Autowired
   private CategoryRepository categoryRepository;
-
-  @AfterEach
-  void tearDown() {
-    categoryRepository.deleteAllInBatch();
-  }
 
   @DisplayName("가게 배달 루트 카테고리를 저장한다.")
   @Test
