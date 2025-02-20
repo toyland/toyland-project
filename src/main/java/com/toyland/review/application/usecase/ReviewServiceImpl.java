@@ -12,6 +12,7 @@ import com.toyland.review.presentation.dto.ReviewRequestDto;
 import com.toyland.review.presentation.dto.ReviewResponseDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -73,6 +74,21 @@ public class ReviewServiceImpl implements ReviewService {
     Review review = reviewRepository.findById(reviewId)
         .orElseThrow(() -> CustomException.from(ReviewErrorCode.REVIEW_NOT_FOUND));
     review.addDeletedField(id);
+  }
+
+
+  @Override
+  @Transactional
+  public Double getAvgRate(String storeId) {
+    List<Review> review = reviewRepository.getReviewList(UUID.fromString(storeId))
+        .orElseThrow(() -> CustomException.from(ReviewErrorCode.REVIEW_NOT_FOUND));
+
+    return review
+        .stream()
+        .mapToInt(Review::getRating)
+        .average()
+        .orElse(0.0);
+
   }
 
 }

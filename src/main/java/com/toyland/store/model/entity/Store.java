@@ -43,6 +43,7 @@ public class Store {
   @JoinColumn(name = "owner_id")
   private User owner;
 
+
   @Builder
   private Store(String address, String content, String name, Region region, User owner) {
     this.address = address;
@@ -50,21 +51,6 @@ public class Store {
     this.name = name;
     this.region = region;
     this.owner = owner;
-  }
-
-  //User 테스트용 빌더
-  @Builder
-  private Store(String address, String content, String name,  User owner) {
-    this.address = address;
-    this.content = content;
-    this.name = name;
-    this.owner = owner;
-  }
-
-  //연관관계 편의메소드
-  public void joinUser(User user){
-    this.owner = user;
-    user.getStoreList().add(this);
   }
 
 
