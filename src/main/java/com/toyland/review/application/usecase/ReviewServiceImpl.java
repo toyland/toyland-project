@@ -75,4 +75,19 @@ public class ReviewServiceImpl implements ReviewService {
     review.addDeletedField(id);
   }
 
+
+  @Override
+  @Transactional
+  public Double getAvgRate(String storeId) {
+    Store store = storeRepository.findById(UUID.fromString(storeId))
+        .orElseThrow(() -> new RuntimeException("Store not found"));
+
+    return store.getReviews()
+        .stream()
+        .mapToInt(Review::getRating)
+        .average()
+        .orElse(0.0);
+
+  }
+
 }

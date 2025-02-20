@@ -18,4 +18,5 @@ public interface ReviewFacade {
 
   void deleteReview(UUID reviewId, Long id);
 
+  Double getAvgRate(String storeId);
 }
