@@ -59,6 +59,7 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
         Pageable pageable) {
         return regionRepository.searchRegion(searchRequestDto, pageable);

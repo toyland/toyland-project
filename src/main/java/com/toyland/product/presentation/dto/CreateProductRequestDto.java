@@ -2,7 +2,7 @@
  * @Date : 2025. 02. 17.
  * @author : jieun(je-pa)
  */
-package com.toyland.product.presentaion.dto;
+package com.toyland.product.presentation.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

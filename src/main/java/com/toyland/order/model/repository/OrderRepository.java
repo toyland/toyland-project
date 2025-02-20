@@ -6,14 +6,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderRepository {
+    Order save(Order from);
 
-  Order save(Order from);
+    Optional<Order> findById(UUID orderId);
 
-  // test code 용
-  void deleteAllInBatch();
+    // test code 용
+    void deleteAllInBatch();
 
   List<Order> findAll();
-
-  Optional<Order> findById(UUID id);
-
 }

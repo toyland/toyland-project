@@ -1,10 +1,10 @@
 ### 지역 생성
 POST http://localhost:8080/api/v1/regions
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODg5MjE5LCJpYXQiOjE3Mzk4ODU2MTl9.l5z3hPhX5w25NV3R4G9Nr30gmBJHkQY7kXxh-Ox9yK0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTc1NzY3LCJpYXQiOjE3Mzk5NzIxNjd9.L35DWP5gfFktr_Nj4-dV4sqEpyQNwQZB4gIVOR3Sq0o
 
 {
-  "regionName": "서울시10"
+  "regionName": "서울시12345"
 }
 
 ### 지역 단 건 조회

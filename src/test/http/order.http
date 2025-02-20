@@ -1,7 +1,7 @@
 ### 주문 생성
 POST http://localhost:8080/api/v1/orders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk4NzUyMTgsImlhdCI6MTczOTg3MTYxOH0.xtgYoz42Dpw9jAQsGoTppejSXZdHZIsbeJWix4Uzsz4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTc0MTA0LCJpYXQiOjE3Mzk5NzA1MDR9.b9eZGWzvAR8A7j3WjHwUr8DQeLXwi7FyUORQGSzTPrw
 
 {
   "orderProducts": [
@@ -19,3 +19,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNUR
   "orderType": "DELIVERY",
   "paymentType": "CARD"
 }
+
+
+
+### 주문 단 건 조회
+GET http://localhost:8080/api/v1/orders/d457aff9-f6de-4033-8c2d-f267eafe45a5
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTczOTk3OTkzNywiaWF0IjoxNzM5OTc2MzM3fQ.5B-nvNlBJFNDCBN3yr1hH83mQuVQFCyi5zI-TLdBbak
+
+
+
+### 주문 삭제
+DELETE http://localhost:8080/api/v1/orders/a8615669-a074-4e84-a390-cbcc7902d15a
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTQ4Njk5LCJpYXQiOjE3Mzk5NDUwOTl9.6M_7GYd8GXRTjBc9HNhLqHNk7QucICIXgyrU3hMHAkg
+

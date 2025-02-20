@@ -1,8 +1,12 @@
 package com.toyland.order.application;
 
+import com.toyland.global.exception.CustomException;
+import com.toyland.global.exception.type.domain.OrderErrorCode;
+import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
+import com.toyland.order.presentation.dto.response.OrderResponseDto;
 import com.toyland.orderproduct.model.OrderProduct;
 import com.toyland.orderproduct.presentation.dto.OrderProductRequestDto;
 import com.toyland.product.model.entity.Product;
@@ -15,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +34,10 @@ public class OrderService {
      * 주문 생성
      */
     @Transactional
-    public Order createOrder(CreateOrderRequestDto createOrderRequestDto, String username) {
+    public Order createOrder(CreateOrderRequestDto createOrderRequestDto, Long loginUserId) {
 
         // 회원 조회
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findById(loginUserId)
             .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다"));
 
 
@@ -59,4 +64,36 @@ public class OrderService {
     }
 
 
+
+    /**
+     * 주문 조회(단 건 조회)
+     */
+    public OrderResponseDto findByOrderId(UUID orderId, Long loginUserId) {
+        // 주문 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomException(OrderErrorCode.ORDER_NOT_FOUND));
+        return OrderResponseDto.from(order);
+    }
+
+
+
+    /**
+     * 주문 삭제(취소)
+     */
+    @Transactional
+    public void deleteOrder(UUID orderId, Long loginUserId) {
+
+        // 회원 조회
+        User user = userRepository.findById(loginUserId)
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
+
+
+        //주문 엔티티 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomException(OrderErrorCode.ORDER_NOT_FOUND));
+
+
+        //주문 취소
+        order.cancel();
+    }
 }
