@@ -89,7 +89,7 @@ public class Order extends BaseEntity {
      *  주문 수정
      */
     public void update(User user, CreateOrderRequestDto createOrderRequestDto, List<OrderProduct> orderProductList) {
-        if (isAvailableCancelStatus()) {
+        if (isModifiableStatus()) {
             throw new CustomException(OrderErrorCode.INVALID_STATUS);
         }
 
@@ -124,7 +124,7 @@ public class Order extends BaseEntity {
      * 주문 삭제(취소)
      */
     public void cancel() {
-        if (isAvailableCancelStatus()) {
+        if (isModifiableStatus()) {
             throw new CustomException(OrderErrorCode.INVALID_STATUS);
         }
 
@@ -142,7 +142,7 @@ public class Order extends BaseEntity {
         }
     }
 
-    private boolean isAvailableCancelStatus() {
+    private boolean isModifiableStatus() {
         return this.orderStatus == OrderStatus.PREPARING
             || this.orderStatus == OrderStatus.DELIVERING
             || this.orderStatus == OrderStatus.DELIVERY_COMPLETED;
