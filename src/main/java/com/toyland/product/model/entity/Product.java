@@ -5,8 +5,8 @@
 package com.toyland.product.model.entity;
 
 import com.toyland.global.common.auditing.BaseEntity;
-import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
+import com.toyland.product.presentation.dto.CreateProductRequestDto;
 import com.toyland.store.model.entity.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -58,12 +58,12 @@ public class Product extends BaseEntity {
     this.store = store;
   }
 
-  public static Product from(CreateProductServiceRequestDto dto) {
+  public static Product of(CreateProductRequestDto dto, Store store) {
     return Product.builder()
         .name(dto.name())
         .price(dto.price())
         .isDisplay(dto.isDisplay())
-        .store(dto.store())
+        .store(store)
         .build();
   }
 

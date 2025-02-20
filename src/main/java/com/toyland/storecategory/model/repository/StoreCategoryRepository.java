@@ -14,7 +14,5 @@ public interface StoreCategoryRepository {
 
 
   // test code 용
-  void deleteAllInBatch();
-
   List<StoreCategory> findAll();
 }

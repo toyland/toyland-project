@@ -1,3 +1,7 @@
+/**
+ * @author : khloe
+ * @Date : 2025. 02. 19.
+ */
 package com.toyland.global.exception.type.domain;
 
 import com.toyland.global.exception.type.ErrorCode;
@@ -5,10 +9,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-/**
- * @author : khloe
- * @Date : 2025. 02. 19.
- */
+
 @Getter
 @RequiredArgsConstructor
 public enum StoreErrorCode implements ErrorCode {
