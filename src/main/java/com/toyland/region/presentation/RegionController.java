@@ -1,8 +1,10 @@
 package com.toyland.region.presentation;
 
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
+import com.toyland.global.config.swagger.annotation.ApiErrorCodeAnnotation;
 import com.toyland.global.config.swagger.response.CustomApiResponse;
 import com.toyland.global.config.swagger.response.HttpSuccessCode;
+import com.toyland.global.exception.type.ApiErrorCode;
 import com.toyland.region.application.facade.RegionFacade;
 import com.toyland.region.presentation.dto.repuest.CreateRegionRequestDto;
 import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
@@ -45,8 +47,8 @@ public class RegionController {
     @Operation(summary = "지역 등록", description = "지역 등록 메서드 입니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "지역 등록 성공"),
-        @ApiResponse(responseCode = "400", description = "잘못된 ID 값 요청")
     })
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
     @PostMapping
     public ResponseEntity<CustomApiResponse<RegionResponseDto>> createRegion(
