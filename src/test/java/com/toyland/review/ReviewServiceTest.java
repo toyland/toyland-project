@@ -11,7 +11,7 @@ import com.toyland.order.model.PaymentType;
 import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
-import com.toyland.review.application.usecase.ReviewServiceImpl;
+import com.toyland.review.application.usecase.ReviewService;
 import com.toyland.review.model.Review;
 import com.toyland.review.model.repository.ReviewRepository;
 import com.toyland.store.model.entity.Store;
@@ -21,15 +21,12 @@ import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
-@AutoConfigureMockMvc
-@Transactional
+
 public class ReviewServiceTest extends IntegrationTestSupport {
 
   @Autowired
-  private ReviewServiceImpl reviewServiceImp;
+  private ReviewService reviewService;
   @Autowired
   private ReviewRepository reviewRepository;
   @Autowired
@@ -69,14 +66,14 @@ public class ReviewServiceTest extends IntegrationTestSupport {
     Review review1 = reviewRepository.save(new Review("good", 3, store, order));
     Review review2 = reviewRepository.save(new Review("good2", 5, store, order2));
 
-    store.addReview(review1);
-    store.addReview(review2);
+    // store.addReview(review1);
+    // store.addReview(review2);
 
     storeRepository.save(store);
     reviewRepository.save(review1);
     reviewRepository.save(review2);
 
-    Double avg = reviewServiceImp.getAvgRate(store.getId().toString());
+    Double avg = reviewService.getAvgRate(store.getId().toString());
 
     assertThat(avg)
         .isNotNull()

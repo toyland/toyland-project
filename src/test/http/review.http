@@ -39,7 +39,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 ###review 평점조회
 GET http://localhost:8080/api/v1/reviews/avgRate
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDE5NzQ5LCJpYXQiOjE3NDAwMTYxNDl9.Zu1N3dzU-ckOqYzpXKAkN9DZyszKv2vEtHeU8sFiPCE
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDMyODI2LCJpYXQiOjE3NDAwMjkyMjZ9.cxSlb1SBkMoGZKVh8hzYozedJTkWw8eIo2kCBPNCvQg
 
 {
   "storeId": "2e11ee82-82a9-41cc-ac52-3b532887d5e6"

@@ -12,6 +12,7 @@ import com.toyland.review.presentation.dto.ReviewRequestDto;
 import com.toyland.review.presentation.dto.ReviewResponseDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -79,10 +80,10 @@ public class ReviewServiceImpl implements ReviewService {
   @Override
   @Transactional
   public Double getAvgRate(String storeId) {
-    Store store = storeRepository.findById(UUID.fromString(storeId))
-        .orElseThrow(() -> new RuntimeException("Store not found"));
+    List<Review> review = reviewRepository.getReviewList(UUID.fromString(storeId))
+        .orElseThrow(() -> CustomException.from(ReviewErrorCode.REVIEW_NOT_FOUND));
 
-    return store.getReviews()
+    return review
         .stream()
         .mapToInt(Review::getRating)
         .average()
