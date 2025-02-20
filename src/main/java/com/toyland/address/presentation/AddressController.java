@@ -53,7 +53,7 @@ public class AddressController {
 
     @GetMapping("/search")
     public ResponseEntity<Page<AddressSearchResponseDto>> searchAddress(
-        @RequestBody AddressSearchRequestDto requestDto, Pageable pageable) {
+        AddressSearchRequestDto requestDto, Pageable pageable) {
 
         return ResponseEntity.ok(addressFacade.searchAddress(requestDto, pageable));
     }

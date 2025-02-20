@@ -1,6 +1,5 @@
 package com.toyland.global.exception.type;
 
-import com.toyland.global.exception.CustomException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,7 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @RequiredArgsConstructor
-public enum ApiErrorCode implements ErrorCode{
+public enum ApiErrorCode implements ErrorCode {
     INVALID_REQUEST("API_400", "잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
     UNAUTHORIZED("API_401", "인증되지 않은 요청입니다.", HttpStatus.UNAUTHORIZED),
     FORBIDDEN("API_403", "접근이 금지 되었습니다..", HttpStatus.FORBIDDEN),
@@ -25,8 +24,5 @@ public enum ApiErrorCode implements ErrorCode{
     private final String message;
     private final HttpStatus status;
 
-    public CustomException toException() {
-        return new CustomException(this);
-    }
 
 }
