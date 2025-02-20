@@ -65,7 +65,7 @@ class ProductServiceTest extends IntegrationTestSupport {
 
   @DisplayName("상품을 단건 조회합니다.")
   @Test
-  void readProduct(){
+  void readProduct() {
     // given
     Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
     Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
@@ -83,14 +83,13 @@ class ProductServiceTest extends IntegrationTestSupport {
 
   @DisplayName("상품을 업데이트합니다.")
   @Test
-  void updateProduct(){
+  void updateProduct() {
     // given
     Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
     Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
     String newName = "new 이름";
     BigDecimal newPrice = BigDecimal.valueOf(29000);
     boolean newIsDisplay = true;
-
 
     // when
     ProductResponseDto result = productService.updateProduct(
@@ -109,7 +108,7 @@ class ProductServiceTest extends IntegrationTestSupport {
 
   @DisplayName("상품을 삭제합니다.")
   @Test
-  void deleteProduct(){
+  void deleteProduct() {
     // given
     Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
     Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
@@ -118,12 +117,12 @@ class ProductServiceTest extends IntegrationTestSupport {
 
     // when
     productService.deleteProduct(
-            DeleteProductServiceRequestDto.builder()
-                .actorId(user.getId())
-                .productId(product1.getId())
-                .eventDateTime(now)
-                .build()
-        );
+        DeleteProductServiceRequestDto.builder()
+            .actorId(user.getId())
+            .productId(product1.getId())
+            .eventDateTime(now)
+            .build()
+    );
 
     // then
     List<Product> result = productRepository.findAll();
@@ -143,7 +142,7 @@ class ProductServiceTest extends IntegrationTestSupport {
         .build();
   }
 
-  private Store createStore(String name, String content, String address){
+  private Store createStore(String name, String content, String address) {
     return Store.builder()
         .name(name)
         .content(content)

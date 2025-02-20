@@ -94,7 +94,7 @@ public class StoreServiceImpl implements StoreService {
 
   private Store findStoreById(UUID storeId) {
     return storeRepository.findById(storeId).orElseThrow(
-        () -> CustomException.from(StoreErrorCode.NOT_FOUND)
+        () -> CustomException.from(StoreErrorCode.STORE_NOT_FOUND)
     );
   }
 
