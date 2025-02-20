@@ -15,6 +15,8 @@ public interface PaymentFacade {
 
     PaymentResponseDto createPayment(PaymentRequestDto requestDto, Long loginUserId);
 
+    PaymentResponseDto findByPaymentId(UUID paymentId);
+
     PaymentUpdateResponseDto updatePayment(PaymentUpdateRequestDto requestDto);
 
     void deletePayment(UUID paymentId, Long loginUserId);

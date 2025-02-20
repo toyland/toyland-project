@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface PaymentService {
 
     PaymentResponseDto createPayment(PaymentRequestDto requestDto, Long loginUserId);
+    PaymentResponseDto findByPaymentId(UUID paymentId);
     PaymentUpdateResponseDto updatePayment(PaymentUpdateRequestDto requestDto);
     void deletePayment(UUID paymentId, Long loginUserId);
 }

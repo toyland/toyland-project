@@ -4,6 +4,12 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDE3NzEzLCJpYXQiOjE3NDAwMTQxMTN9.WycI2pW5Lh7cAqOL97UYntFeXiADhv1GqsD1bXVQ4eU
 
 {
-  "orderId": "dd09bc76-3c7a-40b6-9578-1952590fbee9",
-  "paymentType": "CARD"
+  "orderId": "ae8de6e2-8f5e-4172-8df3-c9829521710f",
+  "totalPrice": "1000.00"
 }
+
+
+### 결제 단 건 조회
+GET http://localhost:8080/api/v1/payments/cf0f235d-b2ee-4e0d-8ef6-5ab3bb061948
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDczOTc2LCJpYXQiOjE3NDAwNzAzNzZ9.9oHGITnlt9eXSdX_f66p_MTADbl7ur96Hpko5ZqmXPU

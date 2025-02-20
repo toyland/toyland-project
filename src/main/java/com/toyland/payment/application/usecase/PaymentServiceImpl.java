@@ -39,6 +39,14 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public PaymentResponseDto findByPaymentId(UUID paymentId) {
+        return PaymentResponseDto.from(paymentRepository.findById(paymentId)
+                .orElseThrow(() ->
+                        CustomException.from(PaymentErrorCode.PAYMENT_NOT_FOUND)));
+    }
+
+    @Override
     public PaymentUpdateResponseDto updatePayment(PaymentUpdateRequestDto requestDto) {
 
         Payment payment = paymentRepository.findById(requestDto.id())

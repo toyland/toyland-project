@@ -31,6 +31,14 @@ public class PaymentController {
         return ResponseEntity.ok().body(payment);
     }
 
+
+
+    @GetMapping("/{paymentId}")
+    public ResponseEntity<PaymentResponseDto> findPaymentByPaymentId(@PathVariable UUID paymentId) {
+        return ResponseEntity.ok(paymentFacade.findByPaymentId(paymentId));
+    }
+
+
     @DeleteMapping("/{paymentId}")
     public ResponseEntity<Void> deletePayment(
             @PathVariable UUID paymentId,
