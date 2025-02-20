@@ -1,13 +1,13 @@
 ### 음식점 생성
 POST http://localhost:8080/api/v1/stores
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTU3MDgsImlhdCI6MTczOTc5MjEwOH0.yfR9zRaO99qqY1XSFlJl-jN1cq6fa5Ff_RCvLL5cZRI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDE3NzEzLCJpYXQiOjE3NDAwMTQxMTN9.WycI2pW5Lh7cAqOL97UYntFeXiADhv1GqsD1bXVQ4eU
 
 {
   "name": "굽네치킨",
   "content": "굽네치킨입니다.",
   "address": "경기도 성남시 분당구 가로 1",
-  "regionId": "376ddba6-d9ab-4953-aee6-614e1dfeef7e",
+  "regionId": "552a8bca-3823-4d59-9e82-8b0b128553bd",
   "ownerId": "2"
 }
 
