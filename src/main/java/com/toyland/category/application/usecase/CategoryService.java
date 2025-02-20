@@ -4,9 +4,19 @@
  */
 package com.toyland.category.application.usecase;
 
+import com.toyland.category.application.usecase.dto.DeleteCategoryServiceRequestDto;
+import com.toyland.category.application.usecase.dto.UpdateCategoryServiceRequestDto;
+import com.toyland.category.presentation.dto.CategoryResponseDto;
 import com.toyland.category.presentation.dto.CreateCategoryRequestDto;
+import java.util.UUID;
 
 public interface CategoryService {
 
   void createCategory(CreateCategoryRequestDto request);
+
+  CategoryResponseDto readCategory(UUID categoryId);
+
+  CategoryResponseDto updateCategory(UpdateCategoryServiceRequestDto dto);
+
+  void deleteCategory(DeleteCategoryServiceRequestDto dto);
 }

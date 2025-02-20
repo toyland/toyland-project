@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum CategoryErrorCode implements ErrorCode {
     ID_DUPLICATE("CATEGORY_400", "category id들에 중복 값이 존재합니다.", BAD_REQUEST),
+    INVALID_PARENT_ID("CATEGORY_400", "parentId와 id는 동일할 수 없습니다.", BAD_REQUEST),
     CATEGORY_NOT_FOUND("CATEGORY_404","존재하지 않는 카테고리입니다. 카테고리 id를 확인해주세요.", NOT_FOUND);
 
     private final String code;
