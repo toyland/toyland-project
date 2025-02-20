@@ -8,7 +8,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 
 import com.toyland.common.IntegrationTestSupport;
-import com.toyland.product.application.usecase.dto.CreateProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.model.entity.Product;
@@ -30,128 +29,124 @@ import org.springframework.transaction.annotation.Transactional;
 
 class ProductServiceTest extends IntegrationTestSupport {
 
-    @Autowired
-    private ProductService productService;
+  @Autowired
+  private ProductService productService;
 
-    @Autowired
-    private ProductRepository productRepository;
+  @Autowired
+  private ProductRepository productRepository;
 
-    @Autowired
-    private StoreRepository storeRepository;
+  @Autowired
+  private StoreRepository storeRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    @DisplayName("상품을 생성합니다.")
-    @Test
-    @Transactional
-    void createProduct() {
-        // given
-        Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+  @DisplayName("상품을 생성합니다.")
+  @Test
+  @Transactional
+  void createProduct() {
+    // given
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
 
-        // when
-        productService.createProduct(
-            CreateProductServiceRequestDto.of(
-                new CreateProductRequestDto("고추바사삭", BigDecimal.valueOf(100000), false,
-                    goobne.getId())
-                , goobne
-            )
+    // when
+    productService.createProduct(
+        new CreateProductRequestDto("고추바사삭", BigDecimal.valueOf(100000), false, goobne.getId())
+    );
+
+    // then
+    List<Product> all = productRepository.findAll();
+    assertThat(all).hasSize(1)
+        .extracting("name", "price", "isDisplay", "store.name")
+        .containsExactlyInAnyOrder(
+            tuple("고추바사삭", BigDecimal.valueOf(100000), false, "굽네치킨")
         );
 
-        // then
-        List<Product> all = productRepository.findAll();
-        assertThat(all).hasSize(1)
-            .extracting("name", "price", "isDisplay", "store.name")
-            .containsExactlyInAnyOrder(
-                tuple("고추바사삭", BigDecimal.valueOf(100000), false, "굽네치킨")
-            );
+  }
 
-    }
+  @DisplayName("상품을 단건 조회합니다.")
+  @Test
+  void readProduct() {
+    // given
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+    Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
+    Product product2 = productRepository.save(createProduct("고추바사삭", goobne));
 
-    @DisplayName("상품을 단건 조회합니다.")
-    @Test
-    void readProduct() {
-        // given
-        Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
-        Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
-        Product product2 = productRepository.save(createProduct("고추바사삭", goobne));
+    // when
+    ProductResponseDto result = productService.readProduct(product1.getId());
 
-        // when
-        ProductResponseDto result = productService.readProduct(product1.getId());
+    // then
+    assertThat(result)
+        .extracting("name", "id")
+        .contains(product1.getName(), product1.getId());
 
-        // then
-        assertThat(result)
-            .extracting("name", "id")
-            .contains(product1.getName(), product1.getId());
+  }
 
-    }
+  @DisplayName("상품을 업데이트합니다.")
+  @Test
+  void updateProduct() {
+    // given
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+    Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
+    String newName = "new 이름";
+    BigDecimal newPrice = BigDecimal.valueOf(29000);
+    boolean newIsDisplay = true;
 
-    @DisplayName("상품을 업데이트합니다.")
-    @Test
-    void updateProduct() {
-        // given
-        Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
-        Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
-        String newName = "new 이름";
-        BigDecimal newPrice = BigDecimal.valueOf(29000);
-        boolean newIsDisplay = true;
+    // when
+    ProductResponseDto result = productService.updateProduct(
+        UpdateProductServiceRequestDto.builder()
+            .id(product1.getId())
+            .name(newName)
+            .price(newPrice)
+            .isDisplay(newIsDisplay)
+            .build());
 
-        // when
-        ProductResponseDto result = productService.updateProduct(
-            UpdateProductServiceRequestDto.builder()
-                .id(product1.getId())
-                .name(newName)
-                .price(newPrice)
-                .isDisplay(newIsDisplay)
-                .build());
+    // then
+    assertThat(result)
+        .extracting("name", "id", "price", "isDisplay")
+        .contains(newName, product1.getId(), newPrice, newIsDisplay);
+  }
 
-        // then
-        assertThat(result)
-            .extracting("name", "id", "price", "isDisplay")
-            .contains(newName, product1.getId(), newPrice, newIsDisplay);
-    }
+  @DisplayName("상품을 삭제합니다.")
+  @Test
+  void deleteProduct() {
+    // given
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+    Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
+    User user = userRepository.save(createMaster("유저1"));
+    LocalDateTime now = LocalDateTime.now();
 
-    @DisplayName("상품을 삭제합니다.")
-    @Test
-    void deleteProduct() {
-        // given
-        Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
-        Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
-        User user = userRepository.save(createMaster("유저1"));
-        LocalDateTime now = LocalDateTime.now();
+    // when
+    productService.deleteProduct(
+        DeleteProductServiceRequestDto.builder()
+            .actorId(user.getId())
+            .productId(product1.getId())
+            .eventDateTime(now)
+            .build()
+    );
 
-        // when
-        productService.deleteProduct(
-            DeleteProductServiceRequestDto.builder()
-                .actorId(user.getId())
-                .productId(product1.getId())
-                .eventDateTime(now)
-                .build()
-        );
+    // then
+    List<Product> result = productRepository.findAll();
+    assertThat(result).hasSize(0);
+  }
 
-        // then
-        List<Product> result = productRepository.findAll();
-        assertThat(result).hasSize(0);
-    }
+  private User createMaster(String username) {
+    return new User(username, "password", UserRoleEnum.MASTER);
+  }
 
-    private User createMaster(String username) {
-        return new User(username, "password", UserRoleEnum.MASTER);
-    }
+  private Product createProduct(String name, Store store) {
+    return Product.builder()
+        .name(name)
+        .price(BigDecimal.valueOf(20000))
+        .isDisplay(true)
+        .store(store)
+        .build();
+  }
 
-    private Product createProduct(String name, Store store) {
-        return Product.builder()
-            .name(name)
-            .price(BigDecimal.valueOf(20000))
-            .isDisplay(true)
-            .store(store)
-            .build();
-    }
-
-    private Store createStore(String name, String content, String address) {
-        return Store.builder()
-            .name(name)
-            .content(content)
-            .address(address)
-            .build();
-    }
+  private Store createStore(String name, String content, String address) {
+    return Store.builder()
+        .name(name)
+        .content(content)
+        .address(address)
+        .build();
+  }
 }

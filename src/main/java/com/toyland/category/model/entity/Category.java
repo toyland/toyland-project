@@ -4,20 +4,31 @@
  */
 package com.toyland.category.model.entity;
 
+import com.toyland.category.application.usecase.dto.UpdateCategoryServiceRequestDto;
 import com.toyland.category.presentation.dto.CreateCategoryRequestDto;
-import jakarta.persistence.*;
+import com.toyland.global.common.auditing.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.UUID;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "p_category")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Category {
+@SQLRestriction("deleted_at IS NULL")
+public class Category extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -42,5 +53,11 @@ public class Category {
         .name(dto.name())
         .parent(parent)
         .build();
+  }
+
+  public Category update(UpdateCategoryServiceRequestDto dto, Category parent) {
+    this.name = dto.name();
+    this.parent = parent;
+    return this;
   }
 }

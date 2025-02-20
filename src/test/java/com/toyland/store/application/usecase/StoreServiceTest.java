@@ -13,9 +13,12 @@ import com.toyland.common.IntegrationTestSupport;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.store.application.usecase.dto.CreateStoreCategoryListServiceRequestDto;
+import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
+import com.toyland.store.application.usecase.dto.UpdateStoreServiceRequestDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.store.presentation.dto.CreateStoreRequestDto;
+import com.toyland.store.presentation.dto.StoreResponseDto;
 import com.toyland.storecategory.model.entity.StoreCategory;
 import com.toyland.storecategory.model.repository.StoreCategoryRepository;
 import com.toyland.user.model.User;
@@ -24,7 +27,6 @@ import com.toyland.user.model.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,15 +51,6 @@ class StoreServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
-
-    @AfterEach
-    void tearDown() {
-        storeCategoryRepository.deleteAllInBatch();
-        categoryRepository.deleteAllInBatch();
-        storeRepository.deleteAllInBatch();
-        regionRepository.deleteAllInBatch();
-        userRepository.deleteAllInBatch();
-    }
 
     @DisplayName("음식점을 저장한다.")
     @Test
@@ -91,13 +84,68 @@ class StoreServiceTest extends IntegrationTestSupport {
         Store nene = storeRepository.save(createStore("네네치킨", "네네치킨입니다.", "경기도 성남시 분당구 가로 2"));
 
         // when
-        Store result = storeService.readStore(goobne.getId());
+        StoreResponseDto result = storeService.readStore(goobne.getId());
 
         // then
         assertThat(result)
             .extracting("name", "content", "address")
             .contains("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1");
     }
+
+    @DisplayName("음식점을 수정합니다.")
+    @Test
+    void updateStore(){
+        // given
+        Region beforeRegion = regionRepository.save(createRegion("서울"));
+        User beforeOwner = userRepository.save(createMaster("홍길동"));
+        Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+
+        Region afterRegion = regionRepository.save(createRegion("부산"));
+        User afterOwner = userRepository.save(createMaster("유재석"));
+        String newName = "굽네";
+
+        // when
+        StoreResponseDto result = storeService.updateStore(
+            UpdateStoreServiceRequestDto.builder()
+                .id(goobne.getId())
+                .regionId(afterRegion.getId())
+                .ownerId(afterOwner.getId())
+                .name(newName)
+                .content(goobne.getContent())
+                .address(goobne.getAddress())
+                .build()
+        );
+
+        // then
+        assertThat(result)
+            .extracting("name", "regionName", "ownerName")
+            .contains(newName, afterRegion.getRegionName(), afterOwner.getUsername());
+
+    }
+
+    @DisplayName("음식점을 삭제합니다.")
+    @Test
+    void deleteStore(){
+        // given
+        Store go = createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1");
+        Store ne = createStore("네네치킨", "네네치킨입니다.", "경기도 성남시 분당구 가로 2");
+        storeRepository.saveAll(List.of(go, ne));
+        User actor = userRepository.save(createMaster("유재석"));
+
+        // when
+        storeService.deleteStore(
+            DeleteStoreServiceRequestDto.of(actor.getId(), go.getId(), LocalDateTime.now())
+        );
+
+        // then
+        List<Store> result = storeRepository.findAll();
+        assertThat(result).hasSize(1)
+            .extracting("id", "name")
+            .containsExactlyInAnyOrder(
+                tuple(ne.getId(), ne.getName())
+            );
+    }
+
 
     @DisplayName("상점에 카테고리들을 설정 - 기존 상점의 카테고리를 제거 후 새로운 카테고리를 입력합니다.")
     @Transactional
@@ -151,10 +199,16 @@ class StoreServiceTest extends IntegrationTestSupport {
     }
 
     private Store createStore(String name, String content, String address) {
+        return createStore(name, content, address, null, null);
+    }
+
+    private Store createStore(String name, String content, String address, User owner, Region region) {
         return Store.builder()
             .name(name)
             .content(content)
             .address(address)
+            .owner(owner)
+            .region(region)
             .build();
     }
 }

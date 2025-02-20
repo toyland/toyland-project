@@ -8,15 +8,18 @@ import com.toyland.category.model.entity.Category;
 import com.toyland.category.model.repository.CategoryRepository;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.CategoryErrorCode;
-import com.toyland.global.exception.type.domain.ProductErrorCode;
 import com.toyland.global.exception.type.domain.RegionErrorCode;
+import com.toyland.global.exception.type.domain.StoreErrorCode;
 import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.store.application.usecase.dto.CreateStoreCategoryListServiceRequestDto;
+import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
+import com.toyland.store.application.usecase.dto.UpdateStoreServiceRequestDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.store.presentation.dto.CreateStoreRequestDto;
+import com.toyland.store.presentation.dto.StoreResponseDto;
 import com.toyland.storecategory.model.entity.StoreCategory;
 import com.toyland.storecategory.model.repository.StoreCategoryRepository;
 import com.toyland.user.model.User;
@@ -27,6 +30,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,16 +49,33 @@ public class StoreServiceImpl implements StoreService {
   }
 
   @Override
-  public Store readStore(UUID id) {
-    return storeRepository.findById(id)
-        .orElseThrow(
-            () -> CustomException.from(ProductErrorCode.NOT_FOUND)
-        );
+  @Transactional(readOnly = true)
+  public StoreResponseDto readStore(UUID id) {
+    return StoreResponseDto.from(findStoreById(id));
+  }
+
+  @Override
+  @Transactional
+  public StoreResponseDto updateStore(UpdateStoreServiceRequestDto dto) {
+    Store store = findStoreById(dto.id());
+    User owner = dto.ownerId() == null ? null : findUserById(dto.ownerId());
+    Region region = dto.regionId() == null ? null : findRegionById(dto.regionId());
+
+    store.updateStore(dto.name(), dto.name(), dto.address(), owner, region);
+
+    return StoreResponseDto.from(store);
+  }
+
+  @Override
+  @Transactional
+  public void deleteStore(DeleteStoreServiceRequestDto dto) {
+    Store store = findStoreById(dto.storeId());
+    store.delete(dto.eventDateTime(), dto.actorId());
   }
 
   @Override
   public void setStoreCategories(CreateStoreCategoryListServiceRequestDto dto) {
-    Store store = readStore(dto.storeId());
+    Store store = findStoreById(dto.storeId());
 
     deleteAllByStore(dto.actorId(), dto.eventTime(), store);
 
@@ -69,6 +90,12 @@ public class StoreServiceImpl implements StoreService {
   private void deleteAllByStore(Long actorId, LocalDateTime eventTime, Store store) {
     List<StoreCategory> before = storeCategoryRepository.findAllByStore(store);
     before.stream().forEach((a)->a.delete(eventTime, actorId));
+  }
+
+  private Store findStoreById(UUID storeId) {
+    return storeRepository.findById(storeId).orElseThrow(
+        () -> CustomException.from(StoreErrorCode.STORE_NOT_FOUND)
+    );
   }
 
   private List<Category> getCategories(CreateStoreCategoryListServiceRequestDto dto) {

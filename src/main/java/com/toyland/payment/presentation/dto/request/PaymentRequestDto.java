@@ -1,8 +1,9 @@
 package com.toyland.payment.presentation.dto.request;
 
-import com.toyland.order.model.PaymentType;
-import java.util.UUID;
+import com.toyland.payment.model.entity.PaymentStatus;
 import lombok.Builder;
+
+import java.util.UUID;
 
 /**
  * @author : hanjihoon
@@ -10,7 +11,6 @@ import lombok.Builder;
  */
 @Builder
 public record PaymentRequestDto(UUID orderId,
-                                PaymentType paymentType) {
-
+                                PaymentStatus paymentStatus) {
 
 }

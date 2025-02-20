@@ -4,15 +4,20 @@
  */
 package com.toyland.category.application.usecase;
 
+import com.toyland.category.application.usecase.dto.DeleteCategoryServiceRequestDto;
+import com.toyland.category.application.usecase.dto.UpdateCategoryServiceRequestDto;
 import com.toyland.category.model.entity.Category;
 import com.toyland.category.model.repository.CategoryRepository;
+import com.toyland.category.presentation.dto.CategoryResponseDto;
 import com.toyland.category.presentation.dto.CreateCategoryRequestDto;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.CategoryErrorCode;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +28,37 @@ public class CategoryServiceImpl implements CategoryService {
   public void createCategory(CreateCategoryRequestDto dto) {
     Category parent = dto.patentId() == null ? null : findCategoryById(dto.patentId());
     categoryRepository.save(Category.from(dto, parent));
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public CategoryResponseDto readCategory(UUID categoryId) {
+    return CategoryResponseDto.from(findCategoryById(categoryId));
+  }
+
+  @Override
+  @Transactional
+  public CategoryResponseDto updateCategory(UpdateCategoryServiceRequestDto dto) {
+    if(dto.isEqualsParentCategoryId()){
+      throw CustomException.from(CategoryErrorCode.INVALID_PARENT_ID);
+    }
+
+    Map<UUID, Category> categories = categoryRepository.findAllById(
+        dto.getCategoryList())
+        .stream().collect(Collectors.toMap(Category::getId, entity -> entity));
+
+    Category category = categories.get(dto.categoryId());
+    Category parentCategory = categories.get(dto.parentCategoryId());
+    category.update(dto, parentCategory);
+
+    return CategoryResponseDto.from(category);
+  }
+
+  @Override
+  @Transactional
+  public void deleteCategory(DeleteCategoryServiceRequestDto dto) {
+    Category category = findCategoryById(dto.categoryId());
+    category.delete(dto.eventTime(), dto.actorId());
   }
 
   private Category findCategoryById(UUID id) {

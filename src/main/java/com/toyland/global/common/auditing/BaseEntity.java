@@ -3,6 +3,8 @@ package com.toyland.global.common.auditing;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity implements Serializable {
+
 
     @CreatedBy
     @Column(updatable = false)
@@ -50,6 +53,4 @@ public abstract class BaseEntity implements Serializable {
         this.deletedAt = deleteAt;
         this.deletedBy = deletedBy;
     }
-
-
 }

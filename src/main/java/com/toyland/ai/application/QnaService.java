@@ -9,7 +9,8 @@ import com.toyland.ai.presentation.dto.AiResponseDto;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
 import com.toyland.ai.presentation.dto.QnaResponseDto;
 import com.toyland.global.exception.CustomException;
-import com.toyland.global.exception.type.domain.ProductErrorCode;
+import com.toyland.global.exception.type.domain.AiqnaErrorCode;
+import com.toyland.global.exception.type.domain.StoreErrorCode;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import java.util.UUID;
@@ -53,7 +54,7 @@ public class QnaService {
   private Store findStoreById(String storeId) {
     UUID uuid = UUID.fromString(storeId);
     return storeRepository.findById(uuid)
-        .orElseThrow(() -> CustomException.from(ProductErrorCode.NOT_FOUND));
+        .orElseThrow(() -> CustomException.from(StoreErrorCode.STORE_NOT_FOUND));
   }
 
   /**
@@ -68,8 +69,7 @@ public class QnaService {
 
   public QnaResponseDto getQna(UUID qnaId) {
     Qna qna = qnaRepository.findById(qnaId).orElseThrow(
-        () -> CustomException.from(ProductErrorCode.NOT_FOUND)
-    );
+        () -> CustomException.from(AiqnaErrorCode.AIQNA_NOT_FOUND));
     QnaResponseDto qnaResponseDto = new QnaResponseDto(qna);
     return qnaResponseDto;
   }
@@ -84,8 +84,7 @@ public class QnaService {
   @Transactional
   public QnaResponseDto updateQna(QnaRequestDto request, UUID qnaId) {
     Qna qna = qnaRepository.findById(qnaId).orElseThrow(
-        () -> CustomException.from(ProductErrorCode.NOT_FOUND)
-    );
+        () -> CustomException.from(AiqnaErrorCode.AIQNA_NOT_FOUND));
     qna.update(request);
     return QnaResponseDto.of(qna);
 
@@ -95,8 +94,7 @@ public class QnaService {
   @Transactional
   public void delete(UUID qnaId, Long id) {
     Qna qna = qnaRepository.findById(qnaId).orElseThrow(
-        () -> CustomException.from(ProductErrorCode.NOT_FOUND)
-    );
+        () -> CustomException.from(AiqnaErrorCode.AIQNA_NOT_FOUND));
     qna.addDeletedField(id);
 
   }

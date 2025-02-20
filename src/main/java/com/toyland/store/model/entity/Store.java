@@ -4,29 +4,25 @@
  */
 package com.toyland.store.model.entity;
 
+import com.toyland.global.common.auditing.BaseEntity;
 import com.toyland.region.model.entity.Region;
 import com.toyland.store.presentation.dto.CreateStoreRequestDto;
 import com.toyland.user.model.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.util.UUID;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "p_store")
 @Getter
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Store {
+public class Store extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -50,6 +46,7 @@ public class Store {
   @JoinColumn(name = "owner_id")
   private User owner;
 
+
   @Builder
   private Store(String address, String content, String name, Region region, User owner) {
     this.address = address;
@@ -58,6 +55,7 @@ public class Store {
     this.region = region;
     this.owner = owner;
   }
+
 
   public static Store of(CreateStoreRequestDto dto, Region region, User owner) {
     return Store.builder()
@@ -68,5 +66,13 @@ public class Store {
         .owner(owner)
         .build();
 
+  }
+
+  public void updateStore(String name, String content, String address, User owner, Region region) {
+    this.name = name;
+    this.content = content;
+    this.address = address;
+    this.owner = owner;
+    this.region = region;
   }
 }

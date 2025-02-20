@@ -16,8 +16,6 @@ public interface StoreRepository {
     Optional<Store> findById(UUID id);
 
     // test code 용
-    void deleteAllInBatch();
-
     List<Store> findAll();
 
     <S extends Store> Iterable<S> saveAll(Iterable<S> entities);
