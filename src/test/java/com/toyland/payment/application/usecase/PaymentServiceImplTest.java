@@ -101,6 +101,53 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
         assertThat(payment).isNotNull();
     }
 
+
+    @DisplayName("결제 단 건을 조회합니다.")
+    @Test
+    void findPaymentByPaymentId() {
+        //given
+        User user = userRepository.save(createUser("admin", "1234", UserRoleEnum.MANAGER));
+
+        // 상점 생성
+        Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+
+        // 상품 생성
+        Product product1 = createProduct("고추바사삭", BigDecimal.valueOf(10000), goobne);
+        Product product2 = createProduct("볼케이노", BigDecimal.valueOf(20000), goobne);
+        Product product3 = createProduct("오리지널", BigDecimal.valueOf(30000), goobne);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+        productRepository.save(product3);
+
+        List<OrderProductRequestDto> orderProducts = List.of(
+                new OrderProductRequestDto(product1.getId(), product1.getPrice(), 1),
+                new OrderProductRequestDto(product2.getId(), product2.getPrice(), 2),
+                new OrderProductRequestDto(product3.getId(), product3.getPrice(), 3)
+        );
+
+        CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts,
+                OrderType.DELIVERY, PaymentType.CASH);
+
+        Order order = orderService.createOrder(createOrderRequestDto, user.getId());
+
+        PaymentResponseDto payment = paymentService.createPayment(
+                PaymentRequestDto.builder()
+                        .orderId(order.getId())
+                        .build(), user.getId());
+
+        //when
+        PaymentResponseDto foundPayment = paymentService.findByPaymentId(payment.paymentId());
+
+        //then
+        assertThat(foundPayment).isNotNull();
+        assertThat(foundPayment.paymentId()).isEqualTo(payment.paymentId());
+        assertThat(foundPayment.orderId()).isEqualTo(order.getId());
+        assertThat(foundPayment.paymentStatus()).isEqualTo(PaymentStatus.PRE_PAYMENT);
+    }
+
+
+
     @DisplayName("결제를 수정합니다.")
     @Test
     @Transactional
