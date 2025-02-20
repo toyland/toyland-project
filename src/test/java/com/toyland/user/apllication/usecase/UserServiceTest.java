@@ -1,5 +1,11 @@
 package com.toyland.user.apllication.usecase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.toyland.address.model.entity.Address;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.global.config.security.UserDetailsImpl;
@@ -13,8 +19,14 @@ import com.toyland.user.application.UserService;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
-import com.toyland.user.presentation.dto.*;
+import com.toyland.user.presentation.dto.SignupRequestDto;
+import com.toyland.user.presentation.dto.UpdateUserRequestDto;
+import com.toyland.user.presentation.dto.UserDto;
+import com.toyland.user.presentation.dto.UserSearchRequestDto;
+import com.toyland.user.presentation.dto.UserSearchResponseDto;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +35,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest extends IntegrationTestSupport {
 
@@ -168,7 +173,6 @@ public class UserServiceTest extends IntegrationTestSupport {
             //유저생성
             list.add(userRepository.save(createMaster("master"+i)));
             order.joinUser(list.get(i));
-            store.joinUser(list.get(i));
             address.joinUser(list.get(i));
         }
 
