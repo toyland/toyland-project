@@ -41,8 +41,7 @@ public class PaymentController {
 
     @PutMapping
     public ResponseEntity<PaymentUpdateResponseDto> updatePayment(
-            @RequestBody PaymentUpdateRequestDto requestDto,
-            @CurrentLoginUserId Long loginUserId) {
+            @RequestBody PaymentUpdateRequestDto requestDto) {
         PaymentUpdateResponseDto responseDto = paymentFacade.updatePayment(requestDto);
         return ResponseEntity.ok().body(responseDto);
     }
