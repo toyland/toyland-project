@@ -13,12 +13,12 @@ import lombok.Builder;
 public record ProductResponseDto(
     UUID id, String name, BigDecimal price, boolean isDisplay) {
 
-  public static ProductResponseDto from(Product product) {
-    return ProductResponseDto.builder()
-        .id(product.getId())
-        .name(product.getName())
-        .price(product.getPrice())
-        .isDisplay(product.isDisplay())
-        .build();
-  }
+    public static ProductResponseDto from(Product product) {
+        return ProductResponseDto.builder()
+            .id(product.getId())
+            .name(product.getName())
+            .price(product.getPrice())
+            .isDisplay(product.isDisplay())
+            .build();
+    }
 }

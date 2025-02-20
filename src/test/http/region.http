@@ -1,7 +1,7 @@
 ### 지역 생성
 POST http://localhost:8080/api/v1/regions
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTczOTk2MTQyOCwiaWF0IjoxNzM5OTU3ODI4fQ.Ps5NRdSq9gZP8HMwNKZh6tzT_zCrkyiPkBRcUuUnvY8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTc1NzY3LCJpYXQiOjE3Mzk5NzIxNjd9.L35DWP5gfFktr_Nj4-dV4sqEpyQNwQZB4gIVOR3Sq0o
 
 {
   "regionName": "서울시12345"

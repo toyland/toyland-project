@@ -6,6 +6,7 @@ import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
+import com.toyland.order.presentation.dto.response.OrderResponseDto;
 import com.toyland.orderproduct.model.OrderProduct;
 import com.toyland.orderproduct.presentation.dto.OrderProductRequestDto;
 import com.toyland.product.model.entity.Product;
@@ -65,6 +66,18 @@ public class OrderService {
 
 
     /**
+     * 주문 조회(단 건 조회)
+     */
+    public OrderResponseDto findByOrderId(UUID orderId, Long loginUserId) {
+        // 주문 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new CustomException(OrderErrorCode.ORDER_NOT_FOUND));
+        return OrderResponseDto.from(order);
+    }
+
+
+
+    /**
      * 주문 삭제(취소)
      */
     @Transactional
@@ -83,5 +96,4 @@ public class OrderService {
         //주문 취소
         order.cancel();
     }
-
 }

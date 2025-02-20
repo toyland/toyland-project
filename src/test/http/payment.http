@@ -1,0 +1,9 @@
+### 결제 생성
+POST http://localhost:8080/api/v1/payments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDE3NzEzLCJpYXQiOjE3NDAwMTQxMTN9.WycI2pW5Lh7cAqOL97UYntFeXiADhv1GqsD1bXVQ4eU
+
+{
+  "orderId": "dd09bc76-3c7a-40b6-9578-1952590fbee9",
+  "paymentType": "CARD"
+}

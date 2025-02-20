@@ -5,17 +5,29 @@ import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.OrderErrorCode;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
 import com.toyland.orderproduct.model.OrderProduct;
+import com.toyland.payment.model.entity.Payment;
 import com.toyland.user.model.User;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,6 +53,10 @@ public class Order extends BaseEntity {
     @Column(name = "payment_type")
     private PaymentType paymentType; // 결제유형(카드/현금)
 
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false) // p_user 테이블의 user_id를 FK로 설정
     private User user;
@@ -57,9 +73,15 @@ public class Order extends BaseEntity {
         this.orderStatus = orderStatus;
     }
 
+    //연관관계 편의 메소드 (테스트용)
+    public void joinUser(User user) {
+        this.user = user;
+        user.getOrderList().add(this);
+    }
 
     // 주문 생성 메서드
-    public static Order createOrder(User user, CreateOrderRequestDto dto, List<OrderProduct> orderProductList) {
+    public static Order createOrder(User user, CreateOrderRequestDto dto,
+        List<OrderProduct> orderProductList) {
 
         Order order = Order.builder()
             .user(user) // user 연관 관계 자동 설정
@@ -79,11 +101,12 @@ public class Order extends BaseEntity {
     // 연관 관계 설정 메서드
     public void addOrderProduct(OrderProduct orderProduct) {
         this.orderProductList.add(orderProduct);  // 주문 상품 리스트에 추가
-        orderProduct.associateOrder(this); // OrderProduct에도 해당 Order 정보 설정 (양방향 관계 유지), setter 대신 associateOrder 메서드 사용
+        orderProduct.associateOrder(
+            this); // OrderProduct에도 해당 Order 정보 설정 (양방향 관계 유지), setter 대신 associateOrder 메서드 사용
     }
 
-
     // 비즈니스 로직
+
     /**
      * 주문 삭제(취소)
      */
@@ -101,12 +124,14 @@ public class Order extends BaseEntity {
         this.addDeletedField(user.getId());
 
         // 주문 상품 논리적 삭제 처리
-        for(OrderProduct orderProduct : orderProductList) {
+        for (OrderProduct orderProduct : orderProductList) {
             orderProduct.addDeletedField(user.getId()); // OrderProduct에도 삭제 정보 추가
         }
     }
 
     private boolean isAvailableCancelStatus() {
-        return this.orderStatus == OrderStatus.PREPARING || this.orderStatus == OrderStatus.DELIVERING || this.orderStatus == OrderStatus.DELIVERY_COMPLETED;
+        return this.orderStatus == OrderStatus.PREPARING
+            || this.orderStatus == OrderStatus.DELIVERING
+            || this.orderStatus == OrderStatus.DELIVERY_COMPLETED;
     }
 }

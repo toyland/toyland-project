@@ -10,16 +10,17 @@ import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record UpdateProductServiceRequestDto (
+public record UpdateProductServiceRequestDto(
     UUID id, String name, BigDecimal price, boolean isDisplay
-){
+) {
 
-  public static UpdateProductServiceRequestDto of(UpdateProductRequestDto request, UUID productId) {
-    return UpdateProductServiceRequestDto.builder()
-        .id(productId)
-        .name(request.name())
-        .price(request.price())
-        .isDisplay(request.isDisplay())
-        .build();
-  }
+    public static UpdateProductServiceRequestDto of(UpdateProductRequestDto request,
+        UUID productId) {
+        return UpdateProductServiceRequestDto.builder()
+            .id(productId)
+            .name(request.name())
+            .price(request.price())
+            .isDisplay(request.isDisplay())
+            .build();
+    }
 }

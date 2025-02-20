@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
-public record UpdateProductRequestDto (
+public record UpdateProductRequestDto(
     @NotEmpty(message = "상품 이름은 필수값입니다.")
     String name,
 
@@ -18,6 +18,6 @@ public record UpdateProductRequestDto (
     BigDecimal price,
 
     boolean isDisplay
-){
+) {
 
 }

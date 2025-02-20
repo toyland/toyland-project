@@ -75,6 +75,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AddressSearchResponseDto> searchAddress(AddressSearchRequestDto requestDto,
         Pageable pageable) {
         return addressRepository.searchAddress(requestDto, pageable);

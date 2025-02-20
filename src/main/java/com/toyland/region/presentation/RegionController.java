@@ -44,7 +44,7 @@ public class RegionController {
                 UriComponentsBuilder.fromUriString("/api/v1/{regionId}")
                     .buildAndExpand(region.regionId())
                     .toUri())
-            .build();
+            .body(region);
     }
 
     @GetMapping("/{regionId}")
