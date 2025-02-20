@@ -73,6 +73,11 @@ public class Order extends BaseEntity {
         this.orderStatus = orderStatus;
     }
 
+    //연관관계 편의 메소드 (테스트용)
+    public void joinUser(User user) {
+        this.user = user;
+        user.getOrderList().add(this);
+    }
 
     // 주문 생성 메서드
     public static Order createOrder(User user, CreateOrderRequestDto dto,

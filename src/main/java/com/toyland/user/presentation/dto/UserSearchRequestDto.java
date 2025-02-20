@@ -9,4 +9,9 @@ import lombok.NoArgsConstructor;
 public class UserSearchRequestDto {
     private String username;
     private UserRoleEnum role;
+
+    public UserSearchRequestDto(String username, UserRoleEnum role) {
+        this.username = username;
+        this.role = role;
+    }
 }
