@@ -58,9 +58,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
             .info(info);
     }
 
-    /**
-     * @return
-     */
+
     @Bean
     public OperationCustomizer customize() {
         return (Operation operation, HandlerMethod handlerMethod) -> {
@@ -148,6 +146,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
         );
     }
 
+    // exampleHolder를 ApiResponses에 추가
     private void addExamplesToResponses(ApiResponses responses, ExampleHolder exampleHolder) {
         Content content = new Content();
         MediaType mediaType = new MediaType();
