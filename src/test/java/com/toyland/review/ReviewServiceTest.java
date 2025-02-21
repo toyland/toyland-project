@@ -11,9 +11,10 @@ import com.toyland.order.model.PaymentType;
 import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
-import com.toyland.review.application.usecase.ReviewService;
-import com.toyland.review.model.Review;
+import com.toyland.review.application.facade.ReviewFacade;
 import com.toyland.review.model.repository.ReviewRepository;
+import com.toyland.review.presentation.dto.ReviewRequestDto;
+import com.toyland.review.presentation.dto.ReviewResponseDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
@@ -26,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ReviewServiceTest extends IntegrationTestSupport {
 
   @Autowired
-  private ReviewService reviewService;
+  private ReviewFacade reviewFacade;
   @Autowired
   private ReviewRepository reviewRepository;
   @Autowired
@@ -63,21 +64,17 @@ public class ReviewServiceTest extends IntegrationTestSupport {
             .owner(user)  // UUID 대신 객체를 직접 전달
             .build());
 
-    Review review1 = reviewRepository.save(new Review("good", 3, store, order));
-    Review review2 = reviewRepository.save(new Review("good2", 5, store, order2));
+    ReviewResponseDto responseDto = reviewFacade.createReview(
+        new ReviewRequestDto(order.getId().toString(), store.getId().toString(), "good", 3));
 
-    // store.addReview(review1);
-    // store.addReview(review2);
+    ReviewResponseDto responseDto2 = reviewFacade.createReview(
+        new ReviewRequestDto(order2.getId().toString(), store.getId().toString(), "good2", 5));
 
-    storeRepository.save(store);
-    reviewRepository.save(review1);
-    reviewRepository.save(review2);
+    Store updatedStore = storeRepository.findById(store.getId()).orElse(null);
 
-    Double avg = reviewService.getAvgRate(store.getId().toString());
-
-    assertThat(avg)
-        .isNotNull()
+    assertThat(updatedStore.getAvgRating())
         .isEqualTo(expectedAvg);
+
 
   }
 
