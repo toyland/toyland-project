@@ -123,6 +123,14 @@ public class Order extends BaseEntity {
             this); // OrderProduct에도 해당 Order 정보 설정 (양방향 관계 유지), setter 대신 associateOrder 메서드 사용
     }
 
+
+    public void addPayment(Payment payment){
+        this.payment = payment;
+    }
+
+
+
+
     // 비즈니스 로직
 
     /**

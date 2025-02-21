@@ -26,6 +26,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
+    public PaymentResponseDto findByPaymentId(UUID paymentId) {
+        return paymentService.findByPaymentId(paymentId);
+    }
+
+    @Override
     public PaymentUpdateResponseDto updatePayment(PaymentUpdateRequestDto requestDto) {
         return paymentService.updatePayment(requestDto);
     }

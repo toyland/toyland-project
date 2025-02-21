@@ -1,8 +1,9 @@
 package com.toyland.payment.presentation.dto.request;
 
-import com.toyland.payment.model.entity.PaymentStatus;
+
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
@@ -11,6 +12,12 @@ import java.util.UUID;
  */
 @Builder
 public record PaymentRequestDto(UUID orderId,
-                                PaymentStatus paymentStatus) {
+                                BigDecimal totalPrice) {
 
+    public static PaymentRequestDto from(UUID orderId,
+                                         BigDecimal totalPrice) {
+        return new PaymentRequestDto(
+                orderId,
+                totalPrice);
+    }
 }
