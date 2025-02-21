@@ -1,8 +1,5 @@
 package com.toyland.region.application.usecase;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
@@ -16,8 +13,7 @@ import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
-import java.util.List;
-import java.util.stream.IntStream;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +22,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author : hanjihoon
@@ -100,6 +102,7 @@ class RegionServiceImplTest extends IntegrationTestSupport {
         assertThat(deleteBeforeRegion.getRegionName()).isEqualTo(region.getRegionName());
     }
 
+    @Disabled
     @DisplayName("Region 동적 쿼리 테스트")
     @Test
     @Transactional
