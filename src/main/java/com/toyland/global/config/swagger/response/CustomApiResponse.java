@@ -11,10 +11,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomApiResponse<T> {
 
+
     private final HttpSuccessCode httpSuccessCode;
     private final T result;
+
 
     public static <T> CustomApiResponse<T> of(HttpSuccessCode httpSuccessCode, T result) {
         return new CustomApiResponse<>(httpSuccessCode, result);
     }
+
+
 }

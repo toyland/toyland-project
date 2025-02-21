@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,7 @@ public class RegionController {
     @PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
     @PostMapping
     public ResponseEntity<CustomApiResponse<RegionResponseDto>> createRegion(
-        @RequestBody CreateRegionRequestDto requestDto) {
+        @Valid @RequestBody CreateRegionRequestDto requestDto) {
         RegionResponseDto region = regionFacade.createRegion(requestDto);
 
         URI uri = UriComponentsBuilder.fromUriString("/api/v1/{regionId}")
@@ -72,32 +73,44 @@ public class RegionController {
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @GetMapping("/{regionId}")
-    public ResponseEntity<RegionResponseDto> findRegionByRegionId(@PathVariable UUID regionId) {
-        return ResponseEntity.ok(regionFacade.findByRegionId(regionId));
+    public ResponseEntity<CustomApiResponse<RegionResponseDto>> findRegionByRegionId(
+        @PathVariable UUID regionId) {
+        return ResponseEntity
+            .ok(CustomApiResponse.of(HttpSuccessCode.REGION_FIND_ONE,
+                regionFacade.findByRegionId(regionId)));
     }
 
-    @Operation(summary = "지역 검색", description = "지역 검색 메서드 입니다.")
+    @Operation(summary = "지역 검색", description = "지역 검색 메서드 입니다." +
+        " 예시 http://localhost:8080/api/v1/regions/search?regionName=서울시&page=1&size=5&sort=createdAt,asc"
+        +
+        "regionName 맞는 값이 없다면 전체를 조회합니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "지역 검색 성공"),
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @GetMapping("/search")
-    public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
+    public ResponseEntity<CustomApiResponse<Page<RegionSearchResponseDto>>> searchRegion(
+        RegionSearchRequestDto searchRequestDto,
         Pageable pageable) {
-        return regionFacade.searchRegion(searchRequestDto, pageable);
+        return ResponseEntity
+            .ok(CustomApiResponse.of(HttpSuccessCode.REGION_SEARCH,
+                regionFacade.searchRegion(searchRequestDto, pageable)));
     }
 
 
-    @Operation(summary = "지역 수겆ㅇ", description = "지역 수정 메서드 입니다.")
+    @Operation(summary = "지역 수정", description = "지역 수정 메서드 입니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "지역 수정 성공"),
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_MASTER')")
     @PutMapping("/{regionId}")
-    public ResponseEntity<RegionResponseDto> updateRegionByRegionId(@PathVariable UUID regionId,
-        @RequestBody CreateRegionRequestDto requestDto) {
-        return ResponseEntity.ok(regionFacade.updateRegion(regionId, requestDto));
+    public ResponseEntity<CustomApiResponse<RegionResponseDto>> updateRegionByRegionId(
+        @PathVariable UUID regionId,
+        @Valid @RequestBody CreateRegionRequestDto requestDto) {
+        return ResponseEntity
+            .ok(CustomApiResponse.of(HttpSuccessCode.REGION_UPDATE,
+                regionFacade.updateRegion(regionId, requestDto)));
     }
 
     @Operation(summary = "지역 삭제", description = "지역 삭제 메서드 입니다.")
@@ -107,9 +120,14 @@ public class RegionController {
     @ApiErrorCodeAnnotationList({ApiErrorCode.INVALID_REQUEST, ApiErrorCode.UNAUTHORIZED})
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_MASTER')")
     @DeleteMapping("/{regionId}")
-    public void deleteRegionByRegionId(@PathVariable UUID regionId,
+    public ResponseEntity<CustomApiResponse<URI>> deleteRegionByRegionId(
+        @PathVariable UUID regionId,
         @CurrentLoginUserId Long userId) {
         regionFacade.deleteByRegionId(regionId, userId);
 
+        URI uri = UriComponentsBuilder.fromUriString("/api/v1/regions")
+            .build()
+            .toUri();
+        return ResponseEntity.ok(CustomApiResponse.of(HttpSuccessCode.REGION_DELETE, uri));
     }
 }
