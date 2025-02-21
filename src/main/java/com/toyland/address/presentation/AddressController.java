@@ -56,9 +56,6 @@ public class AddressController {
         @CurrentLoginUserId Long userId) {
         AddressResponseDto address = addressFacade.createAddress(dto, userId);
 
-        log.info("address: {}", address.addressName());
-        log.info("address: {}", address.addressId());
-
         URI uri = UriComponentsBuilder.fromUriString("/api/v1/addresses/{addressId}")
             .buildAndExpand(address.addressId())
             .toUri();
