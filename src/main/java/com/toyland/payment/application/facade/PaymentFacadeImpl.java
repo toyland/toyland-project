@@ -2,10 +2,14 @@ package com.toyland.payment.application.facade;
 
 import com.toyland.payment.application.usecase.PaymentService;
 import com.toyland.payment.presentation.dto.request.PaymentRequestDto;
+import com.toyland.payment.presentation.dto.request.PaymentSearchRequestDto;
 import com.toyland.payment.presentation.dto.request.PaymentUpdateRequestDto;
 import com.toyland.payment.presentation.dto.response.PaymentResponseDto;
+import com.toyland.payment.presentation.dto.response.PaymentSearchResponseDto;
 import com.toyland.payment.presentation.dto.response.PaymentUpdateResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -38,6 +42,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public void deletePayment(UUID paymentId, Long loginUserId) {
         paymentService.deletePayment(paymentId, loginUserId);
+    }
+
+    @Override
+    public Page<PaymentSearchResponseDto> searchPayment(PaymentSearchRequestDto searchRequestDto, Pageable pageable) {
+        return paymentService.searchPayment(searchRequestDto, pageable);
     }
 
 }

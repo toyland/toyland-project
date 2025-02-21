@@ -3,11 +3,16 @@ package com.toyland.payment.presentation;
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.payment.application.facade.PaymentFacade;
 import com.toyland.payment.presentation.dto.request.PaymentRequestDto;
+import com.toyland.payment.presentation.dto.request.PaymentSearchRequestDto;
 import com.toyland.payment.presentation.dto.request.PaymentUpdateRequestDto;
 import com.toyland.payment.presentation.dto.response.PaymentResponseDto;
+import com.toyland.payment.presentation.dto.response.PaymentSearchResponseDto;
 import com.toyland.payment.presentation.dto.response.PaymentUpdateResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -52,6 +57,14 @@ public class PaymentController {
             @RequestBody PaymentUpdateRequestDto requestDto) {
         PaymentUpdateResponseDto responseDto = paymentFacade.updatePayment(requestDto);
         return ResponseEntity.ok().body(responseDto);
+    }
+
+
+    @GetMapping("/search")
+    @Transactional(readOnly = true)
+    public Page<PaymentSearchResponseDto> searchPayment(PaymentSearchRequestDto searchRequestDto,
+                                                        Pageable pageable) {
+        return paymentFacade.searchPayment(searchRequestDto, pageable);
     }
 
 }
