@@ -2,7 +2,7 @@ package com.toyland.ai;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import com.toyland.ai.application.QnaService;
+import com.toyland.ai.application.usecase.QnaService;
 import com.toyland.ai.model.Qna;
 import com.toyland.ai.model.repository.QnaRepository;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
