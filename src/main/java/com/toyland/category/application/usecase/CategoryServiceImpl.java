@@ -8,14 +8,18 @@ import com.toyland.category.application.usecase.dto.DeleteCategoryServiceRequest
 import com.toyland.category.application.usecase.dto.UpdateCategoryServiceRequestDto;
 import com.toyland.category.model.entity.Category;
 import com.toyland.category.model.repository.CategoryRepository;
+import com.toyland.category.model.repository.dao.SearchCategoryRequestDao;
 import com.toyland.category.presentation.dto.CategoryResponseDto;
 import com.toyland.category.presentation.dto.CreateCategoryRequestDto;
+import com.toyland.category.presentation.dto.SearchCategoryRequestDto;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.CategoryErrorCode;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +38,17 @@ public class CategoryServiceImpl implements CategoryService {
   @Transactional(readOnly = true)
   public CategoryResponseDto readCategory(UUID categoryId) {
     return CategoryResponseDto.from(findCategoryById(categoryId));
+  }
+
+  @Override
+  public Page<CategoryResponseDto> searchCategories(SearchCategoryRequestDto dto) {
+    return categoryRepository.searchCategories(
+        SearchCategoryRequestDao.builder()
+            .searchText(dto.searchText())
+            .parentCategoryId(dto.parentCategoryId())
+            .page(dto.page() - 1)
+            .size(Set.of(10, 30, 50).contains(dto.size()) ? dto.size() : 10)
+            .build());
   }
 
   @Override

@@ -1,4 +1,4 @@
-package com.toyland.category.presentation;
+package com.toyland.category.presentation.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
