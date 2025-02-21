@@ -1,12 +1,21 @@
 package com.toyland.region.presentation;
 
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
+import com.toyland.global.config.swagger.annotation.ApiErrorCodeAnnotation;
+import com.toyland.global.config.swagger.annotation.ApiErrorCodeAnnotationList;
+import com.toyland.global.config.swagger.response.CustomApiResponse;
+import com.toyland.global.config.swagger.response.HttpSuccessCode;
+import com.toyland.global.exception.type.ApiErrorCode;
 import com.toyland.region.application.facade.RegionFacade;
 import com.toyland.region.presentation.dto.repuest.CreateRegionRequestDto;
 import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
 import com.toyland.region.presentation.dto.response.RegionResponseDto;
 import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.net.URI;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,31 +44,43 @@ public class RegionController {
 
     private final RegionFacade regionFacade;
 
-    //    @Operation(summary = "예시입니다.", description = "description")
-//    @ApiResponses(value = {
-//        @ApiResponse(responseCode = "200", description = "Success",
-//            content = {@Content(schema = @Schema(implementation = RegionResponseDto.class))}),
-//        @ApiResponse(responseCode = "404", description = "Not Found"),
-//    })
-    //권한이 둘 중 하나라도 일치하면 true
+
+    @Operation(summary = "지역 등록", description = "지역 등록 메서드 입니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "지역 등록 성공"),
+    })
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
     @PostMapping
-    public ResponseEntity<RegionResponseDto> createRegion(
+    public ResponseEntity<CustomApiResponse<RegionResponseDto>> createRegion(
         @RequestBody CreateRegionRequestDto requestDto) {
         RegionResponseDto region = regionFacade.createRegion(requestDto);
 
-        return ResponseEntity.created(
-                UriComponentsBuilder.fromUriString("/api/v1/{regionId}")
-                    .buildAndExpand(region.regionId())
-                    .toUri())
-            .body(region);
+        URI uri = UriComponentsBuilder.fromUriString("/api/v1/{regionId}")
+            .buildAndExpand(region.regionId())
+            .toUri();
+
+        return ResponseEntity
+            .created(uri)
+            .body(CustomApiResponse.of(HttpSuccessCode.REGION_CREATE, region));
+
     }
 
+    @Operation(summary = "지역 단 건 조회", description = "지역 단 건 조회 메서드 입니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "지역 조회 성공"),
+    })
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @GetMapping("/{regionId}")
     public ResponseEntity<RegionResponseDto> findRegionByRegionId(@PathVariable UUID regionId) {
         return ResponseEntity.ok(regionFacade.findByRegionId(regionId));
     }
 
+    @Operation(summary = "지역 검색", description = "지역 검색 메서드 입니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "지역 검색 성공"),
+    })
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @GetMapping("/search")
     public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
         Pageable pageable) {
@@ -67,6 +88,11 @@ public class RegionController {
     }
 
 
+    @Operation(summary = "지역 수겆ㅇ", description = "지역 수정 메서드 입니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "지역 수정 성공"),
+    })
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_MASTER')")
     @PutMapping("/{regionId}")
     public ResponseEntity<RegionResponseDto> updateRegionByRegionId(@PathVariable UUID regionId,
@@ -74,6 +100,11 @@ public class RegionController {
         return ResponseEntity.ok(regionFacade.updateRegion(regionId, requestDto));
     }
 
+    @Operation(summary = "지역 삭제", description = "지역 삭제 메서드 입니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "지역 삭제 성공"),
+    })
+    @ApiErrorCodeAnnotationList({ApiErrorCode.INVALID_REQUEST, ApiErrorCode.UNAUTHORIZED})
     @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_MASTER')")
     @DeleteMapping("/{regionId}")
     public void deleteRegionByRegionId(@PathVariable UUID regionId,
