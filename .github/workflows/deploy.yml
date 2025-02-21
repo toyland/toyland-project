@@ -49,6 +49,6 @@ jobs:
           port: 22
           script_stop: true
           script: |
-            docker build -t springboot:latest
+            docker buildx build -t springboot:latest
             docker-compose up
             
