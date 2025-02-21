@@ -12,20 +12,20 @@ services:
       - postgres_data:/var/lib/postgresql/data  # 데이터 유지 볼륨
     restart: unless-stopped  # 컨테이너가 중지되면 자동으로 재시작
 
-  springboot-app:
-    image: toyland-springboot:latest
-    container_name: springboot-container # 컨테이너 이름을 'springboot-container'로 지정
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-container:5432/toyland # PostgreSQL 데이터베이스 URL
-      SPRING_DATASOURCE_USERNAME: toyland # PostgreSQL 사용자 이름
-      SPRING_DATASOURCE_PASSWORD: 1234 # PostgreSQL 비밀번호
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
-      OPENAI_API_URL: ${OPENAI_API_URL}
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      OPENAI_MODEL: ${OPENAI_MODEL}
-    ports:
-      - "8080:8080" # Spring Boot 애플리케이션의 포트 매핑
-    depends_on:
-      - postgres # PostgreSQL 서비스가 먼저 시작되도록 설정
+#  springboot-app:
+#    image: toyland-springboot:latest
+#    container_name: springboot-container # 컨테이너 이름을 'springboot-container'로 지정
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-container:5432/toyland # PostgreSQL 데이터베이스 URL
+#      SPRING_DATASOURCE_USERNAME: toyland # PostgreSQL 사용자 이름
+#      SPRING_DATASOURCE_PASSWORD: 1234 # PostgreSQL 비밀번호
+#      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+#      OPENAI_API_URL: ${OPENAI_API_URL}
+#      OPENAI_API_KEY: ${OPENAI_API_KEY}
+#      OPENAI_MODEL: ${OPENAI_MODEL}
+#    ports:
+#      - "8080:8080" # Spring Boot 애플리케이션의 포트 매핑
+#    depends_on:
+#      - postgres # PostgreSQL 서비스가 먼저 시작되도록 설정
 volumes:
   postgres_data: #볼룸을 서비스 바깥에서 정의해야 docker compose에서 인식
