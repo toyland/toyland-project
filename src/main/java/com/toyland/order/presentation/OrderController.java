@@ -84,7 +84,7 @@ public class OrderController {
      *  주문 검색
      */
     @GetMapping("/search")
-    public Page<OrderSearchResponseDto> searchOrder(@RequestBody OrderSearchRequestDto searchRequestDto,
+    public Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto,
                                                     Pageable pageable) {
         return orderService.searchOrder(searchRequestDto, pageable);
     }
