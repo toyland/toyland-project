@@ -1,17 +1,17 @@
 ### 주문 생성
 POST http://localhost:8080/api/v1/orders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDE3NzEzLCJpYXQiOjE3NDAwMTQxMTN9.WycI2pW5Lh7cAqOL97UYntFeXiADhv1GqsD1bXVQ4eU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMwMzY3LCJpYXQiOjE3NDAxMjY3Njd9.zLHGAgVn0tPAtEuHmSE6lghhyADAQmb9cHTk4AKJ3IA
 
 {
   "orderProducts": [
     {
-      "productId": "26c7366c-2560-48a6-93fd-37aa8c19e0f3",
+      "productId": "303a3572-67eb-4ce1-9df6-ca5e38a5082e",
       "price": 10000.00,
       "quantity": 1
     },
     {
-      "productId": "13c0a47a-3d34-4dfe-bf0b-babb6e12af82",
+      "productId": "0f9a2a88-4522-427e-8bef-13ac1e44307f",
       "price": 10000.00,
       "quantity": 2
     }
@@ -34,3 +34,25 @@ DELETE http://localhost:8080/api/v1/orders/a8615669-a074-4e84-a390-cbcc7902d15a
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTQ4Njk5LCJpYXQiOjE3Mzk5NDUwOTl9.6M_7GYd8GXRTjBc9HNhLqHNk7QucICIXgyrU3hMHAkg
 
+
+
+### 주문 검색 (주문 번호, 회원 번호로 검색)
+GET http://localhost:8080/api/v1/orders/search?page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTM5NTc1LCJpYXQiOjE3NDAxMzU5NzV9.qv0vAg55QcPED8Q03mHH4QEak3_LxjhmaJRL0hz6dN8
+
+{
+  "orderId": "ae8de6e2-8f5e-4172-8df3-c9829521710f",
+  "userId": 11
+}
+
+
+
+### 주문 검색 (회원 번호로 검색)
+GET http://localhost:8080/api/v1/orders/search?page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTM5NTc1LCJpYXQiOjE3NDAxMzU5NzV9.qv0vAg55QcPED8Q03mHH4QEak3_LxjhmaJRL0hz6dN8
+
+{
+  "userId": 11
+}
