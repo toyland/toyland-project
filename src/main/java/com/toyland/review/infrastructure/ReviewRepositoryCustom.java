@@ -11,6 +11,7 @@ public interface ReviewRepositoryCustom {
 
   Page<Review> searchReviews(UUID storeId, Pageable pageable);
 
-  Optional<List<Review>> getReviewList(UUID uuid);
+  Optional<List<Review>> getReviewList(UUID storeId);
+
 
 }

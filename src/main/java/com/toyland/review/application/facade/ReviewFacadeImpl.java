@@ -40,10 +40,6 @@ public class ReviewFacadeImpl implements ReviewFacade {
     reviewService.deleteReview(reviewId, id);
   }
 
-  @Override
-  public Double getAvgRate(String storeId) {
-    return reviewService.getAvgRate(storeId);
-  }
 
 }
 
