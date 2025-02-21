@@ -50,14 +50,14 @@ public class GlobalErrorHandler {
                 HttpStatus.FORBIDDEN.value()));
     }
 
-    //그 외 모든 예외 처리
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception e) {
-        return ResponseEntity
-            .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(new ErrorResponse("INTERNAL_SERVER_ERROR", "서버 내부 오류가 발생했습니다.",
-                HttpStatus.INTERNAL_SERVER_ERROR.value()));
-    }
+//    //그 외 모든 예외 처리
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+//        return ResponseEntity
+//            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+//            .body(new ErrorResponse("INTERNAL_SERVER_ERROR", "서버 내부 오류가 발생했습니다.",
+//                HttpStatus.INTERNAL_SERVER_ERROR.value()));
+//    }
 
     /**
      * 요청 받는 DTO 검증 에러 ExceptionHandler

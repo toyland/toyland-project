@@ -8,14 +8,15 @@ import com.toyland.address.presentation.dto.response.AddressResponseDto;
 import com.toyland.address.presentation.dto.response.AddressSearchResponseDto;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.AddressErrorCode;
+import com.toyland.global.exception.type.domain.RegionErrorCode;
 import com.toyland.global.exception.type.domain.UserErrorCode;
-import com.toyland.region.application.usecase.RegionService;
 import com.toyland.region.model.entity.Region;
-import com.toyland.region.presentation.dto.response.RegionResponseDto;
+import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
-    private final RegionService regionService;
+    private final RegionRepository regionRepository;
 
     @Override
     public AddressResponseDto createAddress(CreateAddressRequestDto requestDto, Long userId) {
@@ -41,10 +43,11 @@ public class AddressServiceImpl implements AddressService {
             .orElseThrow(() ->
                 CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
-        RegionResponseDto findByRegionId = regionService.findByRegionId(requestDto.regionId());
+        Region region = regionRepository.findById(requestDto.regionId()).orElseThrow(() ->
+            CustomException.from(RegionErrorCode.REGION_NOT_FOUND));
 
         Address savedAddress = addressRepository.save(
-            Address.of(requestDto, user, Region.from(findByRegionId)));
+            Address.of(requestDto, user, region));
 
         return AddressResponseDto.from(savedAddress);
     }

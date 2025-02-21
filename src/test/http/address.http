@@ -1,37 +1,34 @@
 ### Address 생성
 POST http://localhost:8080/api/v1/addresses
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTMzMzg1LCJpYXQiOjE3Mzk5Mjk3ODV9.575F3TPMGFNLLvSmzadwnNRjTPVudyLYFc5m_gmA5nM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMxNTA4LCJpYXQiOjE3NDAxMjc5MDh9.8rkrN69uV-Tt3bBF7nKe8V0kcHq3zYtAroXSJuu8Ikg
 
 {
   "addressName": "seoul",
-  "regionId": "46ed2e02-850e-4102-a598-137d899706ec"
+  "regionId": "6ebdc634-bb2a-4651-b0de-01a9d7bd07e5"
 }
 
 ### Address 단 건 조회
-GET http://localhost:8080/api/v1/addresses/9a6b4446-40f5-4166-9dc7-9f6644c7951e
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
+GET http://localhost:8080/api/v1/addresses/e8198be9-773a-4329-905b-4f03f3cff3b4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMwNTE2LCJpYXQiOjE3NDAxMjY5MTZ9.HLAsIzWzbJx-KDKrh8Vtq4Tb14tpvGh29Xz8rMMumfQ
 
 
 ### Address 수정
-PUT http://localhost:8080/api/v1/addresses/9a6b4446-40f5-4166-9dc7-9f6644c7951e
+PUT http://localhost:8080/api/v1/addresses/e8198be9-773a-4329-905b-4f03f3cff3b4
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMwNTE2LCJpYXQiOjE3NDAxMjY5MTZ9.HLAsIzWzbJx-KDKrh8Vtq4Tb14tpvGh29Xz8rMMumfQ
 
 {
   "addressName": "수정된 주소",
-  "regionId": "609ee92b-6a53-4e41-934c-af8eda047d96"
+  "regionId": "6ebdc634-bb2a-4651-b0de-01a9d7bd07e5"
 }
 
 ### Address 삭제
-DELETE http://localhost:8080/api/v1/addresses/9a6b4446-40f5-4166-9dc7-9f6644c7951e
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3OTQ3MjMsImlhdCI6MTczOTc5MTEyM30.F9rmPS2vECXJOHOWrhZiDny-X9lIt-aD2DHGg1dBtbc
+DELETE http://localhost:8080/api/v1/addresses/e8198be9-773a-4329-905b-4f03f3cff3b4
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMwNTE2LCJpYXQiOjE3NDAxMjY5MTZ9.HLAsIzWzbJx-KDKrh8Vtq4Tb14tpvGh29Xz8rMMumfQ
 
 ### Address 동적 검색 //page=0&size=10&sort=createdAt,asc
-GET http://localhost:8080/api/v1/addresses/search?page=0&size=10&sort=createdAt,asc
+GET http://localhost:8080/api/v1/addresses/search?addressName=busan&page=0&size=10&
+    sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM2NzU2LCJpYXQiOjE3Mzk5MzMxNTZ9.rpers-KaRo18e8wCmSmxapaE5z-jrEBMrHUlM4IQjlc
-
-{
-  "addressName": "busan"
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMxNTA4LCJpYXQiOjE3NDAxMjc5MDh9.8rkrN69uV-Tt3bBF7nKe8V0kcHq3zYtAroXSJuu8Ikg
