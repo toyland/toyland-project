@@ -6,7 +6,9 @@ import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
+import com.toyland.order.presentation.dto.request.OrderSearchRequestDto;
 import com.toyland.order.presentation.dto.response.OrderResponseDto;
+import com.toyland.order.presentation.dto.response.OrderSearchResponseDto;
 import com.toyland.orderproduct.model.OrderProduct;
 import com.toyland.orderproduct.presentation.dto.OrderProductRequestDto;
 import com.toyland.product.model.entity.Product;
@@ -14,6 +16,8 @@ import com.toyland.product.model.repository.ProductRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -132,5 +136,14 @@ public class OrderService {
 
         //주문 취소
         order.cancel();
+    }
+
+    /**
+     *  주문 검색
+     */
+    @Transactional(readOnly = true)
+    public Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto,
+                                                    Pageable pageable) {
+        return orderRepository.searchOrder(searchRequestDto, pageable);
     }
 }
