@@ -39,7 +39,14 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build -x test
-      
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+        OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}     
+        
     - name: Run Tests
       run: ./gradlew test
       
