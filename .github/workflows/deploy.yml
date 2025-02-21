@@ -23,7 +23,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Run UnitTest
-        run: ./gradlew clean test
+        run: ./gradlew test
 
       - name: Application Build
         run: ./gradlew bootJar
