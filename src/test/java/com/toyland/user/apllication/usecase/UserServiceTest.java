@@ -1,11 +1,5 @@
 package com.toyland.user.apllication.usecase;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.tuple;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.toyland.address.model.entity.Address;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.global.config.security.UserDetailsImpl;
@@ -14,19 +8,14 @@ import com.toyland.order.model.OrderStatus;
 import com.toyland.order.model.OrderType;
 import com.toyland.order.model.PaymentType;
 import com.toyland.region.model.entity.Region;
+import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.store.model.entity.Store;
 import com.toyland.user.application.UserService;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
-import com.toyland.user.presentation.dto.SignupRequestDto;
-import com.toyland.user.presentation.dto.UpdateUserRequestDto;
-import com.toyland.user.presentation.dto.UserDto;
-import com.toyland.user.presentation.dto.UserSearchRequestDto;
-import com.toyland.user.presentation.dto.UserSearchResponseDto;
+import com.toyland.user.presentation.dto.*;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +24,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest extends IntegrationTestSupport {
 
@@ -48,6 +44,9 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RegionRepository regionRepository;
 
     @DisplayName("회원 정보 저장")
     @Test
@@ -76,7 +75,6 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     @DisplayName("회원 정보 수정")
     @Test
-    @Transactional
     void updateUser() {
         // given
         User savedUser = userRepository.save(new User("master",
@@ -90,46 +88,36 @@ public class UserServiceTest extends IntegrationTestSupport {
                 .password("Password123!") // 새로운 비밀번호
                 .build();
 
-        userService.updateUserInfo(updateUserRequestDto, savedUser.getId());
+        UpdateUserResponseDto updateUserResponseDto = userService.updateUserInfo(updateUserRequestDto, savedUser.getId());
 
         // then
-        User updatedUser = userRepository.findById(savedUser.getId()).orElseThrow(() -> new RuntimeException("User not found"));
-
-        assertEquals("updateuser", updatedUser.getUsername());
-        assertTrue(passwordEncoder.matches("Password123!", updatedUser.getPassword()));
+        assertEquals("updateuser", updateUserResponseDto.getUsername());
+        assertTrue(passwordEncoder.matches("Password123!", updateUserResponseDto.getPassword()));
     }
 
 
-    @DisplayName("회원 탈퇴")
+    @DisplayName("회원 조회")
     @Test
-    @Transactional
-    void deleteUser() {
+    void searchUser() {
         // given
-        userDetails = new UserDetailsImpl(
-                    UserDto.of(100L,
-                        "master",
-                        passwordEncoder.encode("Password123!"),
-                        UserRoleEnum.MASTER));
-
         User testUser = new User("testuser",
             passwordEncoder.encode("Password123!"),
             UserRoleEnum.CUSTOMER);
         userRepository.save(testUser);
 
         // when
-        userService.deleteUser(testUser.getId(), userDetails);
+        UserResponseDto userResponseDto = userService.findbyUserId(testUser.getId());
 
         // then
-        User deletedUser = userRepository.findById(testUser.getId()).orElse(null);
-        assertNotNull(deletedUser);
-        assertNotNull(deletedUser.getDeletedAt());
-        assertEquals(userDetails.getId(), deletedUser.getDeletedBy());
+        assertThat(userResponseDto)
+                .extracting("username","password", "role")
+                .contains(testUser.getUsername(), testUser.getPassword(), testUser.getRole().toString());
     }
 
-    @DisplayName("회원 조회")
+    @DisplayName("회원 탈퇴")
     @Test
     @Transactional
-    void searchUser() {
+    void deleteUser() {
         // given
         userDetails = new UserDetailsImpl(
                 UserDto.of(100L,
@@ -164,8 +152,11 @@ public class UserServiceTest extends IntegrationTestSupport {
                 .build();
         //상점생성
         Store store = createStore("상점", "내용", "주소");
+        Region region = Region.builder().regionName("서울").build();
+        Region region1 = regionRepository.save(region);
+
         //주소생성
-        Address address = createAddress("천안");
+        Address address = createAddress("천안", region);
 
         List<User> list = new ArrayList<>();
 
@@ -183,6 +174,7 @@ public class UserServiceTest extends IntegrationTestSupport {
         Pageable pageable1 = PageRequest.of(0, 3, Sort.by("createdAt").ascending());
         //페이징 조건2
         Pageable pageable2 = PageRequest.of(0, 3, Sort.by("username").descending());
+
 
 
         Page<UserSearchResponseDto> search = userService.search(case1, pageable1);
@@ -210,8 +202,7 @@ public class UserServiceTest extends IntegrationTestSupport {
         return new User(username, "Password123!", UserRoleEnum.MASTER);
     }
 
-    private Address createAddress(String name) {
-        Region region = Region.builder().regionName("서울").build();
+    private Address createAddress(String name, Region region) {
         return Address.builder()
             .addressName("주소이름")
             .region(region).build();
