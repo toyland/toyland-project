@@ -14,6 +14,10 @@ import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
 import com.toyland.product.presentation.dto.CreateProductRequestDto;
 import com.toyland.product.presentation.dto.ProductResponseDto;
+import com.toyland.product.presentation.dto.ProductWithStoreResponseDto;
+import com.toyland.product.presentation.dto.SearchProductRequestDto;
+import com.toyland.region.model.entity.Region;
+import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
@@ -21,10 +25,13 @@ import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 class ProductServiceTest extends IntegrationTestSupport {
@@ -37,6 +44,9 @@ class ProductServiceTest extends IntegrationTestSupport {
 
   @Autowired
   private StoreRepository storeRepository;
+
+  @Autowired
+  private RegionRepository regionRepository;
 
   @Autowired
   private UserRepository userRepository;
@@ -81,6 +91,52 @@ class ProductServiceTest extends IntegrationTestSupport {
 
   }
 
+  @DisplayName("상품을 검색합니다.")
+  @Test
+  void searchProducts() {
+    // given
+    User owner = userRepository.save(createOwner("오너"));
+    Region region = regionRepository.save(createRegion("경기도"));
+    Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1", owner, region));
+    List<Product> products = new ArrayList<>();
+    for(int i=0 ; i<25 ; i++){
+      products.add(createProduct(String.format("고추바사삭 %03d", i), goobne,i%2 == 0));
+    }
+    for(int i=0 ; i<25 ; i++){
+      products.add(createProduct(String.format("치킨 %03d", i, i%2 == 0), goobne,i%2 == 1));
+    }
+    productRepository.saveAll(products);
+
+    // when
+    Page<ProductWithStoreResponseDto> result = productService.searchProducts(
+        SearchProductRequestDto.builder()
+            .searchText("고추바사삭")
+            .storeId(goobne.getId())
+            .isDisplay(true)
+            .page(2)
+            .size(10)
+            .sort(List.of("name", "asc"))
+            .build()
+    );
+
+    // then
+    List<Product> expected = List.of(products.get(20), products.get(22), products.get(24));
+
+    assertThat(result.getContent()).hasSize(3)
+        .extracting("productId", "store.storeId", "store.ownerName")
+        .containsExactlyInAnyOrder(
+            expected.stream().map(
+                (ex) -> tuple(ex.getId(), ex.getStore().getId(), ex.getStore().getOwner().getUsername())
+            ).toArray(Tuple[]::new)
+        );
+  }
+
+  private Region createRegion(String name) {
+    return Region.builder()
+        .regionName(name)
+        .build();
+  }
+
   @DisplayName("상품을 업데이트합니다.")
   @Test
   void updateProduct() {
@@ -112,7 +168,7 @@ class ProductServiceTest extends IntegrationTestSupport {
     // given
     Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
     Product product1 = productRepository.save(createProduct("고추바사삭", goobne));
-    User user = userRepository.save(createMaster("유저1"));
+    User user = userRepository.save(createOwner("유저1"));
     LocalDateTime now = LocalDateTime.now();
 
     // when
@@ -129,24 +185,34 @@ class ProductServiceTest extends IntegrationTestSupport {
     assertThat(result).hasSize(0);
   }
 
-  private User createMaster(String username) {
-    return new User(username, "password", UserRoleEnum.MASTER);
+  private User createOwner(String username) {
+    return new User(username, "password", UserRoleEnum.OWNER);
   }
 
-  private Product createProduct(String name, Store store) {
+  private Product createProduct(String name, Store store, boolean isDisplay){
     return Product.builder()
         .name(name)
         .price(BigDecimal.valueOf(20000))
-        .isDisplay(true)
+        .isDisplay(isDisplay)
         .store(store)
         .build();
   }
 
-  private Store createStore(String name, String content, String address) {
+  private Product createProduct(String name, Store store) {
+    return this.createProduct(name, store, true);
+  }
+
+  private Store createStore(String name, String content, String address, User owner, Region region) {
     return Store.builder()
         .name(name)
         .content(content)
         .address(address)
+        .owner(owner)
+        .region(region)
         .build();
+  }
+
+  private Store createStore(String name, String content, String address) {
+    return createStore(name, content, address, null, null);
   }
 }

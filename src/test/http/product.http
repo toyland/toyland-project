@@ -5,15 +5,26 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 
 {
-  "name": "고추바사삭2",
-  "price": 10000,
+  "name": "상점2-상품05",
+  "price": 50000,
   "isDisplay": false,
-  "storeId": "b78fa4b4-920e-457a-96b5-97186bfe6243"
+  "storeId": "d2a88144-242d-4a87-b607-4846a66d89de"
 }
 
 ### 상품 단건 조회
 GET http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
+### 상품 검색
+GET http://localhost:8080/api/v1/products/search
+    ?searchText=가
+    &sort=name,desc,created_at
+    &size=10
+    &page=1
+    &storeId=d2a88144-242d-4a87-b607-4846a66d89de
+    &isDisplay=false
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
 
 ### 상품 수정
 PUT http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
