@@ -37,7 +37,7 @@ public class Review extends BaseEntity {
   @Column
   private Integer rating;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "store_id", nullable = false)
   private Store store;
 
@@ -68,8 +68,5 @@ public class Review extends BaseEntity {
     this.rating = reviewDto.getRating();
   }
 
-  public void setStore(Store store) {
-    this.store = store;
-  }
 
 }

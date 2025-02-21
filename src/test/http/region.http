@@ -1,36 +1,32 @@
 ### 지역 생성
 POST http://localhost:8080/api/v1/regions
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDA2MDE4OCwiaWF0IjoxNzQwMDU2NTg4fQ.vxug4JQEuseKFnILifNp1MdgyuOkR7VeUoVXECP1TK0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
 {
   "regionName": "서울시12345"
 }
 
 ### 지역 단 건 조회
-GET http://localhost:8080/api/v1/regions/95689b56-4ae9-4477-8e5d-06eeec294a1f
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjYyMzQsImlhdCI6MTczOTcyMjYzNH0.OqS6OaniuXEU9U7lUraSkKYyM5jyrbe4wnTl2orvX3k
+GET http://localhost:8080/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
 
 ### 지역 수정
-PUT http://localhost:8080/api/v1/regions/95689b56-4ae9-4477-8e5d-06eeec294a1f
+PUT http://localhost:8080/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjYyMzQsImlhdCI6MTczOTcyMjYzNH0.OqS6OaniuXEU9U7lUraSkKYyM5jyrbe4wnTl2orvX3k
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
 {
   "regionName": "부산시"
 }
 
 ### 지역 삭제
-DELETE http://localhost:8080/api/v1/regions/95689b56-4ae9-4477-8e5d-06eeec294a1f
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJNQVNURVIiLCJleHAiOjE3Mzk3MjYyMzQsImlhdCI6MTczOTcyMjYzNH0.OqS6OaniuXEU9U7lUraSkKYyM5jyrbe4wnTl2orvX3k
+DELETE http://localhost:8080/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
 
 ### 지역 검색(동적 쿼리) //page=0&size=10&sort=createdAt,asc
-GET http://localhost:8080/api/v1/regions/search?page=1&size=5&sort=createdAt,asc
+GET http://localhost:8080/api/v1/regions/search?regionName=서울시&page=1&size=5&sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM2NzU2LCJpYXQiOjE3Mzk5MzMxNTZ9.rpers-KaRo18e8wCmSmxapaE5z-jrEBMrHUlM4IQjlc
-
-{
-  "regionName": "서울시"
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg

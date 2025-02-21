@@ -1,4 +1,5 @@
-package com.toyland.ai.application;
+package com.toyland.ai.application.usecase;
+
 
 import com.toyland.ai.model.AiComp;
 import com.toyland.ai.model.Qna;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class QnaService {
+public class QnaServiceImpl implements QnaService {
 
 
   private final QnaRepository qnaRepository;
@@ -70,15 +71,13 @@ public class QnaService {
   public QnaResponseDto getQna(UUID qnaId) {
     Qna qna = qnaRepository.findById(qnaId).orElseThrow(
         () -> CustomException.from(AiqnaErrorCode.AIQNA_NOT_FOUND));
-    QnaResponseDto qnaResponseDto = new QnaResponseDto(qna);
-    return qnaResponseDto;
+    return QnaResponseDto.of(qna);
   }
 
 
   public Page<QnaResponseDto> getQnaList(Pageable pageable, UUID storeId) {
     Page<Qna> qnaPage = qnaRepository.searchQna(storeId, pageable);
-    Page<QnaResponseDto> qnaList = qnaPage.map(QnaResponseDto::of);
-    return qnaList;
+    return qnaPage.map(QnaResponseDto::of);
   }
 
   @Transactional
@@ -99,3 +98,4 @@ public class QnaService {
 
   }
 }
+

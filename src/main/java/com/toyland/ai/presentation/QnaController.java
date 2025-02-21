@@ -1,13 +1,13 @@
 package com.toyland.ai.presentation;
 
 
-import com.toyland.ai.application.QnaService;
-import com.toyland.ai.presentation.dto.PagedResponse;
+import com.toyland.ai.application.facade.QnaFacade;
 import com.toyland.ai.presentation.dto.QnaRequestDto;
 import com.toyland.ai.presentation.dto.QnaResponseDto;
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/qna")
 public class QnaController {
 
-  private final QnaService qnaService;
+  private final QnaFacade qnaFacade;
 
 
   /**
@@ -37,7 +38,7 @@ public class QnaController {
    */
   @PostMapping
   public ResponseEntity<QnaResponseDto> createAiQna(@RequestBody QnaRequestDto request) {
-    QnaResponseDto qna = qnaService.createQna(request);
+    QnaResponseDto qna = qnaFacade.createQna(request);
     return ResponseEntity.ok(qna);
   }
 
@@ -49,7 +50,7 @@ public class QnaController {
    */
   @GetMapping("/{qnaId}")
   public ResponseEntity<QnaResponseDto> getAiQna(@PathVariable UUID qnaId) {
-    QnaResponseDto qna = qnaService.getQna(qnaId);
+    QnaResponseDto qna = qnaFacade.getQna(qnaId);
     return ResponseEntity.ok(qna);
   }
 
@@ -61,10 +62,11 @@ public class QnaController {
    * @return 질문/답변 리스트
    */
   @GetMapping("/search")
-  public ResponseEntity<PagedResponse<QnaResponseDto>> getAiQnaList(Pageable pageable,
+  public ResponseEntity<Page<QnaResponseDto>> getAiQnaList(Pageable pageable,
       @RequestParam UUID storeId) {
-    Page<QnaResponseDto> qnaList = qnaService.getQnaList(pageable, storeId);
-    return ResponseEntity.ok(new PagedResponse<>(qnaList));
+    log.info("Received storeId: {}", storeId);
+    Page<QnaResponseDto> qnaList = qnaFacade.getQnaList(pageable, storeId);
+    return ResponseEntity.ok(qnaList);
   }
 
 
@@ -78,7 +80,7 @@ public class QnaController {
   @PutMapping("/{qnaId}")
   public ResponseEntity<QnaResponseDto> updateAiQna(@RequestBody QnaRequestDto request,
       @PathVariable UUID qnaId) {
-    QnaResponseDto responseDto = qnaService.updateQna(request, qnaId);
+    QnaResponseDto responseDto = qnaFacade.updateQna(request, qnaId);
     return ResponseEntity.ok(responseDto);
   }
 
@@ -92,7 +94,7 @@ public class QnaController {
   @DeleteMapping("/{qnaId}")
   public void deleteAiQna(@PathVariable UUID qnaId,
       @CurrentLoginUserId Long loginUserId) {
-    qnaService.delete(qnaId, loginUserId);
+    qnaFacade.delete(qnaId, loginUserId);
 
   }
 

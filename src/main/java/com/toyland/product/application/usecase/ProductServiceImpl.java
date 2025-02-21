@@ -13,10 +13,13 @@ import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
 import com.toyland.product.presentation.dto.CreateProductRequestDto;
 import com.toyland.product.presentation.dto.ProductResponseDto;
+import com.toyland.product.presentation.dto.ProductWithStoreResponseDto;
+import com.toyland.product.presentation.dto.SearchProductRequestDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +39,11 @@ public class ProductServiceImpl implements ProductService {
   public ProductResponseDto readProduct(UUID productId) {
     Product product = findProductById(productId);
     return ProductResponseDto.from(product);
+  }
+
+  @Override
+  public Page<ProductWithStoreResponseDto> searchProducts(SearchProductRequestDto dto) {
+    return productRepository.searchProducts(dto);
   }
 
   @Override

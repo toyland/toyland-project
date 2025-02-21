@@ -1,6 +1,5 @@
 package com.toyland.review.presentation;
 
-import com.toyland.ai.presentation.dto.PagedResponse;
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.review.application.facade.ReviewFacade;
 import com.toyland.review.presentation.dto.ReviewRequestDto;
@@ -58,10 +57,9 @@ public class ReviewController {
    * @return 리뷰리스트와 점수
    */
   @GetMapping("/search")
-  public ResponseEntity<PagedResponse<ReviewResponseDto>> searchReview(Pageable pageable,
+  public ResponseEntity<Page<ReviewResponseDto>> searchReview(Pageable pageable,
       @RequestParam UUID storeId) {
-    Page<ReviewResponseDto> reviews = reviewFacade.searchReview(pageable, storeId);
-    return ResponseEntity.ok(new PagedResponse<>(reviews));
+    return ResponseEntity.ok(reviewFacade.searchReview(pageable, storeId));
   }
 
   /**
@@ -87,18 +85,6 @@ public class ReviewController {
   public void deleteReview(@PathVariable UUID reviewId,
       @CurrentLoginUserId Long loginUserId) {
     reviewFacade.deleteReview(reviewId, loginUserId);
-  }
-
-  /**
-   * 음식점의 평균 점수를 구한다.
-   *
-   * @param review
-   * @return 평균 점수
-   */
-  @GetMapping("/avgRate")
-  public ResponseEntity<Double> avgRate(@RequestBody ReviewRequestDto review) {
-    Double avgRate = reviewFacade.getAvgRate(review.getStoreId());
-    return ResponseEntity.ok(avgRate);
   }
 
 

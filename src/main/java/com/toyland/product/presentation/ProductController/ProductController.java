@@ -10,13 +10,17 @@ import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDt
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
 import com.toyland.product.presentation.dto.CreateProductRequestDto;
 import com.toyland.product.presentation.dto.ProductResponseDto;
+import com.toyland.product.presentation.dto.ProductWithStoreResponseDto;
+import com.toyland.product.presentation.dto.SearchProductRequestDto;
 import com.toyland.product.presentation.dto.UpdateProductRequestDto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,6 +56,13 @@ public class ProductController {
   @GetMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> readProduct(@PathVariable UUID productId) {
     return ResponseEntity.ok(productService.readProduct(productId));
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<Page<ProductWithStoreResponseDto>> searchProducts(
+      @ModelAttribute SearchProductRequestDto request
+  ){
+    return ResponseEntity.ok(productService.searchProducts(request));
   }
 
   /**

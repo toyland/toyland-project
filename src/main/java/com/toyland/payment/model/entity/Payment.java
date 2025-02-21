@@ -2,7 +2,6 @@ package com.toyland.payment.model.entity;
 
 import com.toyland.global.common.auditing.BaseEntity;
 import com.toyland.order.model.Order;
-import com.toyland.payment.presentation.dto.request.PaymentRequestDto;
 import com.toyland.payment.presentation.dto.request.PaymentUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -31,7 +30,7 @@ public class Payment extends BaseEntity {
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "payment_status")
-    private PaymentStatus paymentStatus; // 결제유형(카드/현금)
+    private PaymentStatus paymentStatus; // 결제상태(결제전/결제대기/결제완료)
 
     @OneToOne(mappedBy = "payment")
     private Order order;
@@ -43,11 +42,16 @@ public class Payment extends BaseEntity {
         this.order = order;
     }
 
-    public static Payment of(PaymentRequestDto requestDto, Order order) {
-        return Payment.builder()
-            .paymentStatus(requestDto.paymentStatus())
-            .order(order)
+    public static Payment of(Order order) {
+         Payment payment = Payment.builder()
+            .paymentStatus(PaymentStatus.PRE_PAYMENT)
+            .order(order) // 결제(Payment)에 주문(Order) 연관 관계 설정 (양방향)
             .build();
+
+        // 주문(Order)에 결제(Payment) 연관 관계 설정
+        order.addPayment(payment);
+
+        return payment;
     }
 
     public void addPayment (PaymentUpdateRequestDto requestDto, Order order) {
