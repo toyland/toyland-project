@@ -12,6 +12,7 @@ import com.toyland.product.presentation.dto.SearchProductRequestDto.Order.Produc
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,7 +33,7 @@ public class SearchProductRequestDto {
   private List<String> sort;
 
   public int getValidateSize() {
-    return size < 10 ? 10 : size - size % 10;
+    return Set.of(10, 30, 50).contains(size) ? size : 10;
   }
 
   public int getPage(){
