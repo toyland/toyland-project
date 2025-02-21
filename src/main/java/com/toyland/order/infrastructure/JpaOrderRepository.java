@@ -13,6 +13,7 @@ import java.util.UUID;
 
 
 @Repository
-public interface JpaOrderRepository extends OrderRepository, JpaRepository<Order, UUID> {
+public interface JpaOrderRepository extends OrderRepository, JpaRepository<Order, UUID>,
+        JpaOrderRepositoryCustom {
 
 }

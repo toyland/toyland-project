@@ -1,25 +1,12 @@
-package com.toyland.order.model.repository;
+package com.toyland.order.infrastructure;
 
-import com.toyland.order.model.Order;
 import com.toyland.order.presentation.dto.request.OrderSearchRequestDto;
 import com.toyland.order.presentation.dto.response.OrderSearchResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-public interface OrderRepository {
-    Order save(Order from);
-
-    Optional<Order> findById(UUID orderId);
+public interface JpaOrderRepositoryCustom {
 
     Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto,
                                               Pageable pageable);
-
-    // test code 용
-    void deleteAllInBatch();
-
-  List<Order> findAll();
 }
