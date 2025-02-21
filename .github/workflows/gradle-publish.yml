@@ -37,6 +37,15 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
+    - name: Create .env file (if needed)
+      run: |
+        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+        echo "DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }}" >> .env
+        echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> .env
+        echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+        echo "OPENAI_MODEL=${{ secrets.OPENAI_MODEL }}" >> .env
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+
     - name: Build with Gradle
       run: ./gradlew build -x test
       env:
@@ -45,7 +54,7 @@ jobs:
         DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
         OPENAI_MODEL: ${{ secrets.OPENAI_MODEL }}
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}     
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         
     - name: Run Tests
       run: ./gradlew test
