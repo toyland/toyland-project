@@ -102,7 +102,7 @@ public class UserController {
         URI uri = UriComponentsBuilder.fromUriString("/api/v1/users/login")
                 .build()
                 .toUri();
-        ;
+
         return ResponseEntity.ok(CustomApiResponse.of(HttpSuccessCode.USER_DELETE, uri));
     }
 
