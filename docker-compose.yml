@@ -13,7 +13,7 @@ services:
     restart: unless-stopped  # 컨테이너가 중지되면 자동으로 재시작
 
   springboot-app:
-    image: toyland-springboot:latest
+    image: letsgilit/toyland-springboot:latest
     container_name: springboot-container # 컨테이너 이름을 'springboot-container'로 지정
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql-container:5432/toyland # PostgreSQL 데이터베이스 URL

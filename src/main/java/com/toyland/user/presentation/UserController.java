@@ -1,15 +1,28 @@
 package com.toyland.user.presentation;
 
 import com.toyland.global.config.security.UserDetailsImpl;
+import com.toyland.global.config.security.annotation.CurrentLoginUserId;
+import com.toyland.global.config.swagger.annotation.ApiErrorCodeAnnotation;
+import com.toyland.global.config.swagger.annotation.ApiErrorCodeAnnotationList;
+import com.toyland.global.config.swagger.response.CustomApiResponse;
+import com.toyland.global.config.swagger.response.HttpSuccessCode;
+import com.toyland.global.exception.type.ApiErrorCode;
 import com.toyland.user.application.UserService;
 import com.toyland.user.presentation.dto.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 
 @RestController
@@ -19,57 +32,78 @@ public class UserController {
 
     private final UserService userService;
 
-    /**
-     * 회원가입 요첨 API
-     * @param requestDto 로그인 유저 정보
-     * @return 회원정보를 포함한 성공적인 응답 생성
-     */
+    @Operation(summary = "회원 가입", description = "회원가입 메서드 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 가입 성공"),
+    })
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto) {
+    public ResponseEntity<CustomApiResponse<SignupResponseDto>> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         SignupResponseDto responseDto = userService.signup(requestDto);
-        return ResponseEntity.ok().body(responseDto);
+
+        URI uri = UriComponentsBuilder.fromUriString("/api/v1/users/login")
+                .build().toUri();
+        return ResponseEntity.created(uri).body(
+                CustomApiResponse.of(HttpSuccessCode.USER_SIGNUP, responseDto));
     }
-    /**
-     * 회원정보 조회 API
-     * @param userId 조회할 유저
-     * @return 조회한 회원정보를 포함한 성공적인 응답 생성
-     */
+
+    @Operation(summary = "회원 단 건 조회", description = "회원 조회 메서드 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 조회 성공"),
+    })
+    @PreAuthorize("hasAnyRole('MASTER', 'MANAGER')")
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> search(@PathVariable Long userId) {
-        UserResponseDto userResponseDto = userService.findbyUserId(userId);
-        return ResponseEntity.ok().body(userResponseDto);
+    public ResponseEntity<CustomApiResponse<UserResponseDto>> search(@PathVariable Long userId) {
+        return ResponseEntity.ok(CustomApiResponse.of(HttpSuccessCode.USER_SEARCH
+                ,userService.findbyUserId(userId)));
     }
 
-    /**
-     * 회원정보 전체 조회 API
-     * @param pageable 페이지정보
-     * @return 조회한 회원정보를 포함한 성공적인 응답 생성
-     */
+    @Operation(summary = "회원 검색", description = "회원 검색 메서드 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 검색 성공"),
+    })
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
+    @PreAuthorize("hasAnyRole('MASTER', 'MANAGER')")
     @GetMapping("/search")
-    public ResponseEntity<Page<UserSearchResponseDto>> searchUser(@RequestBody UserSearchRequestDto Dto, Pageable pageable) {
-        return ResponseEntity.ok(userService.search(Dto,pageable));
+    public ResponseEntity<CustomApiResponse<Page<UserSearchResponseDto>>>searchUser(
+            UserSearchRequestDto Dto, Pageable pageable) {
+
+        return ResponseEntity.ok(CustomApiResponse.of(HttpSuccessCode.USER_SEARCH
+                ,userService.search(Dto,pageable)));
     }
 
-    /**
-     * 회원정보 수정 API
-     * @param requestDto 수정할 유저 정보
-     * @return 회원정보를 포함한 성공적인 응답 생성
-     */
-    @PutMapping("/{userId}")
-    public ResponseEntity<UpdateUserResponseDto> update(@Valid @RequestBody UpdateUserRequestDto requestDto,
-                                                        @PathVariable Long userId) {
-        UpdateUserResponseDto updateUserResponseDto = userService.updateUserInfo(requestDto, userId);
-        return ResponseEntity.ok().body(updateUserResponseDto);
+    @Operation(summary = "회원 수정", description = "회원 수정 메서드 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "회원 수정 성공"),
+    })
+    @PreAuthorize("isAuthenticated()")
+    @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
+    @PutMapping
+    public ResponseEntity<CustomApiResponse<UpdateUserResponseDto>> update(
+            @Valid @RequestBody UpdateUserRequestDto requestDto,
+            @CurrentLoginUserId Long currentUserId) {
+
+        return ResponseEntity.ok(CustomApiResponse.of(HttpSuccessCode.USER_UPDATE
+                ,userService.updateUserInfo(requestDto, currentUserId)));
     }
 
-    /**
-     * 회원탈퇴 API
-     * @return 성공적인 응답 생성
-     */
+    @Operation(summary = "회원 삭제", description = "회원 삭제 메서드 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "회원 삭제 성공"),
+    })
+    @ApiErrorCodeAnnotationList({ApiErrorCode.INVALID_REQUEST, ApiErrorCode.UNAUTHORIZED})
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> delete(@PathVariable Long userId, @AuthenticationPrincipal UserDetailsImpl userDetail) {
-        userService.deleteUser(userId, userDetail);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CustomApiResponse<URI>> delete(@PathVariable Long userId
+            , @AuthenticationPrincipal UserDetailsImpl userDetail) {
+
+        userService.deleteUser(userId,userDetail);
+
+        URI uri = UriComponentsBuilder.fromUriString("/api/v1/users/login")
+                .build()
+                .toUri();
+
+        return ResponseEntity.ok(CustomApiResponse.of(HttpSuccessCode.USER_DELETE, uri));
     }
 
 }

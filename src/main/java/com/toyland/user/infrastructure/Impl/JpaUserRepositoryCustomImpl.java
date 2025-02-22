@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static com.toyland.user.model.QUser.user;
 
@@ -36,10 +37,12 @@ public class JpaUserRepositoryCustomImpl implements JpaUserRepositoryCustom {
 
         List<OrderSpecifier<?>> orderSpecifierList = dynamicOrder(pageable);
 
+        int pageSize = validatePageSize(pageable.getPageSize());
+
         List<User> fetch = query(user, requestDto)
                 .orderBy(orderSpecifierList.toArray(new OrderSpecifier[0]))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset() )
+                .limit(pageSize)
                 .distinct()
                 .fetch();
 
@@ -84,6 +87,10 @@ public class JpaUserRepositoryCustomImpl implements JpaUserRepositoryCustom {
         }
 
         return orderSpecifierList;
+    }
+
+    private int validatePageSize(int pageSize) {
+        return Set.of(10, 30, 50).contains(pageSize) ? pageSize : 10;
     }
 
     private BooleanExpression userContainsName(String username) {
