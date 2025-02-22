@@ -16,4 +16,5 @@ public record CategoryResponseDto (
         .parentCategoryId(category.getParent() == null ? null : category.getParent().getId())
         .build();
   }
+
 }

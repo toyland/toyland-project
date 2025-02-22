@@ -1,6 +1,6 @@
 package com.toyland.category.application.usecase.dto;
 
-import com.toyland.category.presentation.UpdateCategoryRequestDto;
+import com.toyland.category.presentation.dto.UpdateCategoryRequestDto;
 import java.util.List;
 import java.util.UUID;
 import lombok.Builder;

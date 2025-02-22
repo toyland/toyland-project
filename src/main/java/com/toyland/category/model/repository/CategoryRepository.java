@@ -5,9 +5,12 @@
 package com.toyland.category.model.repository;
 
 import com.toyland.category.model.entity.Category;
+import com.toyland.category.model.repository.dao.SearchCategoryRequestDao;
+import com.toyland.category.presentation.dto.CategoryResponseDto;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 
 public interface CategoryRepository {
 
@@ -15,8 +18,12 @@ public interface CategoryRepository {
 
   Optional<Category> findById(UUID id);
 
+  Page<CategoryResponseDto> searchCategories(SearchCategoryRequestDao dao);
+
   List<Category> findAllById(Iterable<UUID> ids);
 
   // test 용
   List<Category> findAll();
+
+  <S extends Category> Iterable<S> saveAll(Iterable<S> entities);
 }
