@@ -1,5 +1,6 @@
 package com.toyland.order.model;
 
+import com.toyland.address.model.entity.Address;
 import com.toyland.global.common.auditing.BaseEntity;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.OrderErrorCode;
@@ -38,9 +39,19 @@ public class Order extends BaseEntity {
     @Column(name = "order_type")
     private OrderType orderType; // 주문유형(포장/배달)
 
+    @Column(name = "order_request", length = 255)
+    private String orderRequest; // 요청 사항
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "payment_type")
     private PaymentType paymentType; // 결제유형(카드/현금)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="address_id", nullable = false)
+    private Address address;
+
+    @Column(name = "address_detail", nullable = false, length = 100)
+    private String addressDetail; // 상세 주소
 
     @OneToOne
     @JoinColumn(name = "payment_id")
@@ -55,11 +66,14 @@ public class Order extends BaseEntity {
 
 
     @Builder
-    public Order(User user, PaymentType paymentType, OrderType orderType, OrderStatus orderStatus) {
+    public Order(User user, Address address, String addressDetail, PaymentType paymentType, OrderType orderType, OrderStatus orderStatus, String orderRequest) {
         this.user = user;
         this.paymentType = paymentType;
         this.orderType = orderType;
         this.orderStatus = orderStatus;
+        this.orderRequest = orderRequest;
+        this.address = address;
+        this.addressDetail = addressDetail;
     }
 
     //연관관계 편의 메소드 (테스트용)
@@ -69,14 +83,17 @@ public class Order extends BaseEntity {
     }
 
     // 주문 생성 메서드
-    public static Order createOrder(User user, CreateOrderRequestDto dto,
+    public static Order createOrder(User user, Address address, CreateOrderRequestDto dto,
         List<OrderProduct> orderProductList) {
 
         Order order = Order.builder()
             .user(user) // user 연관 관계 자동 설정
+            .address(address)
+            .addressDetail(dto.getAddressDetail())
             .orderType(dto.getOrderType())
             .paymentType(dto.getPaymentType())
-            .orderStatus(OrderStatus.ORDER_COMPLETED)
+            .orderStatus(OrderStatus.ORDER_PENDING)
+            .orderRequest(dto.getOrderRequest())
             .build();
 
         // 주문 상품(OrderProduct)과 주문(Order) 간의 연관 관계 설정
@@ -156,7 +173,7 @@ public class Order extends BaseEntity {
     }
 
     private boolean isModifiableStatus() {
-        return this.orderStatus == OrderStatus.PREPARING
+        return this.orderStatus == OrderStatus.COOK_PREPARING
             || this.orderStatus == OrderStatus.DELIVERING
             || this.orderStatus == OrderStatus.DELIVERY_COMPLETED;
     }
