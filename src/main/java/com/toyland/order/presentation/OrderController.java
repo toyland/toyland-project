@@ -3,9 +3,13 @@ package com.toyland.order.presentation;
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.order.application.OrderService;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
+import com.toyland.order.presentation.dto.request.OrderSearchRequestDto;
 import com.toyland.order.presentation.dto.response.OrderResponseDto;
+import com.toyland.order.presentation.dto.response.OrderSearchResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -74,4 +78,16 @@ public class OrderController {
         orderService.deleteOrder(orderId, loginUserId);
         return ResponseEntity.ok().build();
     }
+
+
+    /**
+     *  주문 검색
+     */
+    @GetMapping("/search")
+    public Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto,
+                                                    Pageable pageable,
+                                                    @CurrentLoginUserId Long loginUserId) {
+        return orderService.searchOrder(searchRequestDto, pageable, loginUserId);
+    }
+
 }
