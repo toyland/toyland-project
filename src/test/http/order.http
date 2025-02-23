@@ -1,18 +1,18 @@
 ### 주문 생성
 POST http://localhost:8080/api/v1/orders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMwMzY3LCJpYXQiOjE3NDAxMjY3Njd9.zLHGAgVn0tPAtEuHmSE6lghhyADAQmb9cHTk4AKJ3IA
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDI0OTM0NywiaWF0IjoxNzQwMjQ1NzQ3fQ.jobsXSnPX2nxOaUsyLoksXk-7llcRckA9mkWFlJU5PA
 
 {
   "orderProducts": [
     {
-      "productId": "303a3572-67eb-4ce1-9df6-ca5e38a5082e",
-      "price": 10000.00,
-      "quantity": 1
+      "productId": "219da068-3d45-4af1-a83e-7d8ee8324396",
+      "price": 10.00,
+      "quantity": 2
     },
     {
-      "productId": "0f9a2a88-4522-427e-8bef-13ac1e44307f",
-      "price": 10000.00,
+      "productId": "a08096c0-2a5d-4b27-b2fa-c2f88f49b790",
+      "price": 100.00,
       "quantity": 2
     }
   ],
@@ -36,16 +36,39 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 
 
-### 주문 검색 (주문 번호, 회원 번호로 검색)
-GET http://localhost:8080/api/v1/orders/search?userId=11&orderId=d939b6fa-c5bb-4057-b6fa-76d05978d264&page=0&size=10&sort=createdAt,asc
+
+
+
+### 주문 검색 (고객이 자신의 주문 목록 검색)
+GET http://localhost:8080/api/v1/orders/search?orderStatus=ORDER_COMPLETED&page=0&size=10&sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTczMDcxLCJpYXQiOjE3NDAxNjk0NzF9.-f-yqgjvwGkXV2Muo5GLuVllArMJdV2JNhooqRZtxMs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDMwMDg2MiwiaWF0IjoxNzQwMjk3MjYyfQ.IM7s9tkdOpTEPNmcRjJE2DUd0JE6W3NKeb_AG4snTqw
 
 
 
 
-### 주문 검색 (회원 번호로 검색)
-GET http://localhost:8080/api/v1/orders/search?userId=11&page=0&size=10&sort=createdAt,asc
+### 주문 검색 (음식점 주인이 자신의 음식점 주문 목록 검색)
+GET http://localhost:8080/api/v1/orders/search?storeId=a9131f3c-53e4-4253-932b-6dc8a897f946&page=0&size=10&sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTczMDcxLCJpYXQiOjE3NDAxNjk0NzF9.-f-yqgjvwGkXV2Muo5GLuVllArMJdV2JNhooqRZtxMs
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDI5OTkyNSwiaWF0IjoxNzQwMjk2MzI1fQ.p9v9xd6uTob3DQu-zqru1UBKLQVfya_S0MTpVm5lBwQ
 
+
+
+### 주문 검색 (매니저, 마스터가 모든 주문 목록 검색)
+GET http://localhost:8080/api/v1/orders/search?orderStatus=ORDER_COMPLETED&page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDI5NjMwMCwiaWF0IjoxNzQwMjkyNzAwfQ.uBUg9n2jOtPeZOUZanBNVHGuye2kBqoua2tFYyJ2rj8
+
+
+
+### 주문 검색 (매니저, 마스터가 특정 회원의 주문 목록 검색)
+GET http://localhost:8080/api/v1/orders/search?userId=15&page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMjk1ODExLCJpYXQiOjE3NDAyOTIyMTF9.GjByE5Nl-W-efx_4B2UMRpHrOVNtjMORaGD4YmAtdTI
+
+
+
+### 주문 검색 (매니저, 마스터가 특정 음식점의 특정 회원 주문 목록 검색)
+GET http://localhost:8080/api/v1/orders/search?userId=15&storeId=d3220318-b2f7-46e0-97d0-8bb8d11fd975&page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMjk1ODExLCJpYXQiOjE3NDAyOTIyMTF9.GjByE5Nl-W-efx_4B2UMRpHrOVNtjMORaGD4YmAtdTI
