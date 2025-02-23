@@ -12,11 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -69,22 +71,24 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(()->
                         CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
-        if (!Objects.equals(userDetail.getId(), userId)) {
+        if (!Objects.equals(userDetail.getUserId(), userId)) {
             if (userDetail.getRole() != UserRoleEnum.MASTER) {
                 throw new IllegalArgumentException("삭제 권한이 없습니다.");
             }
         }
 
-        user.addDeletedField(userDetail.getId());
+        user.addDeletedField(userDetail.getUserId());
     }
 
-
+    @Transactional(readOnly = true)
     public UserResponseDto findbyUserId(Long userId){
         return UserResponseDto.of(userRepository.findById(userId).orElseThrow(()->
                 CustomException.from(UserErrorCode.USER_NOT_FOUND)));
     }
 
+    @Transactional(readOnly = true)
     public Page<UserSearchResponseDto> search(UserSearchRequestDto dto, Pageable pageable) {
+
         return userRepository.search(dto,pageable)
                 .map(UserSearchResponseDto::from);
     }
