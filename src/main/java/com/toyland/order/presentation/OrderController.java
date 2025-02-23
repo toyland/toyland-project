@@ -85,8 +85,9 @@ public class OrderController {
      */
     @GetMapping("/search")
     public Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto,
-                                                    Pageable pageable) {
-        return orderService.searchOrder(searchRequestDto, pageable);
+                                                    Pageable pageable,
+                                                    @CurrentLoginUserId Long loginUserId) {
+        return orderService.searchOrder(searchRequestDto, pageable, loginUserId);
     }
 
 }

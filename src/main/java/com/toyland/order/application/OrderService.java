@@ -3,6 +3,7 @@ package com.toyland.order.application;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.OrderErrorCode;
 import com.toyland.global.exception.type.domain.ProductErrorCode;
+import com.toyland.global.exception.type.domain.StoreErrorCode;
 import com.toyland.global.exception.type.domain.UserErrorCode;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.repository.OrderRepository;
@@ -14,7 +15,10 @@ import com.toyland.orderproduct.model.OrderProduct;
 import com.toyland.orderproduct.presentation.dto.OrderProductRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
+import com.toyland.store.model.entity.Store;
+import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
+import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,6 +37,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final StoreRepository storeRepository;
 
 
     /**
@@ -142,7 +147,25 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto,
-                                                    Pageable pageable) {
-        return orderRepository.searchOrder(searchRequestDto, pageable);
+                                                    Pageable pageable,
+                                                    Long loginUserId) {
+
+        User user = userRepository.findById(loginUserId)
+                .orElseThrow(() -> CustomException.from(UserErrorCode.USER_NOT_FOUND));
+
+
+        // 음식점 검색 권한 체크
+        if(searchRequestDto.storeId() != null) {
+            System.out.println("음식점");
+            Store store = storeRepository.findById(searchRequestDto.storeId())
+                    .orElseThrow(() -> CustomException.from(StoreErrorCode.STORE_NOT_FOUND));
+            // MANAGER, MASTER 이거나 또는 OWNER이면서 OWNER ID와 음식점 ID가 일치할 때만 음식점 검색 가능
+            if (!(user.getRole().equals(UserRoleEnum.MASTER) || user.getRole().equals(UserRoleEnum.MANAGER) ||
+                    (user.getRole().equals(UserRoleEnum.OWNER) && loginUserId.equals(store.getOwner().getId())))) {
+                throw CustomException.from(StoreErrorCode.STORE_ACCESS_DENIED);
+            }
+
+        }
+        return orderRepository.searchOrder(searchRequestDto, pageable, loginUserId, user.getRole());
     }
 }

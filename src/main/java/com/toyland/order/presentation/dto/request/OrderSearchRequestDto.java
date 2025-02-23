@@ -4,5 +4,7 @@ import java.util.UUID;
 
 public record OrderSearchRequestDto(UUID orderId,
                                     Long userId,
+                                    UUID storeId,
+                                    String storeName,
                                     String orderStatus) {
 }
