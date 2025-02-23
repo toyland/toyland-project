@@ -11,15 +11,19 @@ import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
 import com.toyland.store.application.usecase.dto.UpdateStoreServiceRequestDto;
 import com.toyland.store.presentation.dto.CreateStoreCategoryListRequestDto;
 import com.toyland.store.presentation.dto.CreateStoreRequestDto;
+import com.toyland.store.presentation.dto.SearchStoreRequestDto;
 import com.toyland.store.presentation.dto.StoreResponseDto;
+import com.toyland.store.presentation.dto.StoreWithOwnerResponseDto;
 import com.toyland.store.presentation.dto.UpdateStoreRequestDto;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,6 +79,12 @@ public class StoreController {
   @GetMapping("/{storeId}")
   public ResponseEntity<StoreResponseDto> readStore(@PathVariable UUID storeId) {
     return ResponseEntity.ok(storeService.readStore(storeId));
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<Page<StoreWithOwnerResponseDto>> searchStores(
+      @ModelAttribute SearchStoreRequestDto request){
+    return ResponseEntity.ok(storeService.searchStores(request));
   }
 
   /**

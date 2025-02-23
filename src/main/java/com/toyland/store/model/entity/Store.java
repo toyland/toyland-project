@@ -45,6 +45,9 @@ public class Store extends BaseEntity {
   @Column(name = "address", length = 100)
   private String address;
 
+  @Column(name = "avg_rating")
+  private Double avgRating;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "region_id")
   private Region region;
@@ -52,8 +55,6 @@ public class Store extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "owner_id")
   private User owner;
-  
-  private Double avgRating;
 
   @Builder
   private Store(String address, String content, String name, Region region, User owner) {

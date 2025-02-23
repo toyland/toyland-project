@@ -18,17 +18,22 @@ import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
 import com.toyland.store.application.usecase.dto.UpdateStoreServiceRequestDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
+import com.toyland.store.model.repository.dto.SearchStoreRepositoryRequestDto;
 import com.toyland.store.presentation.dto.CreateStoreRequestDto;
+import com.toyland.store.presentation.dto.SearchStoreRequestDto;
 import com.toyland.store.presentation.dto.StoreResponseDto;
+import com.toyland.store.presentation.dto.StoreWithOwnerResponseDto;
 import com.toyland.storecategory.model.entity.StoreCategory;
 import com.toyland.storecategory.model.repository.StoreCategoryRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +57,21 @@ public class StoreServiceImpl implements StoreService {
   @Transactional(readOnly = true)
   public StoreResponseDto readStore(UUID id) {
     return StoreResponseDto.from(findStoreById(id));
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<StoreWithOwnerResponseDto> searchStores(SearchStoreRequestDto dto) {
+    return storeRepository.searchStore(
+        SearchStoreRepositoryRequestDto.builder()
+            .searchText(dto.searchText())
+            .ownerId(dto.ownerId())
+            .regionId(dto.regionId())
+            .page(dto.page() - 1)
+            .size(Set.of(10, 30, 50).contains(dto.size()) ? dto.size() : 10)
+            .sort(dto.sort())
+            .build()
+    );
   }
 
   @Override
