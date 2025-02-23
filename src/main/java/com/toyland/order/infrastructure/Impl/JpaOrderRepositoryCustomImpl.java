@@ -1,15 +1,14 @@
 package com.toyland.order.infrastructure.Impl;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toyland.order.infrastructure.JpaOrderRepositoryCustom;
 import com.toyland.order.model.Order;
 import com.toyland.order.presentation.dto.request.OrderSearchRequestDto;
 import com.toyland.order.presentation.dto.response.OrderSearchResponseDto;
+import com.toyland.user.model.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -42,7 +41,7 @@ public class JpaOrderRepositoryCustomImpl implements JpaOrderRepositoryCustom {
      * @return Page<OrderSearchResponseDto>
      */
     @Override
-    public Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto, Pageable pageable) {
+    public Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto, Pageable pageable, Long loginUserId, UserRoleEnum role) {
         // 동적 정렬 조건 생성
         List<OrderSpecifier<?>> orderSpecifierList = dynamicOrder(pageable);
 
@@ -51,11 +50,19 @@ public class JpaOrderRepositoryCustomImpl implements JpaOrderRepositoryCustom {
 
 
         // 동적 쿼리 생성 및 조회
-        List<Order> fetch = query(order, searchRequestDto)
+        List<Order> fetch = queryFactory
+                .select(order)
+                .from(order)
                 .leftJoin(order.user, user).fetchJoin()                     // User 조인
                 .leftJoin(order.orderProductList, orderProduct).fetchJoin() // OrderProduct 조인
                 .leftJoin(orderProduct.product, product).fetchJoin()        // Product 조인
                 .leftJoin(product.store, store).fetchJoin()                 // Store 조인
+                .where(
+                        loginUserIdEq(loginUserId, role),                   // 실제 로그인 유저 아이디
+                        userIdEq(searchRequestDto.userId(), role),          // 검색을 하기위한 유저 아이디
+                        orderIdEq(searchRequestDto.orderId()),
+                        storeIdEq(searchRequestDto.storeId(), role)
+                )
                 .orderBy(orderSpecifierList.toArray(new OrderSpecifier[0])) // 동적 정렬
                 .offset(pageable.getOffset())  // 페이징 - 시작 인덱스
                 .limit(pageSize)               // 페이징 - 페이지 크기
@@ -70,7 +77,22 @@ public class JpaOrderRepositoryCustomImpl implements JpaOrderRepositoryCustom {
                 .collect(Collectors.toList());
 
         // 총 개수 조회 (COUNT 쿼리)
-        Long totalCount = query(Wildcard.count, searchRequestDto).fetchOne();
+        Long totalCount = queryFactory
+                .select(Wildcard.count)
+                .from(order)
+                .leftJoin(order.user, user)                     // User 조인
+                .leftJoin(order.orderProductList, orderProduct) // OrderProduct 조인
+                .leftJoin(orderProduct.product, product)        // Product 조인
+                .leftJoin(product.store, store)                 // Store 조인
+                .where(
+                        loginUserIdEq(loginUserId, role),
+                        orderIdEq(searchRequestDto.orderId()),
+                        userIdEq(searchRequestDto.userId(), role),
+                        storeIdEq(searchRequestDto.storeId(), role)
+
+                )
+                .fetchOne();
+
         if (totalCount == null) {
             totalCount = 0L;
         }
@@ -81,45 +103,41 @@ public class JpaOrderRepositoryCustomImpl implements JpaOrderRepositoryCustom {
 
 
 
-
-    /**
-     * 동적 쿼리 생성
-     * @param expr : 조회할 필드 또는 COUNT
-     * @param searchRequestDto : 검색 조건 (orderId, userId)
-     * @return JPAQuery<T>
-     */
-    private <T> JPAQuery<T> query(Expression<T> expr, OrderSearchRequestDto searchRequestDto) {
-        // 쿼리 객체 생성
-        return queryFactory
-                .select(expr)
-                .from(order)
-                .where(
-                        orderIdEq(searchRequestDto.orderId()),  // 주문 ID 검색
-                        userIdEq(searchRequestDto.userId())     // 사용자 ID 검색
-                );
+    // 실제 로그인 유저 아이디
+    private BooleanExpression loginUserIdEq(Long loginUserId, UserRoleEnum role) {
+        if (role == UserRoleEnum.OWNER || role == UserRoleEnum.MANAGER || role == UserRoleEnum.MASTER) {
+            loginUserId = null; // (OWNER, MANAGER, MASTER)은 모든 주문을 조회할 수 있지만, 자신이 주문한 목록은 볼 수 없다는 전제, 주문자가 아닌 '관리자' 역할만 수행
+        }
+        return loginUserId != null ? order.user.id.eq(loginUserId) : null;
     }
 
 
+    // 검색할 로그인 유저 아이디
+    private BooleanExpression userIdEq(Long userId, UserRoleEnum role) {
+        // CUSTOMER는 특정 userId로 검색 불가
+        if (role == UserRoleEnum.CUSTOMER) {
+            return null;
+        }
+        return userId != null ? order.user.id.eq(userId) : null;
+    }
 
 
-    /**
-     * 주문 ID 동적 검색 조건
-     * @param orderId : 검색할 주문 ID
-     * @return BooleanExpression
-     */
+    // 검색할 음식점 아이디
+    private BooleanExpression storeIdEq(UUID storeId, UserRoleEnum role) {
+        // CUSTOMER는 storeId로 검색 불가
+        if (role == UserRoleEnum.CUSTOMER) {
+            return null;
+        }
+        return storeId != null ? store.id.eq(storeId) : null;
+    }
+
+
     private BooleanExpression orderIdEq(UUID orderId) {
         return orderId != null ? order.id.eq(orderId) : null;
     }
 
 
-    /**
-     * 사용자 ID 동적 검색 조건
-     * @param userId : 검색할 사용자 ID
-     * @return BooleanExpression
-     */
-    private BooleanExpression userIdEq(Long userId) {
-        return userId != null ? order.user.id.eq(userId) : null;
-    }
+
 
 
     /**
