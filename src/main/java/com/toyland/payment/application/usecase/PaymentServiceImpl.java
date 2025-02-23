@@ -8,10 +8,14 @@ import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.payment.model.entity.Payment;
 import com.toyland.payment.model.repository.PaymentRepository;
 import com.toyland.payment.presentation.dto.request.PaymentRequestDto;
+import com.toyland.payment.presentation.dto.request.PaymentSearchRequestDto;
 import com.toyland.payment.presentation.dto.request.PaymentUpdateRequestDto;
 import com.toyland.payment.presentation.dto.response.PaymentResponseDto;
+import com.toyland.payment.presentation.dto.response.PaymentSearchResponseDto;
 import com.toyland.payment.presentation.dto.response.PaymentUpdateResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +73,12 @@ public class PaymentServiceImpl implements PaymentService {
 
         payment.addDeletedField(loginUserId);
 
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PaymentSearchResponseDto> searchPayment(PaymentSearchRequestDto searchRequestDto, Pageable pageable) {
+        return paymentRepository.searchPayment(searchRequestDto, pageable);
     }
 
 
