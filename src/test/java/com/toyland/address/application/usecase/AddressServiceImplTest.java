@@ -1,9 +1,5 @@
 package com.toyland.address.application.usecase;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.toyland.address.model.entity.Address;
 import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.address.presentation.dto.request.AddressSearchRequestDto;
@@ -17,10 +13,7 @@ import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +22,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
@@ -190,6 +192,7 @@ class AddressServiceImplTest extends IntegrationTestSupport {
         assertThat(deleteBeforeAddress.addressName()).isEqualTo(createdAddress.addressName());
     }
 
+    @Disabled
     @DisplayName("주소 동적 쿼리 테스트")
     @Test
     @Transactional

@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum StoreErrorCode implements ErrorCode {
+  STORE_ACCESS_DENIED("STORE_403", "음식점에 접근할 권한이 없습니다.", HttpStatus.FORBIDDEN),
   STORE_NOT_FOUND("STORE_404", "존재하지 않는 음식점입니다. 음식점 id를 확인해주세요.", HttpStatus.NOT_FOUND);
 
   private final String code;

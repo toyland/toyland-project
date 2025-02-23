@@ -9,6 +9,7 @@ import com.toyland.category.model.repository.CategoryRepository;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaCategoryRepository extends CategoryRepository, JpaRepository<Category, UUID> {
+public interface JpaCategoryRepository extends CategoryRepository, JpaRepository<Category, UUID>,
+    JpaCategoryRepositoryCustom {
 
 }

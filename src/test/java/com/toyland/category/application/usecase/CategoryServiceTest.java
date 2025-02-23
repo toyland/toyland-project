@@ -13,17 +13,18 @@ import com.toyland.category.model.entity.Category;
 import com.toyland.category.model.repository.CategoryRepository;
 import com.toyland.category.presentation.dto.CategoryResponseDto;
 import com.toyland.category.presentation.dto.CreateCategoryRequestDto;
+import com.toyland.category.presentation.dto.SearchCategoryRequestDto;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import org.assertj.core.groups.Tuple;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 class CategoryServiceTest extends IntegrationTestSupport {
 
@@ -73,7 +74,7 @@ class CategoryServiceTest extends IntegrationTestSupport {
 
   @DisplayName("카테고리를 조회합니다.")
   @Test
-  void readCategory(){
+  void readCategory() {
     // given
     Category parent = categoryRepository.save(createRootCategory("가게 배달"));
     Category category = categoryRepository.save(createCategory("가게 배달", parent));
@@ -83,13 +84,55 @@ class CategoryServiceTest extends IntegrationTestSupport {
 
     // then
     assertThat(categoryResponseDto)
-        .extracting("id","name", "parentCategoryId")
+        .extracting("id", "name", "parentCategoryId")
         .contains(category.getId(), category.getName(), parent.getId());
+  }
+
+  @DisplayName("카테고리를 검색합니다.")
+  @Test
+  void test() {
+    // given
+    Category parent1 = categoryRepository.save(createRootCategory("가게 배달"));
+    Category parent2 = categoryRepository.save(createRootCategory("픽업"));
+
+    int parent1AndPizzaCount = 13;
+
+    List<Category> categoryList = new ArrayList<>();
+    for (int i = 1; i <= parent1AndPizzaCount; i++) {
+      categoryList.add(createCategory(String.format("치킨 %03d",  i), parent1));
+      categoryList.add(createCategory(String.format("피자 %03d",  i), parent1));
+      categoryList.add(createCategory(String.format("초밥 %03d",  i), parent2));
+      categoryList.add(createCategory(String.format("피자 %03d",  i), parent2));
+    }
+
+    categoryRepository.saveAll(categoryList);
+
+    // when
+    Page<CategoryResponseDto> categoryResponseDtos = categoryService.searchCategories(
+        SearchCategoryRequestDto.builder()
+            .searchText("피자")
+            .parentCategoryId(parent1.getId())
+            .page(2)
+            .size(10)
+            .sort(List.of("name"))
+            .build()
+    );
+
+    // then
+    assertThat(categoryResponseDtos.getTotalElements()).isEqualTo(parent1AndPizzaCount);
+    assertThat(categoryResponseDtos.getContent()).hasSize(3)
+        .extracting("name", "parentCategoryId")
+        .containsExactly(
+            tuple("피자 011", parent1.getId()),
+            tuple("피자 012", parent1.getId()),
+            tuple("피자 013", parent1.getId())
+        );
+
   }
 
   @DisplayName("카테고리를 수정합니다.")
   @Test
-  void updateCategory(){
+  void updateCategory() {
     // given
     Category category = categoryRepository.save(createRootCategory("치킨"));
     Category parent = categoryRepository.save(createRootCategory("가게 배달"));
@@ -106,13 +149,13 @@ class CategoryServiceTest extends IntegrationTestSupport {
 
     // then
     assertThat(categoryResponseDto)
-        .extracting("id","name", "parentCategoryId")
+        .extracting("id", "name", "parentCategoryId")
         .contains(category.getId(), newName, parent.getId());
   }
 
   @DisplayName("카테고리를 삭제합니다.")
   @Test
-  void deleteCategory(){
+  void deleteCategory() {
     // given
     User user = userRepository.save(createMaster("유저1"));
     LocalDateTime now = LocalDateTime.now();
@@ -132,11 +175,11 @@ class CategoryServiceTest extends IntegrationTestSupport {
     return new User(username, "password", UserRoleEnum.MASTER);
   }
 
-  private Category createRootCategory(String name){
+  private Category createRootCategory(String name) {
     return this.createCategory(name, null);
   }
 
-  private Category createCategory(String name, Category parent){
+  private Category createCategory(String name, Category parent) {
     return Category.builder()
         .name(name)
         .parent(parent)

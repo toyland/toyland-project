@@ -26,7 +26,7 @@ public class OrderProduct extends BaseEntity {
     @Column(name = "order_product_id", updatable = false, nullable = false)
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false) // p_product 테이블의 product_id로 외래키(FK) 설정
     private Product product;
 
