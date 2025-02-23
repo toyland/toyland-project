@@ -15,6 +15,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 GET http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
+### 음식점 검색
+GET http://localhost:8080/api/v1/stores/search
+    ?searchText=상점
+    &sort=name,desc,created_at
+    &size=10
+    &page=1
+    &regionId=376ddba6-d9ab-4953-aee6-614e1dfeef7e
+    &ownerId=2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+
+
 ### 음식점 수정
 PUT http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
 Content-Type: application/json
