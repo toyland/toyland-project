@@ -73,6 +73,32 @@ public class UserServiceTest extends IntegrationTestSupport {
         assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isTrue();
     }
 
+    @DisplayName("회원 정보 저장 실패 케이스")
+    @Test
+    void createUser_wrongPassword() {
+        // when
+        SignupRequestDto signupRequestDto = SignupRequestDto
+                .builder()
+                .username("testuser")
+                //특수문자 미포함시
+                .password("Password123")
+                .role(UserRoleEnum.MASTER)
+                .build();
+
+        userService.signup(signupRequestDto);
+
+        // then
+        List<User> all = userRepository.findAll();
+        assertThat(all).hasSize(1)
+                .extracting("username", "role")
+                .containsExactlyInAnyOrder(
+                        tuple("testuser", UserRoleEnum.MASTER)
+                );
+
+        User savedUser = all.get(0);
+        assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isTrue();
+    }
+
     @DisplayName("회원 정보 수정")
     @Test
     void updateUser() {
@@ -151,16 +177,16 @@ public class UserServiceTest extends IntegrationTestSupport {
                 .orderType(OrderType.DELIVERY)
                 .build();
         //상점생성
-        Store store = createStore("상점", "내용", "주소");
+        createStore("상점", "내용", "주소");
         Region region = Region.builder().regionName("서울").build();
-        Region region1 = regionRepository.save(region);
+        regionRepository.save(region);
 
         //주소생성
         Address address = createAddress("천안", region);
 
         List<User> list = new ArrayList<>();
 
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 30; i++) {
             //유저생성
             list.add(userRepository.save(createMaster("master"+i)));
             order.joinUser(list.get(i));
@@ -171,9 +197,9 @@ public class UserServiceTest extends IntegrationTestSupport {
         UserSearchRequestDto case1 = new UserSearchRequestDto("master",UserRoleEnum.MASTER);
 
         //페이징 조건1
-        Pageable pageable1 = PageRequest.of(0, 3, Sort.by("createdAt").ascending());
+        Pageable pageable1 = PageRequest.of(1, 10, Sort.by("createdAt").ascending());
         //페이징 조건2
-        Pageable pageable2 = PageRequest.of(0, 3, Sort.by("username").descending());
+        Pageable pageable2 = PageRequest.of(1, 10, Sort.by("username").descending());
 
 
 
@@ -183,19 +209,24 @@ public class UserServiceTest extends IntegrationTestSupport {
 
 
         assertThat(search).isNotEmpty();
-        assertThat(search.getTotalElements()).isEqualTo(9);
+        assertThat(search.getTotalElements()).isEqualTo(30);
         assertThat(search.getTotalPages()).isEqualTo(3);
-        assertThat(search.getContent().get(0).username()).isEqualTo("master0");
+        assertThat(search.getContent().get(0).username()).isEqualTo("master10");
         assertThat(search.getContent().get(0).role()).isEqualTo(UserRoleEnum.MASTER);
-        assertThat(search.getContent().get(2).username()).isEqualTo("master2");
+        assertThat(search.getContent().get(2).username()).isEqualTo("master12");
+
+        // 이름순 오름차순 정렬시
+        // /0/1/10/11/12/13/14/15/16/17
+        // /18/19/2/20/21/22/23/24/25/26
+        // /27/28/29/3/4/5/6/7/8/9
 
         // then
         assertThat(search2).isNotEmpty();
-        assertThat(search2.getTotalElements()).isEqualTo(9);
+        assertThat(search2.getTotalElements()).isEqualTo(30);
         assertThat(search2.getTotalPages()).isEqualTo(3);
-        assertThat(search2.getContent().get(0).username()).isEqualTo("master8");
+        assertThat(search2.getContent().get(0).username()).isEqualTo("master26");
         assertThat(search2.getContent().get(0).role()).isEqualTo(UserRoleEnum.MASTER);
-        assertThat(search2.getContent().get(2).username()).isEqualTo("master6");
+        assertThat(search2.getContent().get(2).username()).isEqualTo("master24");
     }
 
     private User createMaster(String username) {
@@ -204,7 +235,7 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     private Address createAddress(String name, Region region) {
         return Address.builder()
-            .addressName("주소이름")
+            .addressName(name)
             .region(region).build();
     }
 
