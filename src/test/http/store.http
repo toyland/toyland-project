@@ -18,6 +18,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 ### 음식점 검색
 GET http://localhost:8080/api/v1/stores/search
     ?searchText=상점
+    &categoryNameSearchText=야식
+    &storeNameSearchText=상점
     &sort=name,desc,created_at
     &size=10
     &page=1
@@ -44,13 +46,12 @@ DELETE http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 음식점에 카테고리 생성
-POST http://localhost:8080/api/v1/stores/df41f705-a5d4-419c-a372-f9c43c585e07/categories
+POST http://localhost:8080/api/v1/stores/d2c7f7bc-5580-4c97-8bbd-7c3cc2981de5/categories
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM1MjQzLCJpYXQiOjE3Mzk5MzE2NDN9.EH1k06aEe9SfHvEYfNk-IWOB8osI6cJutl07gvokFiI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 {
   "categoryIdList": [
-    "2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7",
     "72f705b4-97ee-4ee3-8c02-78b38b15a5bc"
   ]
 }

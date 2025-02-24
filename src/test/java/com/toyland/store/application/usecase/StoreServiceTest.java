@@ -107,21 +107,30 @@ class StoreServiceTest extends IntegrationTestSupport {
 
     regionRepository.saveAll(List.of(seoul, busan));
     userRepository.saveAll(List.of(owner1, owner2));
-
+    Category parentCategory = categoryRepository.save(createCategory("가게배달", null));
+    Category pizzaCategory = categoryRepository.save(createCategory("피자", parentCategory));
     List<Store> stores = new ArrayList<>();
+    List<StoreCategory> storeCategories = new ArrayList<>();
+
     for(int i=1 ; i<= 13 ; i++){
       stores.add(createStore(String.format("굽네 %03d", i), "", "", owner1, seoul));
       stores.add(createStore(String.format("네네 %03d", i), "", "", owner1, busan));
       stores.add(createStore(String.format("도미노 %03d", i), "", "", owner2, seoul));
-      stores.add(createStore(String.format("도미노 %03d", i), "", "", owner2, busan));
+      Store busanDomino = createStore(String.format("도미노 %03d", i), "", "", owner2, busan);
+      stores.add(busanDomino);
+
+      if(i<=12) storeCategories.add(createStoreCategory(busanDomino, pizzaCategory));
     }
 
     storeRepository.saveAll(stores);
+    storeCategoryRepository.saveAll(storeCategories);
 
     // when
     Page<StoreWithOwnerResponseDto> result = storeService.searchStores(
         SearchStoreRequestDto.builder()
             .searchText("도미노")
+            .categoryNameSearchText("피자")
+            .storeNameSearchText("도미노")
             .ownerId(owner2.getId())
             .regionId(busan.getId())
             .page(2)
@@ -131,12 +140,12 @@ class StoreServiceTest extends IntegrationTestSupport {
     );
 
     // then
-    assertThat(result).hasSize(3)
-        .extracting("storeName", "region.regionId", "owner.ownerId")
+    assertThat(result.getTotalElements()).isEqualTo(12);
+    assertThat(result).hasSize(2)
+        .extracting("storeName", "region.regionId", "owner.ownerId", "category.categoryId")
         .containsExactly(
-            tuple("도미노 003", busan.getId(), owner2.getId()),
-            tuple("도미노 002", busan.getId(), owner2.getId()),
-            tuple("도미노 001", busan.getId(), owner2.getId())
+            tuple("도미노 002", busan.getId(), owner2.getId(), pizzaCategory.getId()),
+            tuple("도미노 001", busan.getId(), owner2.getId(), pizzaCategory.getId())
         );
   }
 
@@ -228,6 +237,10 @@ class StoreServiceTest extends IntegrationTestSupport {
             tuple(goobne, chickenCategory),
             tuple(goobne, lateNightSnackCategory)
         );
+  }
+
+  private StoreCategory createStoreCategory(Store store, Category category){
+    return new StoreCategory(store, category);
   }
 
   private Category createCategory(String name, Category parentCategory) {
