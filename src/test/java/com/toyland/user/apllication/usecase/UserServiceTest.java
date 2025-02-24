@@ -177,9 +177,9 @@ public class UserServiceTest extends IntegrationTestSupport {
                 .orderType(OrderType.DELIVERY)
                 .build();
         //상점생성
-        Store store = createStore("상점", "내용", "주소");
+        createStore("상점", "내용", "주소");
         Region region = Region.builder().regionName("서울").build();
-        Region region1 = regionRepository.save(region);
+        regionRepository.save(region);
 
         //주소생성
         Address address = createAddress("천안", region);
