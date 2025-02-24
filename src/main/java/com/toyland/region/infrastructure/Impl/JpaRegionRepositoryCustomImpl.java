@@ -40,12 +40,10 @@ public class JpaRegionRepositoryCustomImpl implements JpaRegionRepositoryCustom 
         Pageable pageable) {
         List<OrderSpecifier<?>> orderSpecifierList = dynamicOrder(pageable);
 
-        int pageSize = validatePageSize(pageable.getPageSize());
-
         List<Region> fetch = query(region, searchRequestDto)
             .orderBy(orderSpecifierList.toArray(new OrderSpecifier[0]))
             .offset(pageable.getOffset())
-            .limit(pageSize)
+            .limit(validatePageSize(pageable.getPageSize()))
             .distinct()
             .fetch();
 
