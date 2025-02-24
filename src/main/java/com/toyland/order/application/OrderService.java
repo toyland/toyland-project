@@ -154,6 +154,21 @@ public class OrderService {
 
 
     /**
+     * 주문 수정 (주문 취소)
+     */
+    @Transactional
+    public void cancelOrder(UUID orderId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> CustomException.from(OrderErrorCode.ORDER_NOT_FOUND));
+
+        //주문 취소
+        order.cancel();
+    }
+
+
+
+    /**
      * 주문 삭제 (디비에서 논리적 삭제)
      */
     @Transactional

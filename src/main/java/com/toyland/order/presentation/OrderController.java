@@ -73,6 +73,20 @@ public class OrderController {
 
 
     /**
+     * 주문 취소
+     * @param orderId 주문 번호
+     * @return 200 성공
+     */
+    @PreAuthorize("hasAnyRole('CUSTOMER','OWNER', 'MASTER', 'MANAGER')")
+    @PutMapping("/{orderId}/cancel")
+    public ResponseEntity<Void> cancelOrder(@PathVariable UUID orderId) {
+        orderService.cancelOrder(orderId);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+    /**
      * 주문 조회(단 건 조회)
      * @param orderId
      * @return 주문 정보(OrderResponseDto)를 담은 HTTP 응답
@@ -81,7 +95,6 @@ public class OrderController {
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> findOrderByOrderId(@PathVariable UUID orderId,
                                                                @CurrentLoginUserId Long loginUserId) {
-        System.out.println("loginUserId:" + loginUserId);
         return ResponseEntity.ok(orderService.findByOrderId(orderId, loginUserId));
     }
 

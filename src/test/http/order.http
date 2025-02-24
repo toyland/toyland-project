@@ -59,17 +59,24 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDV
 }
 
 
-### 주문 수정(주문 취소)
+### 주문 수정(관리자가 주문 취소)
 PUT http://localhost:8080/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_CANCELED
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzQ3NiwiaWF0IjoxNzQwMzY5ODc2fQ.eC0Ux31DJdlqpP1m3cJAzxtZnw0z7jn1VgYyyy7m7lI
 
 
 
-### 주문 수정(주문 접수)
+### 주문 수정(관리자가 주문 접수)
 PUT http://localhost:8080/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_COMPLETED
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzUzNiwiaWF0IjoxNzQwMzY5OTM2fQ.a61vupZxPPDOr49UmE7BJIvYgDvYhHMRa-nZC5lFs7s
+
+
+
+### 주문 삭제(고객이 주문 취소)
+PUT http://localhost:8080/api/v1/orders/c6c331bb-58df-4f0f-9b05-864c98c0e630/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDQwOTU0MSwiaWF0IjoxNzQwNDA1OTQxfQ.7mEagoGZe2V3xcLq0FWFOK2JcPFqpWVF96iI-6SNr9M
 
 
 
