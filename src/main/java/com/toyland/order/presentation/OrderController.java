@@ -30,6 +30,7 @@ public class OrderController {
      * @param request 주문 생성 정보
      * @return 200 성공
      */
+    @PreAuthorize("hasAnyRole('CUSTOMER','MASTER', 'MANAGER', 'OWNER')")
     @PostMapping
     public ResponseEntity<Void> createOrder(@Valid @RequestBody CreateOrderRequestDto request,
                                             @CurrentLoginUserId Long loginUserId) {
@@ -76,7 +77,7 @@ public class OrderController {
      * @param orderId
      * @return 주문 정보(OrderResponseDto)를 담은 HTTP 응답
      */
-    @PreAuthorize("hasAnyRole('MASTER', 'MANAGER', 'OWNER')")
+    @PreAuthorize("hasAnyRole('CUSTOMER','MASTER', 'MANAGER', 'OWNER')")
     @GetMapping("/{orderId}")
     public ResponseEntity<OrderResponseDto> findOrderByOrderId(@PathVariable UUID orderId,
                                                                @CurrentLoginUserId Long loginUserId) {
@@ -104,6 +105,7 @@ public class OrderController {
      *  주문 검색
      */
     @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('CUSTOMER','MASTER', 'MANAGER', 'OWNER')")
     public Page<OrderSearchResponseDto> searchOrder(OrderSearchRequestDto searchRequestDto,
                                                     Pageable pageable,
                                                     @CurrentLoginUserId Long loginUserId) {

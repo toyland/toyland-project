@@ -10,15 +10,20 @@ import java.util.stream.Collectors;
 public record OrderResponseDto(UUID orderId,
                                String orderStatus,
                                String paymentType,
-                               List<OrderProductResponseDto> orderProducts) {
+                               List<OrderProductResponseDto> orderProducts,
+                               UUID addressId,
+                               String addressDetail,
+                               String orderRequest) {
 
     public static OrderResponseDto from(Order order) {
         return new OrderResponseDto(
             order.getId(),
             order.getOrderStatus().getDescription(),
             order.getPaymentType().getDescription(),
-            order.getOrderProductList().stream()
-                    .map(OrderProductResponseDto::from).collect(Collectors.toList()) // 주문 상품 리스트 변환
+            order.getOrderProductList().stream().map(OrderProductResponseDto::from).collect(Collectors.toList()), // 주문 상품 리스트 변환
+            order.getAddress().getId(),
+            order.getAddressDetail(),
+            order.getOrderRequest()
         );
     }
 }
