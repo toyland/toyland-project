@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 
 public interface CategoryService {
 
-  void createCategory(CreateCategoryRequestDto request);
+  CategoryResponseDto createCategory(CreateCategoryRequestDto request);
 
   CategoryResponseDto readCategory(UUID categoryId);
 

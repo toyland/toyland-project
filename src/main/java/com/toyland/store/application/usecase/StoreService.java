@@ -8,14 +8,19 @@ import com.toyland.store.application.usecase.dto.CreateStoreCategoryListServiceR
 import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
 import com.toyland.store.application.usecase.dto.UpdateStoreServiceRequestDto;
 import com.toyland.store.presentation.dto.CreateStoreRequestDto;
+import com.toyland.store.presentation.dto.SearchStoreRequestDto;
 import com.toyland.store.presentation.dto.StoreResponseDto;
+import com.toyland.store.presentation.dto.StoreWithOwnerResponseDto;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 
 public interface StoreService {
 
-  void createStore(CreateStoreRequestDto request);
+  StoreResponseDto createStore(CreateStoreRequestDto request);
 
   StoreResponseDto readStore(UUID id);
+
+  Page<StoreWithOwnerResponseDto> searchStores(SearchStoreRequestDto request);
 
   StoreResponseDto updateStore(UpdateStoreServiceRequestDto dto);
 

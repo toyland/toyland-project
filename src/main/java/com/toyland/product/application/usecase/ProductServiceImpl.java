@@ -30,18 +30,20 @@ public class ProductServiceImpl implements ProductService {
   private final StoreRepository storeRepository;
 
   @Override
-  public void createProduct(CreateProductRequestDto dto) {
+  public ProductResponseDto createProduct(CreateProductRequestDto dto) {
     Store store = findStoreById(dto.storeId());
-    productRepository.save(Product.of(dto, store));
+    return ProductResponseDto.from(productRepository.save(Product.of(dto, store)));
   }
 
   @Override
+  @Transactional(readOnly = true)
   public ProductResponseDto readProduct(UUID productId) {
     Product product = findProductById(productId);
     return ProductResponseDto.from(product);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Page<ProductWithStoreResponseDto> searchProducts(SearchProductRequestDto dto) {
     return productRepository.searchProducts(dto);
   }

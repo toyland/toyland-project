@@ -9,6 +9,6 @@ import com.toyland.store.model.repository.StoreRepository;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaStoreRepository extends StoreRepository, JpaRepository<Store, UUID> {
+public interface JpaStoreRepository extends StoreRepository, JpaRepository<Store, UUID>, JpaStoreRepositoryCustom {
 
 }

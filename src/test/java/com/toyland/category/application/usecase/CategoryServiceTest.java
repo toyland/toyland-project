@@ -90,7 +90,7 @@ class CategoryServiceTest extends IntegrationTestSupport {
 
   @DisplayName("카테고리를 검색합니다.")
   @Test
-  void test() {
+  void searchCategories() {
     // given
     Category parent1 = categoryRepository.save(createRootCategory("가게 배달"));
     Category parent2 = categoryRepository.save(createRootCategory("픽업"));
