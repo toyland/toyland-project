@@ -1,5 +1,5 @@
 ### 상품 생성
-POST http://localhost:8080/api/v1/products
+POST {{baseUrl}}/api/v1/products
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
@@ -12,11 +12,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 상품 단건 조회
-GET http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+GET {{baseUrl}}/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 상품 검색
-GET http://localhost:8080/api/v1/products/search
+GET {{baseUrl}}/api/v1/products/search
     ?searchText=가
     &sort=name,desc,created_at
     &size=10
@@ -27,7 +27,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 
 ### 상품 수정
-PUT http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+PUT {{baseUrl}}/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
@@ -38,6 +38,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 상품 삭제
-DELETE http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+DELETE {{baseUrl}}/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0

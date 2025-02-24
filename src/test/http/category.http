@@ -1,5 +1,5 @@
 ### 카테고리 생성
-POST http://localhost:8080/api/v1/categories
+POST {{baseUrl}}/api/v1/categories
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODU5NjQ5LCJpYXQiOjE3Mzk4NTYwNDl9.VC0YwrVoNFo_9VMyovczvf1YBC82gIgQ4_m6QlsohCQ
 
@@ -9,11 +9,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 카테고리 조회
-GET http://localhost:8080/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
+GET {{baseUrl}}/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 카테고리 검색
-GET http://localhost:8080/api/v1/categories/search
+GET {{baseUrl}}/api/v1/categories/search
     ?searchText=가
     &sort=name,desc,created_at
     &size=10
@@ -21,7 +21,7 @@ GET http://localhost:8080/api/v1/categories/search
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 카테고리 수정
-PUT http://localhost:8080/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
+PUT {{baseUrl}}/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 Content-Type: application/json
 
@@ -30,5 +30,5 @@ Content-Type: application/json
 }
 
 ### 카테고리 삭제
-DELETE http://localhost:8080/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
+DELETE {{baseUrl}}/api/v1/categories/2b5db83c-d0d0-4c66-bbbb-a5e94f053fb7
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0

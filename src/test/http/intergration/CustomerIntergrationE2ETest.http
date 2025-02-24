@@ -1,5 +1,5 @@
 ### 회원 가입
-POST http://localhost:8080/api/v1/users/signup
+POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 로그인
-GET http://localhost:8080/api/v1/users/login
+GET {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### 주소 생성
-POST http://localhost:8080/api/v1/addresses
+POST {{baseUrl}}/api/v1/addresses
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMxNTA4LCJpYXQiOjE3NDAxMjc5MDh9.8rkrN69uV-Tt3bBF7nKe8V0kcHq3zYtAroXSJuu8Ikg
 
@@ -28,9 +28,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 음식점 조회(주소 기반)
+GET {{baseUrl}}/api/v1/stores/search
+    ?searchText=상점
+    &categoryNameSearchText=야식
+    &storeNameSearchText=상점
+    &storeSearchAddress=서울
+    &regionId=376ddba6-d9ab-4953-aee6-614e1dfeef7e
+    &ownerId=2
+    &categoryId=72f705b4-97ee-4ee3-8c02-78b38b15a5bc
+    &sort=name,desc,created_at
+    &size=10
+    &page=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 주문 생성
-POST http://localhost:8080/api/v1/orders
+POST {{baseUrl}}/api/v1/orders
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDE3NzEzLCJpYXQiOjE3NDAwMTQxMTN9.WycI2pW5Lh7cAqOL97UYntFeXiADhv1GqsD1bXVQ4eU
 
@@ -52,5 +64,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 주문 내역 조회
+GET {{baseUrl}}/api/v1/orders/search?orderStatus=ORDER_COMPLETED&page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDMwMDg2MiwiaWF0IjoxNzQwMjk3MjYyfQ.IM7s9tkdOpTEPNmcRjJE2DUd0JE6W3NKeb_AG4snTqw
 
 ### 주문 삭제 (5분 이내)
+PUT {{baseUrl}}/api/v1/orders/c6c331bb-58df-4f0f-9b05-864c98c0e630/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDQwOTU0MSwiaWF0IjoxNzQwNDA1OTQxfQ.7mEagoGZe2V3xcLq0FWFOK2JcPFqpWVF96iI-6SNr9M

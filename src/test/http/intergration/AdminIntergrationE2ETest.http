@@ -1,5 +1,5 @@
 ### 회원 가입
-POST http://localhost:8080/api/v1/users/signup
+POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 로그인
-GET http://localhost:8080/api/v1/users/login
+GET {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### 지역 생성
-POST http://localhost:8080/api/v1/regions
+POST {{baseUrl}}/api/v1/regions
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
@@ -27,7 +27,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 카테고리 생성
-POST http://localhost:8080/api/v1/categories
+POST {{baseUrl}}/api/v1/categories
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODU5NjQ5LCJpYXQiOjE3Mzk4NTYwNDl9.VC0YwrVoNFo_9VMyovczvf1YBC82gIgQ4_m6QlsohCQ
 
