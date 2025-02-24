@@ -49,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
             .parentCategoryId(dto.parentCategoryId())
             .page(dto.page() - 1)
             .size(Set.of(10, 30, 50).contains(dto.size()) ? dto.size() : 10)
+            .sort(dto.sort())
             .build());
   }
 
