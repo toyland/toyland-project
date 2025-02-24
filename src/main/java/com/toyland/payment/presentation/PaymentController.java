@@ -16,15 +16,22 @@ import com.toyland.payment.presentation.dto.response.PaymentUpdateResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import java.net.URI;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-import java.util.UUID;
 
 /**
  * @author : hanjihoon
@@ -33,6 +40,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/payments")
+@Tag(name = "결제", description = "Payment API")
 public class PaymentController {
 
     private final PaymentFacade paymentFacade;
@@ -40,7 +48,7 @@ public class PaymentController {
 
     @Operation(summary = "결제 생성", description = "결제 생성 api 입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "결제 생성 성공"),
+        @ApiResponse(responseCode = "201", description = "결제 생성 성공"),
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PostMapping
@@ -50,77 +58,77 @@ public class PaymentController {
         PaymentResponseDto payment = paymentFacade.createPayment(requestDto, loginUserId);
 
         URI uri = UriComponentsBuilder.fromUriString("/api/v1/{paymentId}")
-                .buildAndExpand(payment.paymentId())
-                .toUri();
+            .buildAndExpand(payment.paymentId())
+            .toUri();
 
         return ResponseEntity
-                .created(uri)
-                .body(CustomApiResponse.of(HttpSuccessCode.PAYMENT_CREATE, payment));
+            .created(uri)
+            .body(CustomApiResponse.of(HttpSuccessCode.PAYMENT_CREATE, payment));
 
     }
 
 
     @Operation(summary = "결제 단 건 조회", description = "결제 단 건 조회 api 입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "결제 조회 성공"),
+        @ApiResponse(responseCode = "200", description = "결제 조회 성공"),
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @GetMapping("/{paymentId}")
-    public ResponseEntity<CustomApiResponse<PaymentResponseDto>> findPaymentByPaymentId(@PathVariable UUID paymentId) {
+    public ResponseEntity<CustomApiResponse<PaymentResponseDto>> findPaymentByPaymentId(
+        @PathVariable UUID paymentId) {
         return ResponseEntity
-                .ok(CustomApiResponse.of(HttpSuccessCode.PAYMENT_FIND_ONE,
-                        paymentFacade.findByPaymentId(paymentId)));
+            .ok(CustomApiResponse.of(HttpSuccessCode.PAYMENT_FIND_ONE,
+                paymentFacade.findByPaymentId(paymentId)));
     }
-
 
 
     @Operation(summary = "결제 삭제", description = "결제 삭제 api 입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "결제 삭제 성공"),
+        @ApiResponse(responseCode = "204", description = "결제 삭제 성공"),
     })
     @ApiErrorCodeAnnotationList({ApiErrorCode.INVALID_REQUEST, ApiErrorCode.UNAUTHORIZED})
     @DeleteMapping("/{paymentId}")
     public ResponseEntity<CustomApiResponse<URI>> deletePayment(
-            @PathVariable UUID paymentId,
-            @CurrentLoginUserId Long loginUserId) {
-            paymentFacade.deletePayment(paymentId, loginUserId);
+        @PathVariable UUID paymentId,
+        @CurrentLoginUserId Long loginUserId) {
+        paymentFacade.deletePayment(paymentId, loginUserId);
 
         URI uri = UriComponentsBuilder.fromUriString("/api/v1/payments")
-                .build()
-                .toUri();
+            .build()
+            .toUri();
         return ResponseEntity.ok(CustomApiResponse.of(HttpSuccessCode.PAYMENT_DELETE, uri));
     }
 
-    
+
     @Operation(summary = "결제 수정", description = "결제 수정 api 입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "결제 수정 성공"),
+        @ApiResponse(responseCode = "200", description = "결제 수정 성공"),
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PutMapping("/{paymentId}")
     public ResponseEntity<CustomApiResponse<PaymentUpdateResponseDto>> updatePayment(
-            @RequestBody PaymentUpdateRequestDto requestDto) {
+        @RequestBody PaymentUpdateRequestDto requestDto) {
         return ResponseEntity
-                .ok(CustomApiResponse.of(HttpSuccessCode.PAYMENT_UPDATE,
-                        paymentFacade.updatePayment(requestDto)));
+            .ok(CustomApiResponse.of(HttpSuccessCode.PAYMENT_UPDATE,
+                paymentFacade.updatePayment(requestDto)));
     }
 
 
-
     @Operation(summary = "결제 검색", description = "결제 검색 api 입니다." +
-            "예시 http://localhost:8080/api/v1/payments/search?paymentStatus=PRE_PAYMENT&size=5&sort=createdAt,asc"
-            +
-            "예시 http://localhost:8080/api/v1/payments/search?paymentId=0a792c67-1ef6-4421-847f-fd6ea22ca90b&size=5&sort=createdAt,asc.")
+        "예시 http://localhost:8080/api/v1/payments/search?paymentStatus=PRE_PAYMENT&size=5&sort=createdAt,asc"
+        +
+        "예시 http://localhost:8080/api/v1/payments/search?paymentId=0a792c67-1ef6-4421-847f-fd6ea22ca90b&size=5&sort=createdAt,asc.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "결제 검색 성공"),
+        @ApiResponse(responseCode = "200", description = "결제 검색 성공"),
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @GetMapping("/search")
-    public ResponseEntity<CustomApiResponse<Page<PaymentSearchResponseDto>>> searchPayment(PaymentSearchRequestDto searchRequestDto,
-                                                        Pageable pageable) {
+    public ResponseEntity<CustomApiResponse<Page<PaymentSearchResponseDto>>> searchPayment(
+        PaymentSearchRequestDto searchRequestDto,
+        Pageable pageable) {
         return ResponseEntity
-                .ok(CustomApiResponse.of(HttpSuccessCode.PAYMENT_SEARCH,
-                        paymentFacade.searchPayment(searchRequestDto, pageable)));
+            .ok(CustomApiResponse.of(HttpSuccessCode.PAYMENT_SEARCH,
+                paymentFacade.searchPayment(searchRequestDto, pageable)));
     }
 
 }

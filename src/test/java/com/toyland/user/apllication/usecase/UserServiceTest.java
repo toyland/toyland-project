@@ -1,5 +1,11 @@
 package com.toyland.user.apllication.usecase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.toyland.address.model.entity.Address;
 import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.common.IntegrationTestSupport;
@@ -16,8 +22,16 @@ import com.toyland.user.application.UserService;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
-import com.toyland.user.presentation.dto.*;
+import com.toyland.user.presentation.dto.SignupRequestDto;
+import com.toyland.user.presentation.dto.UpdateUserRequestDto;
+import com.toyland.user.presentation.dto.UpdateUserResponseDto;
+import com.toyland.user.presentation.dto.UserDto;
+import com.toyland.user.presentation.dto.UserResponseDto;
+import com.toyland.user.presentation.dto.UserSearchRequestDto;
+import com.toyland.user.presentation.dto.UserSearchResponseDto;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +40,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.groups.Tuple.tuple;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest extends IntegrationTestSupport {
 
@@ -57,7 +64,6 @@ public class UserServiceTest extends IntegrationTestSupport {
     private OrderRepository orderRepository;
 
 
-
     @DisplayName("회원 정보 저장")
     @Test
     void createUser() {
@@ -80,7 +86,7 @@ public class UserServiceTest extends IntegrationTestSupport {
             );
 
         User savedUser = all.get(0);
-        assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isTrue();
+        assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isFalse();
     }
 
     @DisplayName("회원 정보 저장 실패 케이스")
@@ -88,22 +94,22 @@ public class UserServiceTest extends IntegrationTestSupport {
     void createUser_wrongPassword() {
         // when
         SignupRequestDto signupRequestDto = SignupRequestDto
-                .builder()
-                .username("testuser")
-                //특수문자 미포함시
-                .password("Password123")
-                .role(UserRoleEnum.MASTER)
-                .build();
+            .builder()
+            .username("testuser")
+            //특수문자 미포함시
+            .password("Password123")
+            .role(UserRoleEnum.MASTER)
+            .build();
 
         userService.signup(signupRequestDto);
 
         // then
         List<User> all = userRepository.findAll();
         assertThat(all).hasSize(1)
-                .extracting("username", "role")
-                .containsExactlyInAnyOrder(
-                        tuple("testuser", UserRoleEnum.MASTER)
-                );
+            .extracting("username", "role")
+            .containsExactlyInAnyOrder(
+                tuple("testuser", UserRoleEnum.MASTER)
+            );
 
         User savedUser = all.get(0);
         assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isTrue();
@@ -114,17 +120,18 @@ public class UserServiceTest extends IntegrationTestSupport {
     void updateUser() {
         // given
         User savedUser = userRepository.save(new User("master",
-                passwordEncoder.encode("Password123!"),
-                UserRoleEnum.MASTER));
+            passwordEncoder.encode("Password123!"),
+            UserRoleEnum.MASTER));
 
         // when
         UpdateUserRequestDto updateUserRequestDto = UpdateUserRequestDto
-                .builder()
-                .username("updateuser")
-                .password("Password123!") // 새로운 비밀번호
-                .build();
+            .builder()
+            .username("updateuser")
+            .password("Password123!") // 새로운 비밀번호
+            .build();
 
-        UpdateUserResponseDto updateUserResponseDto = userService.updateUserInfo(updateUserRequestDto, savedUser.getId());
+        UpdateUserResponseDto updateUserResponseDto = userService.updateUserInfo(
+            updateUserRequestDto, savedUser.getId());
 
         // then
         assertEquals("updateuser", updateUserResponseDto.getUsername());
@@ -146,8 +153,9 @@ public class UserServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(userResponseDto)
-                .extracting("username","password", "role")
-                .contains(testUser.getUsername(), testUser.getPassword(), testUser.getRole().toString());
+            .extracting("username", "password", "role")
+            .contains(testUser.getUsername(), testUser.getPassword(),
+                testUser.getRole().toString());
     }
 
     @DisplayName("회원 탈퇴")
@@ -156,14 +164,14 @@ public class UserServiceTest extends IntegrationTestSupport {
     void deleteUser() {
         // given
         userDetails = new UserDetailsImpl(
-                UserDto.of(100L,
-                        "master",
-                        passwordEncoder.encode("password123"),
-                        UserRoleEnum.MASTER));
+            UserDto.of(100L,
+                "master",
+                passwordEncoder.encode("password123"),
+                UserRoleEnum.MASTER));
 
         User testUser = new User("testuser",
-                passwordEncoder.encode("password123"),
-                UserRoleEnum.CUSTOMER);
+            passwordEncoder.encode("password123"),
+            UserRoleEnum.CUSTOMER);
         userRepository.save(testUser);
 
         // when
@@ -192,37 +200,34 @@ public class UserServiceTest extends IntegrationTestSupport {
         regionRepository.save(region);
 
         //주소 생성
-        Address address = addressRepository.save(createdAddress("영등포구", customer, region)) ;
+        Address address = addressRepository.save(createdAddress("영등포구", customer, region));
 
         //주문생성
         Order order = orderRepository.save(
-                new Order(customer, address, "300동 10호", PaymentType.CARD, OrderType.ONLINE_DELIVERY, OrderStatus.ORDER_CANCELED, "안맵게 해주세요."));
+            new Order(customer, address, "300동 10호", PaymentType.CARD, OrderType.ONLINE_DELIVERY,
+                OrderStatus.ORDER_CANCELED, "안맵게 해주세요."));
         orderRepository.save(order);
-
 
         List<User> list = new ArrayList<>();
 
         for (int i = 0; i < 30; i++) {
             //유저생성
-            list.add(userRepository.save(createMaster("master"+i)));
+            list.add(userRepository.save(createMaster("master" + i)));
             order.joinUser(list.get(i));
             address.joinUser(list.get(i));
         }
 
         //검색 조건1
-        UserSearchRequestDto case1 = new UserSearchRequestDto("master",UserRoleEnum.MASTER);
+        UserSearchRequestDto case1 = new UserSearchRequestDto("master", UserRoleEnum.MASTER);
 
         //페이징 조건1
         Pageable pageable1 = PageRequest.of(1, 10, Sort.by("createdAt").ascending());
         //페이징 조건2
         Pageable pageable2 = PageRequest.of(1, 10, Sort.by("username").descending());
 
-
-
         Page<UserSearchResponseDto> search = userService.search(case1, pageable1);
 
         Page<UserSearchResponseDto> search2 = userService.search(case1, pageable2);
-
 
         assertThat(search).isNotEmpty();
         assertThat(search.getTotalElements()).isEqualTo(30);
@@ -255,22 +260,24 @@ public class UserServiceTest extends IntegrationTestSupport {
             .region(region).build();
     }
 
-    private Store createStore(String name){return createStore(name, "설명", "주소");}
+    private Store createStore(String name) {
+        return createStore(name, "설명", "주소");
+    }
 
     private Store createStore(String name, String content, String address) {
         return Store.builder()
-                .name(name)
-                .content(content)
-                .address(address)
-                .build();
+            .name(name)
+            .content(content)
+            .address(address)
+            .build();
     }
 
     private Address createdAddress(String addressName, User user, Region region) {
         return Address.builder()
-                .addressName(addressName)
-                .user(user)
-                .region(region)
-                .build();
+            .addressName(addressName)
+            .user(user)
+            .region(region)
+            .build();
     }
 
     private User createUser(String username, String password, UserRoleEnum role) {

@@ -20,6 +20,14 @@ public enum HttpSuccessCode {
     USER_UPDATE(HttpStatus.OK, "유저의 정보를 수정했습니다.", "USER_200"),
     USER_DELETE(HttpStatus.NO_CONTENT, "유저가 삭제되었습니다.", "USER_204"),
 
+    // QnA (질문과 답변)
+    QNA_CREATE(HttpStatus.CREATED, "질문 생성에 성공했습니다.", "QNA_201"),
+    QNA_FIND_ONE(HttpStatus.OK, "질문을 하나 찾았습니다.", "QNA_200"),
+    QNA_SEARCH(HttpStatus.OK, "질문을 조건에 따라 검색했습니다.", "QNA_200"),
+    QNA_UPDATE(HttpStatus.OK, "질문을 수정했습니다.", "QNA_200"),
+    QNA_DELETE(HttpStatus.NO_CONTENT, "질문을 삭제했습니다.", "QNA_204"),
+
+
     // address
     ADDRESS_CREATE(HttpStatus.CREATED, "주소 생성에 성공했습니다.", "ADDRESS_201"),
     ADDRESS_FIND_ONE(HttpStatus.OK, "주소를 하나 찾았습니다.", "ADDRESS_200"),
