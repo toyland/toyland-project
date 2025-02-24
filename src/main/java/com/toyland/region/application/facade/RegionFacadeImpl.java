@@ -8,7 +8,6 @@ import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -42,8 +41,7 @@ public class RegionFacadeImpl implements RegionFacade {
     }
 
     @Override
-    public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
-        Pageable pageable) {
-        return regionService.searchRegion(searchRequestDto, pageable);
+    public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto) {
+        return regionService.searchRegion(searchRequestDto);
     }
 }

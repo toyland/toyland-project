@@ -1,5 +1,8 @@
 package com.toyland.region.application.usecase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
@@ -13,21 +16,15 @@ import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
 import com.toyland.user.model.UserRoleEnum;
 import com.toyland.user.model.repository.UserRepository;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.IntStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author : hanjihoon
@@ -129,22 +126,23 @@ class RegionServiceImplTest extends IntegrationTestSupport {
         //when
         // 검색 조건1
         RegionSearchRequestDto Case1 = new RegionSearchRequestDto(
-            "서울"
+            "서울",
+            0,
+            5,
+            Collections.singletonList("createdAt")
         );
 
         // 검색 조건2
         RegionSearchRequestDto Case2 = new RegionSearchRequestDto(
-            "부산"
+            "부산",
+            0,
+            5,
+            Collections.singletonList("createdAt")
         );
 
-        // 페이징, 정렬 조건
-        Pageable pageable = PageRequest.of(0, 5, Sort.by("createdAt").ascending());
+        Page<RegionSearchResponseDto> result1 = regionService.searchRegion(Case1);
 
-        Page<RegionSearchResponseDto> result1 = regionService.searchRegion(Case1,
-            pageable);
-
-        Page<RegionSearchResponseDto> result2 = regionService.searchRegion(Case2,
-            pageable);
+        Page<RegionSearchResponseDto> result2 = regionService.searchRegion(Case2);
 
         //then
         assertThat(result1).isNotEmpty();

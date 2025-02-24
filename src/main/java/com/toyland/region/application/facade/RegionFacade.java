@@ -6,7 +6,6 @@ import com.toyland.region.presentation.dto.response.RegionResponseDto;
 import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * @author : hanjihoon
@@ -22,6 +21,5 @@ public interface RegionFacade {
 
     void deleteByRegionId(UUID regionId, Long userId);
 
-    Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
-        Pageable pageable);
+    Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto);
 }
