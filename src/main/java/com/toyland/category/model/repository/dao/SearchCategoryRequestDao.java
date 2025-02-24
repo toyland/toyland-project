@@ -26,7 +26,7 @@ public record SearchCategoryRequestDao (
     return StringUtils.hasText(searchText) ? category.name.containsIgnoreCase(searchText) : null;
   }
 
-  public BooleanExpression getEqStoreId() {
+  public BooleanExpression getEqParentCategoryId() {
     return parentCategoryId != null ? category.parent.id.eq(parentCategoryId) : null;
   }
 
