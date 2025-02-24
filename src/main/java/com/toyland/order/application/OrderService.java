@@ -32,6 +32,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -44,7 +45,6 @@ public class OrderService {
     /**
      * 주문 생성
      */
-    @Transactional
     public Order createOrder(CreateOrderRequestDto createOrderRequestDto, Long loginUserId) {
 
         // 회원 조회
@@ -83,6 +83,7 @@ public class OrderService {
     /**
      * 주문 조회(단 건 조회)
      */
+    @Transactional(readOnly = true)
     public OrderResponseDto findByOrderId(UUID orderId, Long loginUserId) {
         // 주문 조회
         Order order = orderRepository.findById(orderId)
@@ -95,7 +96,6 @@ public class OrderService {
     /**
      *  주문 수정 (주문 사항 변경)
      */
-    @Transactional
     public OrderResponseDto updateOrder(UUID orderId, CreateOrderRequestDto createOrderRequestDto, Long loginUserId) {
 
         // 회원 조회
@@ -134,7 +134,6 @@ public class OrderService {
     /**
      * 주문 수정 (주문 처리)
      */
-    @Transactional
     public void updateOrderStatus(UUID orderId, OrderStatus orderStatus, Long loginUserId) {
 
         // 회원 조회
@@ -156,7 +155,6 @@ public class OrderService {
     /**
      * 주문 수정 (주문 취소)
      */
-    @Transactional
     public void cancelOrder(UUID orderId) {
 
         Order order = orderRepository.findById(orderId)
@@ -171,7 +169,6 @@ public class OrderService {
     /**
      * 주문 삭제 (디비에서 논리적 삭제)
      */
-    @Transactional
     public void deleteOrder(UUID orderId, Long loginUserId) {
 
         // 회원 조회
