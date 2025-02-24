@@ -5,8 +5,9 @@
 package com.toyland.store.presentation;
 
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
-import com.toyland.store.application.facade.StoreFacade;
+import com.toyland.global.config.security.annotation.HasManageStoreRole;
 import com.toyland.store.application.usecase.StoreService;
+import com.toyland.store.application.usecase.dto.CreateStoreCategoryListServiceRequestDto;
 import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
 import com.toyland.store.application.usecase.dto.UpdateStoreServiceRequestDto;
 import com.toyland.store.presentation.dto.CreateStoreCategoryListRequestDto;
@@ -15,6 +16,9 @@ import com.toyland.store.presentation.dto.SearchStoreRequestDto;
 import com.toyland.store.presentation.dto.StoreResponseDto;
 import com.toyland.store.presentation.dto.StoreWithOwnerResponseDto;
 import com.toyland.store.presentation.dto.UpdateStoreRequestDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -36,63 +40,74 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/api/v1/stores")
 public class StoreController {
-  private final StoreFacade storeFacade;
   private final StoreService storeService;
 
-  /**
-   * 음식점을 생성합니다.
-   * @param request 음식점 생성 정보
-   * @return 200 성공
-   */
+  @Operation(summary = "상점 등록", description = "상점을 등록합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "상점 등록 성공"),
+  })
+  @HasManageStoreRole
   @PostMapping
   public ResponseEntity<Void> createStore(@Valid @RequestBody CreateStoreRequestDto request) {
-    storeFacade.createStore(request);
-    return ResponseEntity.ok().build();
+    StoreResponseDto store = storeService.createStore(request);
+    return ResponseEntity.created(
+        UriComponentsBuilder.fromUriString("/api/v1/stores/{storeId}")
+            .buildAndExpand(store.id())
+            .toUri()).build();
   }
 
-  /**
-   * 음식점에 카테고리들을 설정합니다.
-   * @param request category id들
-   * @param storeId 추가할 음식점
-   * @param loginUserId 현재 로그인 유저
-   * @return 200 성공
-   */
+  @Operation(summary = "상점의 카테고리 설정", description = "상점에 카테고리를 설정합니다. "
+      + "기존 상점의 카테고리를 제거하고 새롭게 설정합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "상점의 카테고리 설정 성공"),
+  })
+  @HasManageStoreRole
   @PostMapping("/{storeId}/categories")
   public ResponseEntity<Void> setStoreCategories(
       @Valid @RequestBody CreateStoreCategoryListRequestDto request,
       @PathVariable UUID storeId,
       @CurrentLoginUserId Long loginUserId) {
 
-    storeFacade.setStoreCategories(request, storeId, loginUserId, LocalDateTime.now());
-
+    storeService.setStoreCategories(
+        CreateStoreCategoryListServiceRequestDto
+            .builder()
+            .categoryIdList(request.categoryIdList())
+            .storeId(storeId)
+            .actorId(loginUserId)
+            .eventTime(LocalDateTime.now())
+            .build());
     return ResponseEntity.created(
-        UriComponentsBuilder.fromUriString("/api/v1/{storeId}")
+        UriComponentsBuilder.fromUriString("/api/v1/stores/{storeId}")
             .buildAndExpand(storeId)
             .toUri()).build();
   }
 
-  /**
-   * 음식점을 조회합니다.
-   * @param storeId 조회할 음식점 id
-   * @return 조회 음식점 dto
-   */
+  @Operation(summary = "상점 단 건 조회", description = "상점을 조회합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "상점 조회 성공"),
+  })
+  @HasManageStoreRole
   @GetMapping("/{storeId}")
   public ResponseEntity<StoreResponseDto> readStore(@PathVariable UUID storeId) {
     return ResponseEntity.ok(storeService.readStore(storeId));
   }
 
+  @Operation(summary = "상점 검색", description = "상점을 검색합니다." +
+      " (예시 파라미터: ?searchText=가&sort=name,desc,created_at&size=10&page=1)")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "상점 검색 성공"),
+  })
   @GetMapping("/search")
   public ResponseEntity<Page<StoreWithOwnerResponseDto>> searchStores(
       @ModelAttribute SearchStoreRequestDto request){
     return ResponseEntity.ok(storeService.searchStores(request));
   }
 
-  /**
-   * 음식점을 수정합니다.
-   * @param storeId 수정할 store id
-   * @param request 수정 내용
-   * @return 수정된 내용
-   */
+  @Operation(summary = "상점 수정", description = "상점을 수정합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "상점 수정 성공"),
+  })
+  @HasManageStoreRole
   @PutMapping("/{storeId}")
   public ResponseEntity<StoreResponseDto> updateStore(@PathVariable UUID storeId,
       @RequestBody UpdateStoreRequestDto request) {
@@ -100,11 +115,11 @@ public class StoreController {
         UpdateStoreServiceRequestDto.of(request, storeId)));
   }
 
-  /**
-   * 음식점을 삭제합니다.
-   * @param storeId 삭제할 음식점 id
-   * @return 204 no content
-   */
+  @Operation(summary = "상점 삭제", description = "상점을 삭제합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "204", description = "상점 삭제 성공"),
+  })
+  @HasManageStoreRole
   @DeleteMapping("/{storeId}")
   public ResponseEntity<Void> deleteStore(@PathVariable UUID storeId,
       @CurrentLoginUserId Long currentLoginUserId) {

@@ -31,7 +31,7 @@ public class JpaCategoryRepositoryCustomImpl implements
         .leftJoin(category.parent, parentCategory)
         .where(
             dto.getContainsName(),
-            dto.getEqStoreId()
+            dto.getEqParentCategoryId()
         )
         .orderBy(dto.orderSpecifiers())
         .offset(dto.offset())
@@ -44,7 +44,7 @@ public class JpaCategoryRepositoryCustomImpl implements
         .leftJoin(category.parent, parentCategory)
         .where(
             dto.getContainsName(),
-            dto.getEqStoreId()
+            dto.getEqParentCategoryId()
         )
         .fetchOne();
 

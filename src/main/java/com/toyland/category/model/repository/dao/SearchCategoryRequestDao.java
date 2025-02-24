@@ -26,7 +26,7 @@ public record SearchCategoryRequestDao (
     return StringUtils.hasText(searchText) ? category.name.containsIgnoreCase(searchText) : null;
   }
 
-  public BooleanExpression getEqStoreId() {
+  public BooleanExpression getEqParentCategoryId() {
     return parentCategoryId != null ? category.parent.id.eq(parentCategoryId) : null;
   }
 
@@ -45,24 +45,36 @@ public record SearchCategoryRequestDao (
 
     List<OrderSpecifier> orders = new ArrayList<>();
 
-    if (sort == null || sort.size() == 0) {
-      orders.add(CategorySortType.CREATED_AT.getSpecifier(Direction.ASC));
-      orders.add(CategorySortType.UPDATED_AT.getSpecifier(Direction.ASC));
-      return orders.stream().toArray(OrderSpecifier[]::new);
-    }
+    boolean createdAtCheck = false;
+    boolean updatedAtCheck = false;
 
-    Direction currentDirection = Direction.ASC;
-    for (String param : sort) {
-      String upperParam = param.replace("_","").toUpperCase();
+    for (int i = 0; i < sort.size(); i++) {
+      String param = sort.get(i);
+      String upperParam = param.replace("_", "").toUpperCase();
 
-      if (directionMap.containsKey(upperParam)) {
-        currentDirection = directionMap.get(upperParam);
-      } else if (sortTypeMap.containsKey(upperParam)) {
+      CategorySortType sortType = null;
+      Direction direction = null;
+
+      if (sortTypeMap.containsKey(upperParam)) {
+        sortType = sortTypeMap.get(upperParam);
+        if(sortType == CategorySortType.CREATED_AT) createdAtCheck = true;
+        if(sortType == CategorySortType.UPDATED_AT) updatedAtCheck = true;
+      }
+
+      if (i + 1 < sort.size() && directionMap.containsKey(sort.get(i + 1).toUpperCase())) {
+        i++;
+        direction = directionMap.get(sort.get(i).toUpperCase());
+      }
+
+      if (sortType != null) {
         orders.add(
-            sortTypeMap.get(upperParam).getSpecifier(currentDirection));
-        currentDirection = Direction.ASC;
+            sortTypeMap.get(upperParam)
+                .getSpecifier(direction == null ? Direction.ASC : direction));
       }
     }
+
+    if(!createdAtCheck) orders.add(CategorySortType.CREATED_AT.getSpecifier(Direction.ASC));
+    if(!updatedAtCheck) orders.add(CategorySortType.UPDATED_AT.getSpecifier(Direction.ASC));
 
     return orders.stream().toArray(OrderSpecifier[]::new);
   }
