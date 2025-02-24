@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RequiredArgsConstructor
 @RestController
@@ -45,8 +46,11 @@ public class ProductController {
   @HasManageProductRole
   @PostMapping
   public ResponseEntity<Void> createProduct(@RequestBody CreateProductRequestDto dto) {
-    productService.createProduct(dto);
-    return ResponseEntity.ok().build();
+    ProductResponseDto product = productService.createProduct(dto);
+    return ResponseEntity.created(
+        UriComponentsBuilder.fromUriString("/api/v1/products/{productId}")
+            .buildAndExpand(product.id())
+            .toUri()).build();
   }
 
   /**

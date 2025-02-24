@@ -4,7 +4,6 @@
  */
 package com.toyland.category.presentation;
 
-import com.toyland.category.application.facade.CategoryFacade;
 import com.toyland.category.application.usecase.CategoryService;
 import com.toyland.category.application.usecase.dto.DeleteCategoryServiceRequestDto;
 import com.toyland.category.application.usecase.dto.UpdateCategoryServiceRequestDto;
@@ -29,6 +28,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @HasManageCategoryRole
 @RequiredArgsConstructor
@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/categories")
 public class CategoryController {
 
-  private final CategoryFacade categoryFacade;
   private final CategoryService categoryService;
 
   /**
@@ -47,8 +46,11 @@ public class CategoryController {
    */
   @PostMapping
   public ResponseEntity<Void> createCategory(@Valid @RequestBody CreateCategoryRequestDto request) {
-    categoryFacade.createCategory(request);
-    return ResponseEntity.ok().build();
+    CategoryResponseDto category = categoryService.createCategory(request);
+    return ResponseEntity.created(
+        UriComponentsBuilder.fromUriString("/api/v1/categories/{categoryId}")
+            .buildAndExpand(category.id())
+            .toUri()).build();
   }
 
   /**

@@ -6,8 +6,8 @@ package com.toyland.store.presentation;
 
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.global.config.security.annotation.HasManageStoreRole;
-import com.toyland.store.application.facade.StoreFacade;
 import com.toyland.store.application.usecase.StoreService;
+import com.toyland.store.application.usecase.dto.CreateStoreCategoryListServiceRequestDto;
 import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
 import com.toyland.store.application.usecase.dto.UpdateStoreServiceRequestDto;
 import com.toyland.store.presentation.dto.CreateStoreCategoryListRequestDto;
@@ -37,7 +37,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/api/v1/stores")
 public class StoreController {
-  private final StoreFacade storeFacade;
   private final StoreService storeService;
 
   /**
@@ -48,8 +47,11 @@ public class StoreController {
   @HasManageStoreRole
   @PostMapping
   public ResponseEntity<Void> createStore(@Valid @RequestBody CreateStoreRequestDto request) {
-    storeFacade.createStore(request);
-    return ResponseEntity.ok().build();
+    StoreResponseDto store = storeService.createStore(request);
+    return ResponseEntity.created(
+        UriComponentsBuilder.fromUriString("/api/v1/stores/{storeId}")
+            .buildAndExpand(store.id())
+            .toUri()).build();
   }
 
   /**
@@ -66,10 +68,16 @@ public class StoreController {
       @PathVariable UUID storeId,
       @CurrentLoginUserId Long loginUserId) {
 
-    storeFacade.setStoreCategories(request, storeId, loginUserId, LocalDateTime.now());
-
+    storeService.setStoreCategories(
+        CreateStoreCategoryListServiceRequestDto
+            .builder()
+            .categoryIdList(request.categoryIdList())
+            .storeId(storeId)
+            .actorId(loginUserId)
+            .eventTime(LocalDateTime.now())
+            .build());
     return ResponseEntity.created(
-        UriComponentsBuilder.fromUriString("/api/v1/{storeId}")
+        UriComponentsBuilder.fromUriString("/api/v1/stores/{storeId}")
             .buildAndExpand(storeId)
             .toUri()).build();
   }

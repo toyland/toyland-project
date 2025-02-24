@@ -15,7 +15,7 @@ import org.springframework.data.domain.Page;
 
 public interface ProductService {
 
-  void createProduct(CreateProductRequestDto dto);
+  ProductResponseDto createProduct(CreateProductRequestDto dto);
 
   ProductResponseDto readProduct(UUID productId);
 

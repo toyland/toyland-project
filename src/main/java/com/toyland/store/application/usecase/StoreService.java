@@ -16,7 +16,7 @@ import org.springframework.data.domain.Page;
 
 public interface StoreService {
 
-  void createStore(CreateStoreRequestDto request);
+  StoreResponseDto createStore(CreateStoreRequestDto request);
 
   StoreResponseDto readStore(UUID id);
 

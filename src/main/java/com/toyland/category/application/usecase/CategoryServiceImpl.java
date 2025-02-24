@@ -29,9 +29,9 @@ public class CategoryServiceImpl implements CategoryService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public void createCategory(CreateCategoryRequestDto dto) {
+  public CategoryResponseDto createCategory(CreateCategoryRequestDto dto) {
     Category parent = dto.patentId() == null ? null : findCategoryById(dto.patentId());
-    categoryRepository.save(Category.from(dto, parent));
+    return CategoryResponseDto.from(categoryRepository.save(Category.from(dto, parent)));
   }
 
   @Override
