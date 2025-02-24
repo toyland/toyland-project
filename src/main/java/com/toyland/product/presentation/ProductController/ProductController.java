@@ -5,6 +5,7 @@
 package com.toyland.product.presentation.ProductController;
 
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
+import com.toyland.global.config.security.annotation.HasManageProductRole;
 import com.toyland.product.application.usecase.ProductService;
 import com.toyland.product.application.usecase.dto.DeleteProductServiceRequestDto;
 import com.toyland.product.application.usecase.dto.UpdateProductServiceRequestDto;
@@ -41,6 +42,7 @@ public class ProductController {
    * @param dto 상품 생성 정보
    * @return 200 ok
    */
+  @HasManageProductRole
   @PostMapping
   public ResponseEntity<Void> createProduct(@RequestBody CreateProductRequestDto dto) {
     productService.createProduct(dto);
@@ -72,6 +74,7 @@ public class ProductController {
    * @param request   수정 내용
    * @return 수정된 내용
    */
+  @HasManageProductRole
   @PutMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable UUID productId,
       @RequestBody UpdateProductRequestDto request) {
@@ -85,6 +88,7 @@ public class ProductController {
    * @param productId 삭제할 상품 id
    * @return 204 no content
    */
+  @HasManageProductRole
   @DeleteMapping("/{productId}")
   public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId,
       @CurrentLoginUserId Long currentLoginUserId) {

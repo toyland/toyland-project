@@ -5,6 +5,7 @@
 package com.toyland.store.presentation;
 
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
+import com.toyland.global.config.security.annotation.HasManageStoreRole;
 import com.toyland.store.application.facade.StoreFacade;
 import com.toyland.store.application.usecase.StoreService;
 import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
@@ -44,6 +45,7 @@ public class StoreController {
    * @param request 음식점 생성 정보
    * @return 200 성공
    */
+  @HasManageStoreRole
   @PostMapping
   public ResponseEntity<Void> createStore(@Valid @RequestBody CreateStoreRequestDto request) {
     storeFacade.createStore(request);
@@ -57,6 +59,7 @@ public class StoreController {
    * @param loginUserId 현재 로그인 유저
    * @return 200 성공
    */
+  @HasManageStoreRole
   @PostMapping("/{storeId}/categories")
   public ResponseEntity<Void> setStoreCategories(
       @Valid @RequestBody CreateStoreCategoryListRequestDto request,
@@ -76,6 +79,7 @@ public class StoreController {
    * @param storeId 조회할 음식점 id
    * @return 조회 음식점 dto
    */
+  @HasManageStoreRole
   @GetMapping("/{storeId}")
   public ResponseEntity<StoreResponseDto> readStore(@PathVariable UUID storeId) {
     return ResponseEntity.ok(storeService.readStore(storeId));
@@ -93,6 +97,7 @@ public class StoreController {
    * @param request 수정 내용
    * @return 수정된 내용
    */
+  @HasManageStoreRole
   @PutMapping("/{storeId}")
   public ResponseEntity<StoreResponseDto> updateStore(@PathVariable UUID storeId,
       @RequestBody UpdateStoreRequestDto request) {
@@ -105,6 +110,7 @@ public class StoreController {
    * @param storeId 삭제할 음식점 id
    * @return 204 no content
    */
+  @HasManageStoreRole
   @DeleteMapping("/{storeId}")
   public ResponseEntity<Void> deleteStore(@PathVariable UUID storeId,
       @CurrentLoginUserId Long currentLoginUserId) {

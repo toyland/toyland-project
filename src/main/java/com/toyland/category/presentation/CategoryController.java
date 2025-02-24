@@ -13,6 +13,7 @@ import com.toyland.category.presentation.dto.CreateCategoryRequestDto;
 import com.toyland.category.presentation.dto.SearchCategoryRequestDto;
 import com.toyland.category.presentation.dto.UpdateCategoryRequestDto;
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
+import com.toyland.global.config.security.annotation.HasManageCategoryRole;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@HasManageCategoryRole
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/categories")
