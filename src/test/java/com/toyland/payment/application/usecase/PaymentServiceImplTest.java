@@ -1,5 +1,7 @@
 package com.toyland.payment.application.usecase;
 
+import com.toyland.address.model.entity.Address;
+import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.order.application.OrderService;
 import com.toyland.order.model.Order;
@@ -16,6 +18,8 @@ import com.toyland.payment.presentation.dto.response.PaymentResponseDto;
 import com.toyland.payment.presentation.dto.response.PaymentUpdateResponseDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
+import com.toyland.region.model.entity.Region;
+import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
@@ -57,6 +61,12 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
     @Autowired
     PaymentRepository paymentRepository;
 
+    @Autowired
+    RegionRepository regionRepository;
+
+    @Autowired
+    AddressRepository addressRepository;
+
 
     @DisplayName("결제를 생성합니다.")
     @Test
@@ -66,6 +76,12 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
 
         //상점 생성
         Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+
+        //지역 생성
+        Region region = regionRepository.save(new Region("서울"));
+
+        //주소 생성
+        Address address = addressRepository.save(createdAddress("영등포구", user, region)) ;
 
         // 상품 생성
         Product product1 = createProduct("고추바사삭", BigDecimal.valueOf(10000), goobne);
@@ -83,10 +99,10 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
         );
 
 
+        // 주문 요청 DTO 생성
+        CreateOrderRequestDto createOrderRequestDto =
+                new CreateOrderRequestDto(orderProducts, OrderType.ONLINE_DELIVERY, PaymentType.CARD, address.getId(), "30동 100호", "맵게해주세요.");
 
-
-        CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts,
-            OrderType.DELIVERY, PaymentType.CASH);
 
         Order order = orderService.createOrder(createOrderRequestDto, user.getId());
 
@@ -108,8 +124,14 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
         //given
         User user = userRepository.save(createUser("admin", "1234", UserRoleEnum.MANAGER));
 
-        // 상점 생성
+        //상점 생성
         Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+
+        //지역 생성
+        Region region = regionRepository.save(new Region("서울"));
+
+        //주소 생성
+        Address address = addressRepository.save(createdAddress("영등포구", user, region)) ;
 
         // 상품 생성
         Product product1 = createProduct("고추바사삭", BigDecimal.valueOf(10000), goobne);
@@ -126,8 +148,11 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
                 new OrderProductRequestDto(product3.getId(), product3.getPrice(), 3)
         );
 
-        CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts,
-                OrderType.DELIVERY, PaymentType.CASH);
+
+        // 주문 요청 DTO 생성
+        CreateOrderRequestDto createOrderRequestDto =
+                new CreateOrderRequestDto(orderProducts, OrderType.ONLINE_DELIVERY, PaymentType.CARD, address.getId(), "30동 100호", "맵게해주세요.");
+
 
         Order order = orderService.createOrder(createOrderRequestDto, user.getId());
 
@@ -158,6 +183,12 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
         //상점 생성
         Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
 
+        //지역 생성
+        Region region = regionRepository.save(new Region("서울"));
+
+        //주소 생성
+        Address address = addressRepository.save(createdAddress("영등포구", user, region)) ;
+
         // 상품 생성
         Product product1 = createProduct("고추바사삭", BigDecimal.valueOf(10000), goobne);
         Product product2 = createProduct("볼케이노", BigDecimal.valueOf(20000), goobne);
@@ -173,8 +204,11 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
                 new OrderProductRequestDto(product3.getId(), product3.getPrice(), 3)
         );
 
-        CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts,
-                OrderType.DELIVERY, PaymentType.CASH);
+
+        // 주문 요청 DTO 생성
+        CreateOrderRequestDto createOrderRequestDto =
+                new CreateOrderRequestDto(orderProducts, OrderType.ONLINE_DELIVERY, PaymentType.CARD, address.getId(), "30동 100호", "맵게해주세요.");
+
 
         Order order = orderService.createOrder(createOrderRequestDto, user.getId());
 
@@ -210,6 +244,12 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
         //상점 생성
         Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
 
+        //지역 생성
+        Region region = regionRepository.save(new Region("서울"));
+
+        //주소 생성
+        Address address = addressRepository.save(createdAddress("영등포구", user, region)) ;
+
         // 상품 생성
         Product product1 = createProduct("고추바사삭", BigDecimal.valueOf(10000), goobne);
         Product product2 = createProduct("볼케이노", BigDecimal.valueOf(20000), goobne);
@@ -225,8 +265,11 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
                 new OrderProductRequestDto(product3.getId(), product3.getPrice(), 3)
         );
 
-        CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts,
-                OrderType.DELIVERY, PaymentType.CASH);
+
+        // 주문 요청 DTO 생성
+        CreateOrderRequestDto createOrderRequestDto =
+                new CreateOrderRequestDto(orderProducts, OrderType.ONLINE_DELIVERY, PaymentType.CARD, address.getId(), "30동 100호", "맵게해주세요.");
+
 
         Order order = orderService.createOrder(createOrderRequestDto, user.getId());
 
@@ -271,4 +314,11 @@ class PaymentServiceImplTest extends IntegrationTestSupport {
     }
 
 
+    private Address createdAddress(String addressName, User user, Region region) {
+        return Address.builder()
+                .addressName(addressName)
+                .user(user)
+                .region(region)
+                .build();
+    }
 }

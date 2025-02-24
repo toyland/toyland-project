@@ -1,8 +1,8 @@
 package com.toyland.review;
 
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
+import com.toyland.address.model.entity.Address;
+import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.OrderStatus;
@@ -23,6 +23,8 @@ import com.toyland.user.model.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 
 public class ReviewServiceTest extends IntegrationTestSupport {
 
@@ -39,6 +41,8 @@ public class ReviewServiceTest extends IntegrationTestSupport {
 
   @Autowired
   private RegionRepository regionRepository;
+  @Autowired
+  private AddressRepository addressRepository;
 
   @Test
   void calculateAvg() throws Exception {
@@ -46,14 +50,21 @@ public class ReviewServiceTest extends IntegrationTestSupport {
     Double expectedAvg = 4.0;
 
     User user = userRepository.save(new User("test", "1234", UserRoleEnum.MASTER));
+    User customer = userRepository.save(new User("customer", "1234", UserRoleEnum.CUSTOMER));
+
+    //지역 생성
+    Region region = regionRepository.save(new Region("서울"));
+
+    //주소 생성
+    Address address = addressRepository.save(createdAddress("영등포구", user, region)) ;
+
 
     Order order = orderRepository.save(
-        new Order(user, PaymentType.CARD, OrderType.DELIVERY, OrderStatus.ORDER_CANCELED));
+        new Order(customer, address, "300동 10호", PaymentType.CARD, OrderType.ONLINE_DELIVERY, OrderStatus.ORDER_CANCELED, "안맵게 해주세요."));
 
     Order order2 = orderRepository.save(
-        new Order(user, PaymentType.CARD, OrderType.DELIVERY, OrderStatus.ORDER_CANCELED));
+        new Order(customer, address, "302동 22호", PaymentType.CARD, OrderType.ONLINE_TAKEOUT, OrderStatus.ORDER_CANCELED, "맵게 해주세요."));
 
-    Region region = regionRepository.save(new Region("서울"));
 
     Store store = storeRepository.save(
         Store.builder()
@@ -77,5 +88,14 @@ public class ReviewServiceTest extends IntegrationTestSupport {
 
 
   }
+
+
+    private Address createdAddress(String addressName, User user, Region region) {
+        return Address.builder()
+                .addressName(addressName)
+                .user(user)
+                .region(region)
+                .build();
+    }
 
 }
