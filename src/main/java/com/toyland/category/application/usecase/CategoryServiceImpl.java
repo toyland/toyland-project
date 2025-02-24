@@ -41,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Page<CategoryResponseDto> searchCategories(SearchCategoryRequestDto dto) {
     return categoryRepository.searchCategories(
         SearchCategoryRequestDao.builder()

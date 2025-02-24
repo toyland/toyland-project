@@ -36,12 +36,14 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public ProductResponseDto readProduct(UUID productId) {
     Product product = findProductById(productId);
     return ProductResponseDto.from(product);
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Page<ProductWithStoreResponseDto> searchProducts(SearchProductRequestDto dto) {
     return productRepository.searchProducts(dto);
   }
