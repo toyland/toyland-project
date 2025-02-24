@@ -11,7 +11,7 @@ import lombok.Builder;
 @Builder
 public record SearchStoreRequestDto (
     String searchText, String categoryNameSearchText, String storeNameSearchText,
-    UUID regionId, Long ownerId, Integer page, Integer size, List<String> sort
+    UUID regionId, Long ownerId, UUID categoryId, Integer page, Integer size, List<String> sort
 ){
 
 }

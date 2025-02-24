@@ -26,7 +26,7 @@ public class JpaStoreRepositoryCustomImpl implements JpaStoreRepositoryCustom {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Page<StoreWithOwnerResponseDao> searchStore(SearchStoreRepositoryCommand dto) {
+  public Page<StoreWithOwnerResponseDao> searchStore(SearchStoreRepositoryCommand command) {
     List<StoreWithOwnerResponseDao> storeList = queryFactory
         .select(new QStoreWithOwnerResponseDao(
             store.id,
@@ -53,15 +53,16 @@ public class JpaStoreRepositoryCustomImpl implements JpaStoreRepositoryCustom {
         .leftJoin(storeCategory).on(storeCategory.store.eq(store))
         .leftJoin(category).on(storeCategory.category.eq(category))
         .where(
-            dto.getContainsSearchText(),
-            dto.getContainsCategorySearchText(),
-            dto.getContainsStoreNameSearchText(),
-            dto.getEqOwnerId(),
-            dto.getEqRegionId()
+            command.getContainsSearchText(),
+            command.getContainsCategorySearchText(),
+            command.getContainsStoreNameSearchText(),
+            command.getEqOwnerId(),
+            command.getEqRegionId(),
+            command.getEqCategoryId()
         )
-        .orderBy(dto.orderSpecifiers())
-        .offset(dto.offset())
-        .limit(dto.size())
+        .orderBy(command.orderSpecifiers())
+        .offset(command.offset())
+        .limit(command.size())
         .fetch();
 
     long totalCount = queryFactory
@@ -72,14 +73,15 @@ public class JpaStoreRepositoryCustomImpl implements JpaStoreRepositoryCustom {
         .leftJoin(storeCategory).on(storeCategory.store.eq(store))
         .leftJoin(category).on(storeCategory.category.eq(category))
         .where(
-            dto.getContainsSearchText(),
-            dto.getContainsCategorySearchText(),
-            dto.getContainsStoreNameSearchText(),
-            dto.getEqOwnerId(),
-            dto.getEqRegionId()
+            command.getContainsSearchText(),
+            command.getContainsCategorySearchText(),
+            command.getContainsStoreNameSearchText(),
+            command.getEqOwnerId(),
+            command.getEqRegionId(),
+            command.getEqCategoryId()
         )
         .fetchOne();
 
-    return new PageImpl<>(storeList, PageRequest.of(dto.page(), dto.size()), totalCount);
+    return new PageImpl<>(storeList, PageRequest.of(command.page(), command.size()), totalCount);
   }
 }

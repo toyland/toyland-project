@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils;
 @Builder
 public record SearchStoreRepositoryCommand(
     String searchText, String categoryNameSearchText, String storeNameSearchText,
-    UUID regionId, Long ownerId, Integer page, Integer size, List<String> sort
+    UUID regionId, Long ownerId, UUID categoryId,  Integer page, Integer size, List<String> sort
 ) {
 
   public long offset() {
@@ -53,6 +53,10 @@ public record SearchStoreRepositoryCommand(
 
   public BooleanExpression getEqOwnerId() {
     return ownerId != null ? store.owner.id.eq(ownerId) : null;
+  }
+
+  public BooleanExpression getEqCategoryId() {
+    return categoryId != null ? category.id.eq(categoryId) : null;
   }
 
   public OrderSpecifier[] orderSpecifiers() {
