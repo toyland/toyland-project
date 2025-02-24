@@ -133,6 +133,7 @@ class StoreServiceTest extends IntegrationTestSupport {
             .storeNameSearchText("도미노")
             .ownerId(owner2.getId())
             .regionId(busan.getId())
+            .categoryId(pizzaCategory.getId())
             .page(2)
             .size(10)
             .sort(List.of("name", "desc"))

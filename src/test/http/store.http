@@ -20,11 +20,12 @@ GET http://localhost:8080/api/v1/stores/search
     ?searchText=상점
     &categoryNameSearchText=야식
     &storeNameSearchText=상점
+    &regionId=376ddba6-d9ab-4953-aee6-614e1dfeef7e
+    &ownerId=2
+    &categoryId=72f705b4-97ee-4ee3-8c02-78b38b15a5bc
     &sort=name,desc,created_at
     &size=10
     &page=1
-    &regionId=376ddba6-d9ab-4953-aee6-614e1dfeef7e
-    &ownerId=2
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 
