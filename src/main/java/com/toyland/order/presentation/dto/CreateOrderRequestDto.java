@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Getter
@@ -27,4 +28,10 @@ public class CreateOrderRequestDto {
 
     @NotNull(message = "결제 유형은 필수입니다.")
     private PaymentType paymentType; // 결제 유형 (카드/현금)
+
+    private UUID addressId; // 주소 ID
+
+    private String addressDetail; // 상세 주소
+
+    private String orderRequest; // 요청 사항
 }

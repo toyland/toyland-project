@@ -1,5 +1,7 @@
 package com.toyland.order.application;
 
+import com.toyland.address.model.entity.Address;
+import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.OrderStatus;
@@ -11,6 +13,8 @@ import com.toyland.orderproduct.model.OrderProduct;
 import com.toyland.orderproduct.presentation.dto.OrderProductRequestDto;
 import com.toyland.product.model.entity.Product;
 import com.toyland.product.model.repository.ProductRepository;
+import com.toyland.region.model.entity.Region;
+import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
 import com.toyland.user.model.User;
@@ -46,6 +50,12 @@ class OrderServiceTest extends IntegrationTestSupport {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private RegionRepository regionRepository;
+
 
 
 
@@ -55,10 +65,18 @@ class OrderServiceTest extends IntegrationTestSupport {
     void createOrder() {
         /** given **/
         //유저 생성
-        User user = userRepository.save(createUser("admin", "1234", UserRoleEnum.MANAGER));
+        User user = userRepository.save(createUser("customer", "1234", UserRoleEnum.CUSTOMER));
 
         //상점 생성
         Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
+
+        //지역 생성
+        Region region = regionRepository.save(new Region("서울"));
+
+        //주소 생성
+        Address address = addressRepository.save(createdAddress("영등포구", user, region)) ;
+
+
 
         // 상품 생성
         Product product1 = createProduct("고추바사삭", BigDecimal.valueOf(10000), goobne);
@@ -75,7 +93,8 @@ class OrderServiceTest extends IntegrationTestSupport {
         );
 
         // 주문 요청 DTO 생성
-        CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts, OrderType.DELIVERY, PaymentType.CARD);
+        CreateOrderRequestDto createOrderRequestDto =
+                new CreateOrderRequestDto(orderProducts, OrderType.ONLINE_DELIVERY, PaymentType.CARD, address.getId(), "30동 100호", "맵게해주세요.");
 
 
 
@@ -92,9 +111,9 @@ class OrderServiceTest extends IntegrationTestSupport {
 
         // 주문이 1개 존재하는지 확인 & 주문 정보 검증
         assertThat(savedOrders).hasSize(1)
-                .extracting("orderStatus", "orderType", "paymentType", "user.username")
+                .extracting("orderStatus", "orderType", "paymentType", "user.username", "address.region.regionName", "address.addressName", "addressDetail", "orderRequest")
                 .containsExactlyInAnyOrder(
-                        tuple(OrderStatus.ORDER_COMPLETED, OrderType.DELIVERY, PaymentType.CARD, "admin")
+                        tuple(OrderStatus.ORDER_PENDING, OrderType.ONLINE_DELIVERY, PaymentType.CARD, "customer", "서울", "영등포구", "30동 100호", "맵게해주세요.")
                 );
 
 
@@ -122,6 +141,12 @@ class OrderServiceTest extends IntegrationTestSupport {
         //상점 생성
         Store goobne = storeRepository.save(createStore("굽네치킨", "굽네치킨입니다.", "경기도 성남시 분당구 가로 1"));
 
+        //지역 생성
+        Region region = regionRepository.save(new Region("서울"));
+
+        //주소 생성
+        Address address = addressRepository.save(createdAddress("영등포구", user, region)) ;
+
         // 상품 생성
         Product product1 = createProduct("고추바사삭", BigDecimal.valueOf(10000), goobne);
         Product product2 = createProduct("볼케이노", BigDecimal.valueOf(20000), goobne);
@@ -137,7 +162,8 @@ class OrderServiceTest extends IntegrationTestSupport {
         );
 
         // 주문 요청 DTO 생성
-        CreateOrderRequestDto createOrderRequestDto = new CreateOrderRequestDto(orderProducts, OrderType.DELIVERY, PaymentType.CARD);
+        CreateOrderRequestDto createOrderRequestDto =
+                new CreateOrderRequestDto(orderProducts, OrderType.ONLINE_DELIVERY, PaymentType.CARD, address.getId(), "30동 100호", "맵게해주세요.");
 
         // 주문 생성
         Order order = orderService.createOrder(createOrderRequestDto, user.getId());
@@ -145,7 +171,7 @@ class OrderServiceTest extends IntegrationTestSupport {
 
 
         /** when **/
-        // 주문 삭제(취소)
+        // 주문 삭제
         orderService.deleteOrder(order.getId(), user.getId());
 
 
@@ -159,9 +185,6 @@ class OrderServiceTest extends IntegrationTestSupport {
 
         // 삭제 처리된 주문이 논리적으로 삭제되었는지 확인
         assertThat(deletedOrder.get().getDeletedAt()).isNotNull();
-
-        // 삭제 처리된 주문의 상태가 ORDER_CANCELED로 변경되었는지 확인
-        assertThat(deletedOrder.get().getOrderStatus()).isEqualTo(OrderStatus.ORDER_CANCELED);
 
         // 삭제 처리된 주문에 속한 OrderProduct도 논리 삭제되었는지 확인
         List<OrderProduct> deletedOrderProducts = deletedOrder.get().getOrderProductList();
@@ -194,5 +217,15 @@ class OrderServiceTest extends IntegrationTestSupport {
                 .store(store)
                 .build();
     }
+
+
+    private Address createdAddress(String addressName, User user, Region region) {
+        return Address.builder()
+                .addressName(addressName)
+                .user(user)
+                .region(region)
+                .build();
+    }
+
 
 }

@@ -6,18 +6,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDV
 {
   "orderProducts": [
     {
-      "productId": "219da068-3d45-4af1-a83e-7d8ee8324396",
-      "price": 10.00,
-      "quantity": 2
+      "productId": "e20e9465-3c4f-401a-bffc-bb6a3d73cf36",
+      "price": 500.00,
+      "quantity": 3
     },
     {
-      "productId": "a08096c0-2a5d-4b27-b2fa-c2f88f49b790",
-      "price": 100.00,
-      "quantity": 2
+      "productId": "ae65de91-c503-4188-a4e9-06eb827bf37c",
+      "price": 500.00,
+      "quantity": 3
     }
   ],
-  "orderType": "DELIVERY",
-  "paymentType": "CARD"
+  "orderType": "ONLINE_DELIVERY",
+  "paymentType": "CARD",
+  "addressId": "4a16ce7b-628a-436b-a9dd-fcf220f06c3d",
+  "addressDetail": "200동, 2000호",
+  "orderRequest": "맵게 해주세요."
 }
 
 
@@ -26,6 +29,54 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDV
 GET http://localhost:8080/api/v1/orders/d457aff9-f6de-4033-8c2d-f267eafe45a5
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTczOTk3OTkzNywiaWF0IjoxNzM5OTc2MzM3fQ.5B-nvNlBJFNDCBN3yr1hH83mQuVQFCyi5zI-TLdBbak
+
+
+
+### 주문 수정(주문 변경)
+PUT http://localhost:8080/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/menu
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDM3MzM4NiwiaWF0IjoxNzQwMzY5Nzg2fQ.epH77ajxJ_4aFOPshIME_uI_UGz4rcxqWRbKyG3VRro
+
+
+{
+  "orderProducts": [
+    {
+      "productId": "e20e9465-3c4f-401a-bffc-bb6a3d73cf36",
+      "price": 3333.00,
+      "quantity": 555
+    },
+    {
+      "productId": "ae65de91-c503-4188-a4e9-06eb827bf37c",
+      "price": 3333.00,
+      "quantity": 555
+    }
+  ],
+  "orderType": "ONLINE_DELIVERY",
+  "paymentType": "CASH",
+  "addressId": "4a16ce7b-628a-436b-a9dd-fcf220f06c3d",
+  "addressDetail": "300동, 3000호",
+  "orderRequest": "그냥 안맵게 해주세요."
+}
+
+
+### 주문 수정(관리자가 주문 취소)
+PUT http://localhost:8080/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_CANCELED
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzQ3NiwiaWF0IjoxNzQwMzY5ODc2fQ.eC0Ux31DJdlqpP1m3cJAzxtZnw0z7jn1VgYyyy7m7lI
+
+
+
+### 주문 수정(관리자가 주문 접수)
+PUT http://localhost:8080/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_COMPLETED
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzUzNiwiaWF0IjoxNzQwMzY5OTM2fQ.a61vupZxPPDOr49UmE7BJIvYgDvYhHMRa-nZC5lFs7s
+
+
+
+### 주문 삭제(고객이 주문 취소)
+PUT http://localhost:8080/api/v1/orders/c6c331bb-58df-4f0f-9b05-864c98c0e630/cancel
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDQwOTU0MSwiaWF0IjoxNzQwNDA1OTQxfQ.7mEagoGZe2V3xcLq0FWFOK2JcPFqpWVF96iI-6SNr9M
 
 
 
@@ -55,14 +106,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FU
 
 
 ### 주문 검색 (매니저, 마스터가 모든 주문 목록 검색)
-GET http://localhost:8080/api/v1/orders/search?orderStatus=ORDER_COMPLETED&page=0&size=10&sort=createdAt,asc
+GET http://localhost:8080/api/v1/orders/search?page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMzgwMTE2LCJpYXQiOjE3NDAzNzY1MTZ9.eEMbj403wuNTTCAGDiEaFBl2cN7j6ppJKnLGXbSroE8
+
+
+
+### 주문 검색 (매니저, 마스터가 주문 상태가 (대기/완료/취소)된 주문 목록 검색)
+GET http://localhost:8080/api/v1/orders/search?orderStatus=ORDER_PENDING&page=0&size=10&sort=createdAt,asc
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDI5NjMwMCwiaWF0IjoxNzQwMjkyNzAwfQ.uBUg9n2jOtPeZOUZanBNVHGuye2kBqoua2tFYyJ2rj8
 
 
 
 ### 주문 검색 (매니저, 마스터가 특정 회원의 주문 목록 검색)
-GET http://localhost:8080/api/v1/orders/search?userId=15&page=0&size=10&sort=createdAt,asc
+GET http://localhost:8080/api/v1/orders/search?userId=4&page=0&size=10&sort=updatedAt,asc
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMjk1ODExLCJpYXQiOjE3NDAyOTIyMTF9.GjByE5Nl-W-efx_4B2UMRpHrOVNtjMORaGD4YmAtdTI
 

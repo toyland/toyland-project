@@ -1,5 +1,6 @@
 package com.toyland.order.model;
 
+import com.toyland.address.model.entity.Address;
 import com.toyland.global.common.auditing.BaseEntity;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.OrderErrorCode;
@@ -14,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -38,9 +41,19 @@ public class Order extends BaseEntity {
     @Column(name = "order_type")
     private OrderType orderType; // 주문유형(포장/배달)
 
+    @Column(name = "order_request", length = 255)
+    private String orderRequest; // 요청 사항
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "payment_type")
     private PaymentType paymentType; // 결제유형(카드/현금)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="address_id", nullable = false)
+    private Address address;
+
+    @Column(name = "address_detail", nullable = false, length = 100)
+    private String addressDetail; // 상세 주소
 
     @OneToOne
     @JoinColumn(name = "payment_id")
@@ -55,11 +68,14 @@ public class Order extends BaseEntity {
 
 
     @Builder
-    public Order(User user, PaymentType paymentType, OrderType orderType, OrderStatus orderStatus) {
+    public Order(User user, Address address, String addressDetail, PaymentType paymentType, OrderType orderType, OrderStatus orderStatus, String orderRequest) {
         this.user = user;
         this.paymentType = paymentType;
         this.orderType = orderType;
         this.orderStatus = orderStatus;
+        this.orderRequest = orderRequest;
+        this.address = address;
+        this.addressDetail = addressDetail;
     }
 
     //연관관계 편의 메소드 (테스트용)
@@ -69,14 +85,17 @@ public class Order extends BaseEntity {
     }
 
     // 주문 생성 메서드
-    public static Order createOrder(User user, CreateOrderRequestDto dto,
+    public static Order createOrder(User user, Address address, CreateOrderRequestDto dto,
         List<OrderProduct> orderProductList) {
 
         Order order = Order.builder()
             .user(user) // user 연관 관계 자동 설정
+            .address(address)
+            .addressDetail(dto.getAddressDetail())
             .orderType(dto.getOrderType())
             .paymentType(dto.getPaymentType())
-            .orderStatus(OrderStatus.ORDER_COMPLETED)
+            .orderStatus(OrderStatus.ORDER_PENDING)
+            .orderRequest(dto.getOrderRequest())
             .build();
 
         // 주문 상품(OrderProduct)과 주문(Order) 간의 연관 관계 설정
@@ -91,21 +110,25 @@ public class Order extends BaseEntity {
 
     // 비즈니스 로직
     /**
-     *  주문 수정
+     *  주문 수정 (주문 사항 변경)
      */
-    public void update(User user, CreateOrderRequestDto createOrderRequestDto, List<OrderProduct> orderProductList) {
-        if (isModifiableStatus()) {
-            throw new CustomException(OrderErrorCode.INVALID_STATUS);
+    public void update(CreateOrderRequestDto createOrderRequestDto, List<OrderProduct> orderProductList, Address address) {
+        // 상태 변경 가능 여부 확인
+        if (this.orderStatus != OrderStatus.ORDER_PENDING) {
+            throw CustomException.from(OrderErrorCode.INVALID_STATUS);
         }
 
-        // 주문 업데이트 로직
-        this.user = user;
+        // 주문 생성 후 5분 이내에만 변경 가능
+        if (!isCancelUpdate()) {
+            throw new CustomException(OrderErrorCode.CANCEL_UPDATE_TIME_EXCEEDED);
+        }
+
+        // 주문 업데이트 로직 (주문자, 주문상태는 변경 불가능)
         this.orderType = createOrderRequestDto.getOrderType();
         this.paymentType = createOrderRequestDto.getPaymentType();
-        this.orderStatus = OrderStatus.ORDER_COMPLETED;
-
-
-        // 후에 결제 수정 로직 추가
+        this.orderRequest = createOrderRequestDto.getOrderRequest();
+        this.addressDetail = createOrderRequestDto.getAddressDetail();
+        this.address = address;
 
 
         // 주문 상품 업데이트 로직 (기존 상품 삭제 후 추가)
@@ -130,34 +153,61 @@ public class Order extends BaseEntity {
 
 
 
-
-    // 비즈니스 로직
-
     /**
-     * 주문 삭제(취소)
+     * 주문 수정 (주문 처리)
      */
-    public void cancel() {
-        if (isModifiableStatus()) {
-            throw new CustomException(OrderErrorCode.INVALID_STATUS);
+    public void process(OrderStatus newStatus) {
+        // 상태 변경 가능 여부 확인
+        if (this.orderStatus != OrderStatus.ORDER_PENDING) {
+            throw CustomException.from(OrderErrorCode.INVALID_STATUS);
         }
 
-        // 후에 결제 취소 로직 추가
+        // 주문 처리
+        if (newStatus == OrderStatus.ORDER_CANCELED) {
+            // 주문 취소
+            cancel();
+        } else if(newStatus == OrderStatus.ORDER_COMPLETED) {
+            // 주문 접수 (주문 완료)
+            this.orderStatus = newStatus;
+        } else {
+            throw CustomException.from(OrderErrorCode.INVALID_STATUS);
+        }
+
+    }
+
+
+    // 주문 취소
+    public void cancel() {
+        // 주문 생성 후 5분 이내에만 취소 가능
+        if (!isCancelUpdate()) {
+            throw new CustomException(OrderErrorCode.CANCEL_UPDATE_TIME_EXCEEDED);
+        }
 
         // 주문 취소 상태로 수정
         this.orderStatus = OrderStatus.ORDER_CANCELED;
+    }
 
+    // 주문 취소 및 변경 가능 여부 확인주문, 생성 시간 (createdAt) 기준으로 5분 이내에만 취소 가능
+    public boolean isCancelUpdate() {
+        LocalDateTime createdTime = this.getCreatedAt();
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(createdTime, now);
+        // 주문 생성 후 5분 이내인지 확인
+        return duration.toMinutes() < 5;
+    }
+
+
+
+    /**
+     * 주문 삭제
+     */
+    public void deleteOrder(Long loginUserId) {
         // 주문 논리적 삭제 처리
-        this.addDeletedField(user.getId());
+        this.addDeletedField(loginUserId);
 
         // 주문 상품 논리적 삭제 처리
         for (OrderProduct orderProduct : orderProductList) {
-            orderProduct.addDeletedField(user.getId()); // OrderProduct에도 삭제 정보 추가
+            orderProduct.addDeletedField(loginUserId); // OrderProduct에도 삭제 정보 추가
         }
-    }
-
-    private boolean isModifiableStatus() {
-        return this.orderStatus == OrderStatus.PREPARING
-            || this.orderStatus == OrderStatus.DELIVERING
-            || this.orderStatus == OrderStatus.DELIVERY_COMPLETED;
     }
 }

@@ -1,12 +1,14 @@
 package com.toyland.user.apllication.usecase;
 
 import com.toyland.address.model.entity.Address;
+import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.common.IntegrationTestSupport;
 import com.toyland.global.config.security.UserDetailsImpl;
 import com.toyland.order.model.Order;
 import com.toyland.order.model.OrderStatus;
 import com.toyland.order.model.OrderType;
 import com.toyland.order.model.PaymentType;
+import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
 import com.toyland.store.model.entity.Store;
@@ -47,6 +49,14 @@ public class UserServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private RegionRepository regionRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+
 
     @DisplayName("회원 정보 저장")
     @Test
@@ -171,18 +181,24 @@ public class UserServiceTest extends IntegrationTestSupport {
     @Transactional
     void dynamicSearch_User() {
         // given
-        //주문생성
-        Order order = Order.builder().orderStatus(OrderStatus.ORDER_CANCELED)
-                .paymentType(PaymentType.CASH)
-                .orderType(OrderType.DELIVERY)
-                .build();
+        //유저 생성
+        User customer = userRepository.save(createUser("customer", "1234", UserRoleEnum.CUSTOMER));
+
         //상점생성
-        createStore("상점", "내용", "주소");
+        Store store = createStore("상점", "내용", "주소");
+
+        //지역 생성
         Region region = Region.builder().regionName("서울").build();
         regionRepository.save(region);
 
-        //주소생성
-        Address address = createAddress("천안", region);
+        //주소 생성
+        Address address = addressRepository.save(createdAddress("영등포구", customer, region)) ;
+
+        //주문생성
+        Order order = orderRepository.save(
+                new Order(customer, address, "300동 10호", PaymentType.CARD, OrderType.ONLINE_DELIVERY, OrderStatus.ORDER_CANCELED, "안맵게 해주세요."));
+        orderRepository.save(order);
+
 
         List<User> list = new ArrayList<>();
 
@@ -247,6 +263,18 @@ public class UserServiceTest extends IntegrationTestSupport {
                 .content(content)
                 .address(address)
                 .build();
+    }
+
+    private Address createdAddress(String addressName, User user, Region region) {
+        return Address.builder()
+                .addressName(addressName)
+                .user(user)
+                .region(region)
+                .build();
+    }
+
+    private User createUser(String username, String password, UserRoleEnum role) {
+        return new User(username, password, role);
     }
 
 }
