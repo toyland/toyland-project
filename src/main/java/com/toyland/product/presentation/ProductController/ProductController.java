@@ -14,6 +14,9 @@ import com.toyland.product.presentation.dto.ProductResponseDto;
 import com.toyland.product.presentation.dto.ProductWithStoreResponseDto;
 import com.toyland.product.presentation.dto.SearchProductRequestDto;
 import com.toyland.product.presentation.dto.UpdateProductRequestDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -37,12 +40,10 @@ public class ProductController {
 
   private final ProductService productService;
 
-  /**
-   * 상품을 생성합니다.
-   *
-   * @param dto 상품 생성 정보
-   * @return 200 ok
-   */
+  @Operation(summary = "상품 등록", description = "상품을 등록합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "상품 등록 성공"),
+  })
   @HasManageProductRole
   @PostMapping
   public ResponseEntity<Void> createProduct(@RequestBody CreateProductRequestDto dto) {
@@ -53,17 +54,21 @@ public class ProductController {
             .toUri()).build();
   }
 
-  /**
-   * 상품을 조회합니다.
-   *
-   * @param productId 조회할 상품 id
-   * @return 조회 상품 dto
-   */
+  @Operation(summary = "상품 단 건 조회", description = "상품을 조회합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "상품 조회 성공"),
+  })
   @GetMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> readProduct(@PathVariable UUID productId) {
     return ResponseEntity.ok(productService.readProduct(productId));
   }
 
+  @Operation(summary = "상품 검색", description = "상품을 검색합니다." +
+      " (예시 파라미터: ?searchText=가&sort=name,desc,created_at&size=10"
+      + "&page=1&storeId=d2a88144-242d-4a87-b607-4846a66d89de&isDisplay=false)")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "상품 검색 성공"),
+  })
   @GetMapping("/search")
   public ResponseEntity<Page<ProductWithStoreResponseDto>> searchProducts(
       @ModelAttribute SearchProductRequestDto request
@@ -71,13 +76,10 @@ public class ProductController {
     return ResponseEntity.ok(productService.searchProducts(request));
   }
 
-  /**
-   * 상품을 수정합니다.
-   *
-   * @param productId 수정할 product id
-   * @param request   수정 내용
-   * @return 수정된 내용
-   */
+  @Operation(summary = "상품 수정", description = "상품을 수정합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "상품 수정 성공"),
+  })
   @HasManageProductRole
   @PutMapping("/{productId}")
   public ResponseEntity<ProductResponseDto> updateProduct(@PathVariable UUID productId,
@@ -86,12 +88,10 @@ public class ProductController {
         UpdateProductServiceRequestDto.of(request, productId)));
   }
 
-  /**
-   * 상품을 삭제합니다.
-   *
-   * @param productId 삭제할 상품 id
-   * @return 204 no content
-   */
+  @Operation(summary = "상품 삭제", description = "상품을 삭제합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "204", description = "상품 삭제 성공"),
+  })
   @HasManageProductRole
   @DeleteMapping("/{productId}")
   public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId,

@@ -13,6 +13,9 @@ import com.toyland.category.presentation.dto.SearchCategoryRequestDto;
 import com.toyland.category.presentation.dto.UpdateCategoryRequestDto;
 import com.toyland.global.config.security.annotation.CurrentLoginUserId;
 import com.toyland.global.config.security.annotation.HasManageCategoryRole;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -38,12 +41,10 @@ public class CategoryController {
 
   private final CategoryService categoryService;
 
-  /**
-   * 카테고리를 생성합니다.
-   *
-   * @param request 카테고리 생성 정보
-   * @return 200 성공
-   */
+  @Operation(summary = "카테고리 등록", description = "카테고리를 등록합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "카테고리 등록 성공"),
+  })
   @PostMapping
   public ResponseEntity<Void> createCategory(@Valid @RequestBody CreateCategoryRequestDto request) {
     CategoryResponseDto category = categoryService.createCategory(request);
@@ -53,17 +54,20 @@ public class CategoryController {
             .toUri()).build();
   }
 
-  /**
-   * 카테고리을 조회합니다.
-   *
-   * @param categoryId 조회할 카테고리 id
-   * @return 조회 카테고리 dto
-   */
+  @Operation(summary = "카테고리 단 건 조회", description = "카테고리를 조회합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "카테고리 조회 성공"),
+  })
   @GetMapping("/{categoryId}")
   public ResponseEntity<CategoryResponseDto> readCategory(@PathVariable UUID categoryId) {
     return ResponseEntity.ok(categoryService.readCategory(categoryId));
   }
 
+  @Operation(summary = "카테고리 검색", description = "카테고리를 검색합니다." +
+      " (예시 파라미터: ?searchText=가&sort=name,desc,created_at&size=10&page=1)")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "카테고리 검색 성공"),
+  })
   @GetMapping("/search")
   public ResponseEntity<Page<CategoryResponseDto>> searchCategories(
       @ModelAttribute SearchCategoryRequestDto request
@@ -71,13 +75,10 @@ public class CategoryController {
     return ResponseEntity.ok(categoryService.searchCategories(request));
   }
 
-  /**
-   * 카테고리을 수정합니다.
-   *
-   * @param categoryId 수정할 category id
-   * @param request    수정 내용
-   * @return 수정된 내용
-   */
+  @Operation(summary = "카테고리 수정", description = "카테로리를 수정합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "카테고리 수정 성공"),
+  })
   @PutMapping("/{categoryId}")
   public ResponseEntity<CategoryResponseDto> updateCategory(@PathVariable UUID categoryId,
       @RequestBody UpdateCategoryRequestDto request) {
@@ -85,12 +86,10 @@ public class CategoryController {
         UpdateCategoryServiceRequestDto.of(request, categoryId)));
   }
 
-  /**
-   * 카테고리을 삭제합니다.
-   *
-   * @param categoryId 삭제할 카테고리 id
-   * @return 204 no content
-   */
+  @Operation(summary = "카테고리 삭제", description = "카테고리를 삭제합니다.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "204", description = "지역 삭제 성공"),
+  })
   @DeleteMapping("/{categoryId}")
   public ResponseEntity<Void> deleteCategory(@PathVariable UUID categoryId,
       @CurrentLoginUserId Long currentLoginUserId) {
