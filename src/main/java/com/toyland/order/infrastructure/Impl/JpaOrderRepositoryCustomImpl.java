@@ -6,6 +6,7 @@ import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toyland.order.infrastructure.JpaOrderRepositoryCustom;
 import com.toyland.order.model.Order;
+import com.toyland.order.model.OrderStatus;
 import com.toyland.order.presentation.dto.request.OrderSearchRequestDto;
 import com.toyland.order.presentation.dto.response.OrderSearchResponseDto;
 import com.toyland.user.model.UserRoleEnum;
@@ -61,7 +62,8 @@ public class JpaOrderRepositoryCustomImpl implements JpaOrderRepositoryCustom {
                         loginUserIdEq(loginUserId, role),                   // 실제 로그인 유저 아이디
                         userIdEq(searchRequestDto.userId(), role),          // 검색을 하기위한 유저 아이디
                         orderIdEq(searchRequestDto.orderId()),
-                        storeIdEq(searchRequestDto.storeId(), role)
+                        storeIdEq(searchRequestDto.storeId(), role),
+                        orderStatusIdEq(searchRequestDto.orderStatus())
                 )
                 .orderBy(orderSpecifierList.toArray(new OrderSpecifier[0])) // 동적 정렬
                 .offset(pageable.getOffset())  // 페이징 - 시작 인덱스
@@ -88,8 +90,8 @@ public class JpaOrderRepositoryCustomImpl implements JpaOrderRepositoryCustom {
                         loginUserIdEq(loginUserId, role),
                         orderIdEq(searchRequestDto.orderId()),
                         userIdEq(searchRequestDto.userId(), role),
-                        storeIdEq(searchRequestDto.storeId(), role)
-
+                        storeIdEq(searchRequestDto.storeId(), role),
+                        orderStatusIdEq(searchRequestDto.orderStatus())
                 )
                 .fetchOne();
 
@@ -132,6 +134,11 @@ public class JpaOrderRepositoryCustomImpl implements JpaOrderRepositoryCustom {
     }
 
 
+    private BooleanExpression orderStatusIdEq(OrderStatus orderStatus) {
+        return orderStatus != null ? order.orderStatus.eq(orderStatus) : null;
+    }
+
+
     private BooleanExpression orderIdEq(UUID orderId) {
         return orderId != null ? order.id.eq(orderId) : null;
     }
@@ -167,6 +174,9 @@ public class JpaOrderRepositoryCustomImpl implements JpaOrderRepositoryCustom {
                 switch (sortOrder.getProperty()) {
                     case "createdAt":  // 주문 생성일 기준 정렬
                         orderSpecifierList.add(new OrderSpecifier<>(direction, order.createdAt));
+                        break;
+                    case "updatedAt":  // 주문 업데이트 기준 정렬
+                        orderSpecifierList.add(new OrderSpecifier<>(direction, order.updatedAt));
                         break;
                     case "orderStatus":  // 주문 상태 기준 정렬
                         orderSpecifierList.add(new OrderSpecifier<>(direction, order.orderStatus));

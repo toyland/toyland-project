@@ -99,14 +99,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FU
 
 
 ### 주문 검색 (매니저, 마스터가 모든 주문 목록 검색)
-GET http://localhost:8080/api/v1/orders/search?orderStatus=ORDER_COMPLETED&page=0&size=10&sort=createdAt,asc
+GET http://localhost:8080/api/v1/orders/search?page=0&size=10&sort=createdAt,asc
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMzgwMTE2LCJpYXQiOjE3NDAzNzY1MTZ9.eEMbj403wuNTTCAGDiEaFBl2cN7j6ppJKnLGXbSroE8
+
+
+
+### 주문 검색 (매니저, 마스터가 주문 상태가 (대기/완료/취소)된 주문 목록 검색)
+GET http://localhost:8080/api/v1/orders/search?orderStatus=ORDER_PENDING&page=0&size=10&sort=createdAt,asc
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDI5NjMwMCwiaWF0IjoxNzQwMjkyNzAwfQ.uBUg9n2jOtPeZOUZanBNVHGuye2kBqoua2tFYyJ2rj8
 
 
 
 ### 주문 검색 (매니저, 마스터가 특정 회원의 주문 목록 검색)
-GET http://localhost:8080/api/v1/orders/search?userId=15&page=0&size=10&sort=createdAt,asc
+GET http://localhost:8080/api/v1/orders/search?userId=4&page=0&size=10&sort=updatedAt,asc
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMjk1ODExLCJpYXQiOjE3NDAyOTIyMTF9.GjByE5Nl-W-efx_4B2UMRpHrOVNtjMORaGD4YmAtdTI
 
