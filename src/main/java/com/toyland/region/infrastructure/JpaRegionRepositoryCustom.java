@@ -1,9 +1,8 @@
 package com.toyland.region.infrastructure;
 
-import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
+import com.toyland.region.model.repository.command.SearchRegionRepositoryCommand;
 import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * @author : hanjihoon
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Pageable;
  */
 public interface JpaRegionRepositoryCustom {
 
-    Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
-        Pageable pageable);
+    Page<RegionSearchResponseDto> searchRegion(SearchRegionRepositoryCommand build);
 
 }

@@ -20,11 +20,11 @@ import java.net.URI;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -90,11 +90,10 @@ public class RegionController {
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @GetMapping("/search")
     public ResponseEntity<CustomApiResponse<Page<RegionSearchResponseDto>>> searchRegion(
-        RegionSearchRequestDto searchRequestDto,
-        Pageable pageable) {
+        @ModelAttribute RegionSearchRequestDto searchRequestDto) {
         return ResponseEntity
             .ok(CustomApiResponse.of(HttpSuccessCode.REGION_SEARCH,
-                regionFacade.searchRegion(searchRequestDto, pageable)));
+                regionFacade.searchRegion(searchRequestDto)));
     }
 
 

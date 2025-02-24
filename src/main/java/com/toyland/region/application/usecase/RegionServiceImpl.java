@@ -4,14 +4,15 @@ import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.RegionErrorCode;
 import com.toyland.region.model.entity.Region;
 import com.toyland.region.model.repository.RegionRepository;
+import com.toyland.region.model.repository.command.SearchRegionRepositoryCommand;
 import com.toyland.region.presentation.dto.repuest.CreateRegionRequestDto;
 import com.toyland.region.presentation.dto.repuest.RegionSearchRequestDto;
 import com.toyland.region.presentation.dto.response.RegionResponseDto;
 import com.toyland.region.presentation.dto.response.RegionSearchResponseDto;
+import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,9 +61,16 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto,
-        Pageable pageable) {
-        return regionRepository.searchRegion(searchRequestDto, pageable);
+    public Page<RegionSearchResponseDto> searchRegion(RegionSearchRequestDto searchRequestDto) {
+        return regionRepository.searchRegion(
+            SearchRegionRepositoryCommand.builder()
+                .regionName(searchRequestDto.regionName())
+                .size(Set.of(10, 30, 50).contains(searchRequestDto.size()) ? searchRequestDto.size()
+                    : 10)
+                .page(searchRequestDto.page())
+                .sort(searchRequestDto.sort())
+                .build()
+        );
     }
 
 }
