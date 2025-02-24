@@ -122,6 +122,7 @@ class ProductServiceTest extends IntegrationTestSupport {
     // then
     List<Product> expected = List.of(products.get(20), products.get(22), products.get(24));
 
+    assertThat(result.getTotalElements()).isEqualTo(13);
     assertThat(result.getContent()).hasSize(3)
         .extracting("productId", "store.storeId", "store.ownerName")
         .containsExactlyInAnyOrder(

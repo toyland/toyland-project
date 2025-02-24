@@ -47,10 +47,10 @@ public class StoreServiceImpl implements StoreService {
   private final StoreCategoryRepository storeCategoryRepository;
 
   @Override
-  public void createStore(CreateStoreRequestDto dto) {
+  public StoreResponseDto createStore(CreateStoreRequestDto dto) {
     Region region = findRegionById(dto.regionId());
     User owner = findUserById(dto.ownerId());
-    storeRepository.save(Store.of(dto, region, owner));
+    return StoreResponseDto.from(storeRepository.save(Store.of(dto, region, owner)));
   }
 
   @Override

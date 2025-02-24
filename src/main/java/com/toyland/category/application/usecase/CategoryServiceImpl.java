@@ -29,9 +29,9 @@ public class CategoryServiceImpl implements CategoryService {
   private final CategoryRepository categoryRepository;
 
   @Override
-  public void createCategory(CreateCategoryRequestDto dto) {
+  public CategoryResponseDto createCategory(CreateCategoryRequestDto dto) {
     Category parent = dto.patentId() == null ? null : findCategoryById(dto.patentId());
-    categoryRepository.save(Category.from(dto, parent));
+    return CategoryResponseDto.from(categoryRepository.save(Category.from(dto, parent)));
   }
 
   @Override
@@ -41,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
   }
 
   @Override
+  @Transactional(readOnly = true)
   public Page<CategoryResponseDto> searchCategories(SearchCategoryRequestDto dto) {
     return categoryRepository.searchCategories(
         SearchCategoryRequestDao.builder()
@@ -48,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
             .parentCategoryId(dto.parentCategoryId())
             .page(dto.page() - 1)
             .size(Set.of(10, 30, 50).contains(dto.size()) ? dto.size() : 10)
+            .sort(dto.sort())
             .build());
   }
 
