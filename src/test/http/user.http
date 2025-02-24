@@ -3,13 +3,13 @@ POST http://localhost:8080/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "customer6",
+  "username": "master",
   "password": "!Master123",
-  "role": "CUSTOMER"
+  "role": "MASTER"
 }
 
 ### 유저 로그인 (MASTER)
-GET http://localhost:8080/api/v1/users/login
+POST http://localhost:8080/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -17,33 +17,30 @@ Content-Type: application/json
   "password": "!Master123"
 }
 
+
 ### 회원 조회
 GET http://localhost:8080/api/v1/users/1
-Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMzg4ODM5LCJpYXQiOjE3NDAzODUyMzl9.K4Vj0TnRQ2yvLcmrI7G76rsNnDUXW46T8R14eN-RA8Q
 
 ### 회원 조회(동적쿼리)
-GET http://localhost:8080/api/v1/users/search?page=0&size=3&sort=createdAt,desc
-Content-Type: application/json
-
-{
-  "role": "CUSTOMER",
-  "isDeleted": false
-}
+GET http://localhost:8080/api/v1/users/search?username=customer&page=0&size=3&sort=createdAt,desc
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMzgzNTE2LCJpYXQiOjE3NDAzNzk5MTZ9.4ZjalK-3LTEScYjwhNK3R5dBDSrYfa_cjOMD-X88kO4
 
 
 ### 회원 정보 수정
-PUT http://localhost:8080/api/v1/users/1
+PUT http://localhost:8080/api/v1/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjgiLCJhdXRoIjoiQ1VTVE9NRVIiLCJleHAiOjE3NDAyMTI1NDMsImlhdCI6MTc0MDIwODk0M30.9GzRoqpaBcM4XApRbXzAoS_O0Rx-n54V74qlGpuYnwY
 
 {
-  "username": "updateUser",
-  "password": "update1234",
-  "role": "MANAGER"
+  "username": "updateuzer",
+  "password": "Update1234!"
 }
 
 ### 회원 탈퇴
 DELETE http://localhost:8080/api/v1/users/1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMjExNjQyLCJpYXQiOjE3NDAyMDgwNDJ9.jLgjLfzaX6E7xsPhjbyG_MyANYoYbbkZ4hoNdJdTPgw
 
 
 ### 유저 생성(CUSTOMER)
@@ -57,7 +54,7 @@ Content-Type: application/json
 }
 
 ### 유저 로그인 (CUSTOMER)
-GET http://localhost:8080/api/v1/users/login
+POST http://localhost:8080/api/v1/users/login
 Content-Type: application/json
 
 {
