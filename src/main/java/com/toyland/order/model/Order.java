@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -108,21 +110,25 @@ public class Order extends BaseEntity {
 
     // 비즈니스 로직
     /**
-     *  주문 수정
+     *  주문 수정 (주문 사항 변경)
      */
-    public void update(User user, CreateOrderRequestDto createOrderRequestDto, List<OrderProduct> orderProductList) {
-        if (isModifiableStatus()) {
-            throw new CustomException(OrderErrorCode.INVALID_STATUS);
+    public void update(CreateOrderRequestDto createOrderRequestDto, List<OrderProduct> orderProductList, Address address) {
+        // 상태 변경 가능 여부 확인
+        if (this.orderStatus != OrderStatus.ORDER_PENDING) {
+            throw CustomException.from(OrderErrorCode.INVALID_STATUS);
         }
 
-        // 주문 업데이트 로직
-        this.user = user;
+        // 주문 생성 후 5분 이내에만 변경 가능
+        if (!isCancelUpdate()) {
+            throw new CustomException(OrderErrorCode.CANCEL_UPDATE_TIME_EXCEEDED);
+        }
+
+        // 주문 업데이트 로직 (주문자, 주문상태는 변경 불가능)
         this.orderType = createOrderRequestDto.getOrderType();
         this.paymentType = createOrderRequestDto.getPaymentType();
-        this.orderStatus = OrderStatus.ORDER_COMPLETED;
-
-
-        // 후에 결제 수정 로직 추가
+        this.orderRequest = createOrderRequestDto.getOrderRequest();
+        this.addressDetail = createOrderRequestDto.getAddressDetail();
+        this.address = address;
 
 
         // 주문 상품 업데이트 로직 (기존 상품 삭제 후 추가)
@@ -147,34 +153,61 @@ public class Order extends BaseEntity {
 
 
 
-
-    // 비즈니스 로직
-
     /**
-     * 주문 삭제(취소)
+     * 주문 수정 (주문 처리)
      */
-    public void cancel() {
-        if (isModifiableStatus()) {
-            throw new CustomException(OrderErrorCode.INVALID_STATUS);
+    public void process(OrderStatus newStatus) {
+        // 상태 변경 가능 여부 확인
+        if (this.orderStatus != OrderStatus.ORDER_PENDING) {
+            throw CustomException.from(OrderErrorCode.INVALID_STATUS);
         }
 
-        // 후에 결제 취소 로직 추가
+        // 주문 처리
+        if (newStatus == OrderStatus.ORDER_CANCELED) {
+            // 주문 취소
+            cancel();
+        } else if(newStatus == OrderStatus.ORDER_COMPLETED) {
+            // 주문 접수 (주문 완료)
+            this.orderStatus = newStatus;
+        } else {
+            throw CustomException.from(OrderErrorCode.INVALID_STATUS);
+        }
+
+    }
+
+
+    // 주문 취소
+    public void cancel() {
+        // 주문 생성 후 5분 이내에만 취소 가능
+        if (!isCancelUpdate()) {
+            throw new CustomException(OrderErrorCode.CANCEL_UPDATE_TIME_EXCEEDED);
+        }
 
         // 주문 취소 상태로 수정
         this.orderStatus = OrderStatus.ORDER_CANCELED;
+    }
 
+    // 주문 취소 및 변경 가능 여부 확인주문, 생성 시간 (createdAt) 기준으로 5분 이내에만 취소 가능
+    public boolean isCancelUpdate() {
+        LocalDateTime createdTime = this.getCreatedAt();
+        LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(createdTime, now);
+        // 주문 생성 후 5분 이내인지 확인
+        return duration.toMinutes() < 5;
+    }
+
+
+
+    /**
+     * 주문 삭제
+     */
+    public void deleteOrder(Long loginUserId) {
         // 주문 논리적 삭제 처리
-        this.addDeletedField(user.getId());
+        this.addDeletedField(loginUserId);
 
         // 주문 상품 논리적 삭제 처리
         for (OrderProduct orderProduct : orderProductList) {
-            orderProduct.addDeletedField(user.getId()); // OrderProduct에도 삭제 정보 추가
+            orderProduct.addDeletedField(loginUserId); // OrderProduct에도 삭제 정보 추가
         }
-    }
-
-    private boolean isModifiableStatus() {
-        return this.orderStatus == OrderStatus.COOK_PREPARING
-            || this.orderStatus == OrderStatus.DELIVERING
-            || this.orderStatus == OrderStatus.DELIVERY_COMPLETED;
     }
 }

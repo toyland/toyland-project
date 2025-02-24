@@ -5,6 +5,7 @@ import com.toyland.address.model.repository.AddressRepository;
 import com.toyland.global.exception.CustomException;
 import com.toyland.global.exception.type.domain.*;
 import com.toyland.order.model.Order;
+import com.toyland.order.model.OrderStatus;
 import com.toyland.order.model.repository.OrderRepository;
 import com.toyland.order.presentation.dto.CreateOrderRequestDto;
 import com.toyland.order.presentation.dto.request.OrderSearchRequestDto;
@@ -92,7 +93,7 @@ public class OrderService {
 
 
     /**
-     *  주문 수정
+     *  주문 수정 (주문 사항 변경)
      */
     @Transactional
     public OrderResponseDto updateOrder(UUID orderId, CreateOrderRequestDto createOrderRequestDto, Long loginUserId) {
@@ -101,6 +102,9 @@ public class OrderService {
         User user = userRepository.findById(loginUserId)
                 .orElseThrow(() -> CustomException.from(UserErrorCode.USER_NOT_FOUND));
 
+        // 주소 조회
+        Address address = addressRepository.findById(createOrderRequestDto.getAddressId())
+                .orElseThrow(() -> CustomException.from(AddressErrorCode.ADDRESS_NOT_FOUND));
 
         // 주문 조회
         Order order = orderRepository.findById(orderId)
@@ -120,7 +124,7 @@ public class OrderService {
         }
 
         // 주문 수정
-        order.update(user, createOrderRequestDto, orderProductList);
+        order.update(createOrderRequestDto, orderProductList, address);
 
         return OrderResponseDto.from(order);
     }
@@ -128,7 +132,29 @@ public class OrderService {
 
 
     /**
-     * 주문 삭제(취소)
+     * 주문 수정 (주문 처리)
+     */
+    @Transactional
+    public void updateOrderStatus(UUID orderId, OrderStatus orderStatus, Long loginUserId) {
+
+        // 회원 조회
+        User user = userRepository.findById(loginUserId)
+                .orElseThrow(() -> CustomException.from(UserErrorCode.USER_NOT_FOUND));
+
+
+        //주문 엔티티 조회
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> CustomException.from(OrderErrorCode.ORDER_NOT_FOUND));
+
+
+        //주문 처리
+        order.process(orderStatus);
+    }
+
+
+
+    /**
+     * 주문 삭제 (디비에서 논리적 삭제)
      */
     @Transactional
     public void deleteOrder(UUID orderId, Long loginUserId) {
@@ -143,9 +169,11 @@ public class OrderService {
                 .orElseThrow(() -> CustomException.from(OrderErrorCode.ORDER_NOT_FOUND));
 
 
-        //주문 취소
-        order.cancel();
+        //주문 삭제
+        order.deleteOrder(loginUserId);
     }
+
+
 
     /**
      *  주문 검색
