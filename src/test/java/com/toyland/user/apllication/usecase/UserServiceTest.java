@@ -86,7 +86,7 @@ public class UserServiceTest extends IntegrationTestSupport {
             );
 
         User savedUser = all.get(0);
-        assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isFalse();
+        assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isTrue();
     }
 
     @DisplayName("회원 정보 저장 실패 케이스")
@@ -112,7 +112,7 @@ public class UserServiceTest extends IntegrationTestSupport {
             );
 
         User savedUser = all.get(0);
-        assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isTrue();
+        assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isFalse();
     }
 
     @DisplayName("회원 정보 수정")
