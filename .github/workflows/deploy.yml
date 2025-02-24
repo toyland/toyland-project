@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - ecrtest/#1  # 변경된 브랜치 이름 사용
+      - dev  # 변경된 브랜치 이름 사용
 
 env:
   AWS_REGION: ap-northeast-2
