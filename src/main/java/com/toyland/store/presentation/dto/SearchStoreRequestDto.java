@@ -9,9 +9,10 @@ import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record SearchStoreRequestDto (
+public record SearchStoreRequestDto(
     String searchText, String categoryNameSearchText, String storeNameSearchText,
+    String storeSearchAddress,
     UUID regionId, Long ownerId, UUID categoryId, Integer page, Integer size, List<String> sort
-){
+) {
 
 }

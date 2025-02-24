@@ -1,5 +1,5 @@
 ### 지역 생성
-POST http://localhost:8080/api/v1/regions
+POST {{baseUrl}}/api/v1/regions
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
@@ -8,12 +8,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 지역 단 건 조회
-GET http://localhost:8080/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
+GET {{baseUrl}}/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
 
 ### 지역 수정
-PUT http://localhost:8080/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
+PUT {{baseUrl}}/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
@@ -22,11 +22,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 지역 삭제
-DELETE http://localhost:8080/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
+DELETE {{baseUrl}}/api/v1/regions/2bc3ec54-ba61-4e13-96d8-4dc423f3c48d
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
 
 
 ### 지역 검색(동적 쿼리) //page=0&size=10&sort=createdAt,asc
-GET http://localhost:8080/api/v1/regions/search?regionName=서울시&page=1&size=5&sort=createdAt,asc
+GET {{baseUrl}}/api/v1/regions/search?regionName=서울시&page=1&size=5&sort=createdAt,asc
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg

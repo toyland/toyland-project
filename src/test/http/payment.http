@@ -1,5 +1,5 @@
 ### 결제 생성
-POST http://localhost:8080/api/v1/payments
+POST {{baseUrl}}/api/v1/payments
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDE3NzEzLCJpYXQiOjE3NDAwMTQxMTN9.WycI2pW5Lh7cAqOL97UYntFeXiADhv1GqsD1bXVQ4eU
 
@@ -10,14 +10,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 
 ### 결제 단 건 조회
-GET http://localhost:8080/api/v1/payments/cf0f235d-b2ee-4e0d-8ef6-5ab3bb061948
+GET {{baseUrl}}/api/v1/payments/cf0f235d-b2ee-4e0d-8ef6-5ab3bb061948
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDczOTc2LCJpYXQiOjE3NDAwNzAzNzZ9.9oHGITnlt9eXSdX_f66p_MTADbl7ur96Hpko5ZqmXPU
 
 
 
 ### 결제 수정
-PUT http://localhost:8080/api/v1/payments/cf0f235d-b2ee-4e0d-8ef6-5ab3bb061948
+PUT {{baseUrl}}/api/v1/payments/cf0f235d-b2ee-4e0d-8ef6-5ab3bb061948
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDc4NzkxLCJpYXQiOjE3NDAwNzUxOTF9.jCSgd6Nd4eMNOKn6hPXneP2m70zOzO8Xbm4yRKekO8U
 
@@ -29,20 +29,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 
 ### 결제 삭제
-DELETE http://localhost:8080/api/v1/payments/cf0f235d-b2ee-4e0d-8ef6-5ab3bb061948
+DELETE {{baseUrl}}/api/v1/payments/cf0f235d-b2ee-4e0d-8ef6-5ab3bb061948
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMDc4NzkxLCJpYXQiOjE3NDAwNzUxOTF9.jCSgd6Nd4eMNOKn6hPXneP2m70zOzO8Xbm4yRKekO8U
 
 
 
 ### 결제 검색 (결제상태)
-GET http://localhost:8080/api/v1/payments/search?paymentStatus=COMPLETED&size=5&sort=createdAt,asc
+GET {{baseUrl}}/api/v1/payments/search?paymentStatus=COMPLETED&size=5&sort=createdAt,asc
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTU1Mjk0LCJpYXQiOjE3NDAxNTE2OTR9.BXd--B07n6i0Jv0Q-__vRciYmCcsm1sfXqTfkc68XdM
 
 
 
 ### 결제 검색 (결제번호, 결제상태)
-GET http://localhost:8080/api/v1/payments/search?paymentId=0a792c67-1ef6-4421-847f-fd6ea22ca90b&paymentStatus=COMPLETED&size=5&sort=createdAt,asc
+GET {{baseUrl}}/api/v1/payments/search?paymentId=0a792c67-1ef6-4421-847f-fd6ea22ca90b&
+    paymentStatus=COMPLETED&size=5&sort=createdAt,asc
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTU1Mjk0LCJpYXQiOjE3NDAxNTE2OTR9.BXd--B07n6i0Jv0Q-__vRciYmCcsm1sfXqTfkc68XdM

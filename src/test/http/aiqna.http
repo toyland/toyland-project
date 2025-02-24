@@ -1,5 +1,5 @@
 ###Qna 생성
-POST http://localhost:8080/api/v1/qna
+POST {{baseUrl}}/api/v1/qna
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTE0NTc0LCJpYXQiOjE3NDAxMTA5NzR9.aFAzMzb6o_IPS-G1qZOyiTihwn6xlFMqtlfVKi9nN6k
 
@@ -9,18 +9,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ###Qna 전체 조회
-GET http://localhost:8080/api/v1/qna/search?page=0&size=10&sort=createdAt,asc&
+GET {{baseUrl}}/api/v1/qna/search?page=0&size=10&sort=createdAt,asc&
     storeId=2e11ee82-82a9-41cc-ac52-3b532887d5e6
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTE4MDk4LCJpYXQiOjE3NDAxMTQ0OTh9.FDIqoTFstamNRlg5iDEFEIkDtkWHkWl7g6fF6hstEUY
 
 ###Qna 단건 조회
-GET http://localhost:8080/api/v1/qna/0199e721-c32f-4ef2-8c37-59e35b8d2b87
+GET {{baseUrl}}/api/v1/qna/0199e721-c32f-4ef2-8c37-59e35b8d2b87
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTE0NTc0LCJpYXQiOjE3NDAxMTA5NzR9.aFAzMzb6o_IPS-G1qZOyiTihwn6xlFMqtlfVKi9nN6k
 
 ###Qna 수정
-PUT http://localhost:8080/api/v1/qna/29e38b2b-e66d-4ccd-aa82-32799fdc17ea
+PUT {{baseUrl}}/api/v1/qna/29e38b2b-e66d-4ccd-aa82-32799fdc17ea
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODk1NzQ1LCJpYXQiOjE3Mzk4OTIxNDV9.tHY-uCjl9EMUSf7KpVgB45uwovcqLSF19dYH80aLZk4
 
@@ -30,6 +30,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ###Qna 삭제
-DELETE http://localhost:8080/api/v1/qna/1727718c-3276-488d-bf43-5e2a0676cdf2
+DELETE {{baseUrl}}/api/v1/qna/1727718c-3276-488d-bf43-5e2a0676cdf2
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTMwNjc3LCJpYXQiOjE3Mzk5MjcwNzd9.NTwdcwVM9rvCohRRCJPd35Hun6R654rwAQGY9UAsh9k

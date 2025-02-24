@@ -1,5 +1,5 @@
 ### 음식점 생성
-POST http://localhost:8080/api/v1/stores
+POST {{baseUrl}}/api/v1/stores
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
@@ -12,14 +12,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 음식점 조회
-GET http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
+GET {{baseUrl}}/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 음식점 검색
-GET http://localhost:8080/api/v1/stores/search
+GET {{baseUrl}}/api/v1/stores/search
     ?searchText=상점
     &categoryNameSearchText=야식
     &storeNameSearchText=상점
+    &storeSearchAddress=서울
     &regionId=376ddba6-d9ab-4953-aee6-614e1dfeef7e
     &ownerId=2
     &categoryId=72f705b4-97ee-4ee3-8c02-78b38b15a5bc
@@ -30,7 +31,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 
 ### 음식점 수정
-PUT http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
+PUT {{baseUrl}}/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
@@ -43,11 +44,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 음식점 삭제
-DELETE http://localhost:8080/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
+DELETE {{baseUrl}}/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 음식점에 카테고리 생성
-POST http://localhost:8080/api/v1/stores/d2c7f7bc-5580-4c97-8bbd-7c3cc2981de5/categories
+POST {{baseUrl}}/api/v1/stores/d2c7f7bc-5580-4c97-8bbd-7c3cc2981de5/categories
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
@@ -58,7 +59,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 음식점에 카테고리 생성 - 중복 오류
-POST http://localhost:8080/api/v1/stores/df41f705-a5d4-419c-a372-f9c43c585e07/categories
+POST {{baseUrl}}/api/v1/stores/df41f705-a5d4-419c-a372-f9c43c585e07/categories
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM1MjQzLCJpYXQiOjE3Mzk5MzE2NDN9.EH1k06aEe9SfHvEYfNk-IWOB8osI6cJutl07gvokFiI
 

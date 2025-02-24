@@ -1,5 +1,5 @@
 ### 유저 생성 (MASTER)
-POST http://localhost:8080/api/v1/users/signup
+POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 유저 로그인 (MASTER)
-POST http://localhost:8080/api/v1/users/login
+POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 
 ### 회원 조회
-GET http://localhost:8080/api/v1/users/1
+GET {{baseUrl}}/api/v1/users/1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMzg4ODM5LCJpYXQiOjE3NDAzODUyMzl9.K4Vj0TnRQ2yvLcmrI7G76rsNnDUXW46T8R14eN-RA8Q
 
 ### 회원 조회(동적쿼리)
@@ -28,7 +28,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 
 ### 회원 정보 수정
-PUT http://localhost:8080/api/v1/users
+PUT {{baseUrl}}/api/v1/users
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjgiLCJhdXRoIjoiQ1VTVE9NRVIiLCJleHAiOjE3NDAyMTI1NDMsImlhdCI6MTc0MDIwODk0M30.9GzRoqpaBcM4XApRbXzAoS_O0Rx-n54V74qlGpuYnwY
 
@@ -38,13 +38,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lcjgiLCJhdXRoIjoiQ
 }
 
 ### 회원 탈퇴
-DELETE http://localhost:8080/api/v1/users/1
+DELETE {{baseUrl}}/api/v1/users/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMjExNjQyLCJpYXQiOjE3NDAyMDgwNDJ9.jLgjLfzaX6E7xsPhjbyG_MyANYoYbbkZ4hoNdJdTPgw
 
 
 ### 유저 생성(CUSTOMER)
-POST http://localhost:8080/api/v1/users/signup
+POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
@@ -54,7 +54,7 @@ Content-Type: application/json
 }
 
 ### 유저 로그인 (CUSTOMER)
-POST http://localhost:8080/api/v1/users/login
+POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ### 유저 생성(OWNER)
-POST http://localhost:8080/api/v1/users/signup
+POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
@@ -73,7 +73,7 @@ Content-Type: application/json
 }
 
 ### 유저 로그인 (OWNER)
-GET http://localhost:8080/api/v1/users/login
+GET {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -82,7 +82,7 @@ Content-Type: application/json
 }
 
 ### 유저 생성(MANAGER)
-POST http://localhost:8080/api/v1/users/signup
+POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
@@ -92,7 +92,7 @@ Content-Type: application/json
 }
 
 ### 유저 로그인 (MANAGER)
-GET http://localhost:8080/api/v1/users/login
+GET {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {

@@ -1,5 +1,5 @@
 ### 회원 가입
-POST http://localhost:8080/api/v1/users/signup
+POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### 로그인
-GET http://localhost:8080/api/v1/users/login
+GET {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### 음식점 생성
-POST http://localhost:8080/api/v1/stores
+POST {{baseUrl}}/api/v1/stores
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
@@ -31,7 +31,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 상품 생성
-POST http://localhost:8080/api/v1/products
+POST {{baseUrl}}/api/v1/products
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
@@ -44,11 +44,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 음식점 조회 {storeId}
-GET http://localhost:8080/api/v1/stores/d2a88144-242d-4a87-b607-4846a66d89de
+GET {{baseUrl}}/api/v1/stores/d2a88144-242d-4a87-b607-4846a66d89de
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
 ### 메뉴 수정 {productId}
-PUT http://localhost:8080/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+PUT {{baseUrl}}/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
 
@@ -58,4 +58,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
   "isDisplay": true
 }
 
-### 주문 처리
+### 주문 수정(관리자가 주문 취소)
+PUT {{baseUrl}}/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_CANCELED
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzQ3NiwiaWF0IjoxNzQwMzY5ODc2fQ.eC0Ux31DJdlqpP1m3cJAzxtZnw0z7jn1VgYyyy7m7lI
+
+
+
+### 주문 수정(관리자가 주문 접수)
+PUT {{baseUrl}}/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_COMPLETED
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzUzNiwiaWF0IjoxNzQwMzY5OTM2fQ.a61vupZxPPDOr49UmE7BJIvYgDvYhHMRa-nZC5lFs7s
