@@ -4,27 +4,29 @@
  */
 package com.toyland.store.presentation.dto;
 
-import com.toyland.region.model.entity.Region;
-import com.toyland.store.model.entity.Store;
-import com.toyland.user.model.User;
+import com.toyland.store.infrastructure.impl.dao.StoreWithOwnerResponseDao;
+import com.toyland.store.infrastructure.impl.dao.StoreWithOwnerResponseDao.CategoryDao;
+import com.toyland.store.infrastructure.impl.dao.StoreWithOwnerResponseDao.OwnerDao;
+import com.toyland.store.infrastructure.impl.dao.StoreWithOwnerResponseDao.RegionDao;
 import java.util.UUID;
 import lombok.Builder;
 
 @Builder
 public record StoreWithOwnerResponseDto(
     UUID storeId, String storeName, String storeContent, String storeAddress, Double avgRating
-    , RegionDto region, OwnerDto owner
+    , RegionDto region, OwnerDto owner, CategoryDto category
 ) {
 
-  public static StoreWithOwnerResponseDto from(Store store) {
+  public static StoreWithOwnerResponseDto from(StoreWithOwnerResponseDao dao) {
     return StoreWithOwnerResponseDto.builder()
-        .storeId(store.getId())
-        .storeName(store.getName())
-        .storeContent(store.getContent())
-        .storeAddress(store.getAddress())
-        .avgRating(store.getAvgRating())
-        .region(RegionDto.from(store.getRegion()))
-        .owner(OwnerDto.from(store.getOwner()))
+        .storeId(dao.storeId())
+        .storeName(dao.storeName())
+        .storeContent(dao.storeContent())
+        .storeAddress(dao.storeAddress())
+        .avgRating(dao.avgRating())
+        .region(RegionDto.from(dao.region()))
+        .owner(OwnerDto.from(dao.owner()))
+        .category(CategoryDto.from(dao.category()))
         .build();
   }
 
@@ -33,14 +35,14 @@ public record StoreWithOwnerResponseDto(
       UUID regionId, String regionName
   ) {
 
-    public static RegionDto from(Region region) {
+    public static RegionDto from(RegionDao region) {
       if (region == null) {
         return null;
       }
       return RegionDto
           .builder()
-          .regionId(region.getId())
-          .regionName(region.getRegionName())
+          .regionId(region.regionId())
+          .regionName(region.regionName())
           .build();
     }
   }
@@ -50,14 +52,30 @@ public record StoreWithOwnerResponseDto(
       Long ownerId, String ownerName
   ) {
 
-    public static OwnerDto from(User user) {
+    public static OwnerDto from(OwnerDao user) {
       if (user == null) {
         return null;
       }
       return OwnerDto
           .builder()
-          .ownerId(user.getId())
-          .ownerName(user.getUsername())
+          .ownerId(user.ownerId())
+          .ownerName(user.ownerName())
+          .build();
+    }
+  }
+
+  @Builder
+  public record CategoryDto(
+      UUID categoryId, String categoryName
+  ){
+
+    public static CategoryDto from(CategoryDao category) {
+      if (category == null) {
+        return null;
+      }
+      return CategoryDto.builder()
+          .categoryId(category.categoryId())
+          .categoryName(category.categoryName())
           .build();
     }
   }

@@ -1,16 +1,20 @@
 package com.toyland.store.infrastructure.impl;
 
+import static com.toyland.category.model.entity.QCategory.category;
 import static com.toyland.region.model.entity.QRegion.region;
 import static com.toyland.store.model.entity.QStore.store;
+import static com.toyland.storecategory.model.entity.QStoreCategory.storeCategory;
 import static com.toyland.user.model.QUser.user;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.toyland.store.infrastructure.JpaStoreRepositoryCustom;
-import com.toyland.store.model.entity.Store;
-import com.toyland.store.model.repository.dto.SearchStoreRepositoryRequestDto;
-import com.toyland.store.presentation.dto.StoreWithOwnerResponseDto;
+import com.toyland.store.infrastructure.impl.dao.QStoreWithOwnerResponseDao;
+import com.toyland.store.infrastructure.impl.dao.QStoreWithOwnerResponseDao_CategoryDao;
+import com.toyland.store.infrastructure.impl.dao.QStoreWithOwnerResponseDao_OwnerDao;
+import com.toyland.store.infrastructure.impl.dao.QStoreWithOwnerResponseDao_RegionDao;
+import com.toyland.store.infrastructure.impl.dao.StoreWithOwnerResponseDao;
+import com.toyland.store.model.repository.command.SearchStoreRepositoryCommand;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -22,14 +26,36 @@ public class JpaStoreRepositoryCustomImpl implements JpaStoreRepositoryCustom {
   private final JPAQueryFactory queryFactory;
 
   @Override
-  public Page<StoreWithOwnerResponseDto> searchStore(SearchStoreRepositoryRequestDto dto) {
-    List<Store> storeList = queryFactory
-        .select(store)
+  public Page<StoreWithOwnerResponseDao> searchStore(SearchStoreRepositoryCommand dto) {
+    List<StoreWithOwnerResponseDao> storeList = queryFactory
+        .select(new QStoreWithOwnerResponseDao(
+            store.id,
+            store.name,
+            store.content,
+            store.address,
+            store.avgRating,
+            new QStoreWithOwnerResponseDao_RegionDao(
+                region.id,
+                region.regionName
+            ),
+            new QStoreWithOwnerResponseDao_OwnerDao(
+                user.id,
+                user.username
+            ),
+            new QStoreWithOwnerResponseDao_CategoryDao(
+                category.id,
+                category.name
+            )
+        ))
         .from(store)
-        .innerJoin(store.region, region).fetchJoin()
-        .innerJoin(store.owner, user).fetchJoin()
+        .innerJoin(store.region, region)
+        .innerJoin(store.owner, user)
+        .leftJoin(storeCategory).on(storeCategory.store.eq(store))
+        .leftJoin(category).on(storeCategory.category.eq(category))
         .where(
             dto.getContainsSearchText(),
+            dto.getContainsCategorySearchText(),
+            dto.getContainsStoreNameSearchText(),
             dto.getEqOwnerId(),
             dto.getEqRegionId()
         )
@@ -43,15 +69,17 @@ public class JpaStoreRepositoryCustomImpl implements JpaStoreRepositoryCustom {
         .from(store)
         .innerJoin(store.region, region)
         .innerJoin(store.owner, user)
+        .leftJoin(storeCategory).on(storeCategory.store.eq(store))
+        .leftJoin(category).on(storeCategory.category.eq(category))
         .where(
             dto.getContainsSearchText(),
+            dto.getContainsCategorySearchText(),
+            dto.getContainsStoreNameSearchText(),
             dto.getEqOwnerId(),
             dto.getEqRegionId()
         )
         .fetchOne();
 
-    List<StoreWithOwnerResponseDto> list = storeList.stream().map(StoreWithOwnerResponseDto:: from)
-        .collect(Collectors.toUnmodifiableList());
-    return new PageImpl<>(list, PageRequest.of(dto.page(), dto.size()), totalCount);
+    return new PageImpl<>(storeList, PageRequest.of(dto.page(), dto.size()), totalCount);
   }
 }

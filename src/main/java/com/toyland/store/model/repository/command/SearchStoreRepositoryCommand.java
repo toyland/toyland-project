@@ -2,8 +2,9 @@
  * @Date : 2025. 02. 23.
  * @author : jieun(je-pa)
  */
-package com.toyland.store.model.repository.dto;
+package com.toyland.store.model.repository.command;
 
+import static com.toyland.category.model.entity.QCategory.category;
 import static com.toyland.store.model.entity.QStore.store;
 
 import com.querydsl.core.types.OrderSpecifier;
@@ -19,8 +20,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.util.StringUtils;
 
 @Builder
-public record SearchStoreRepositoryRequestDto(
-    String searchText, UUID regionId, Long ownerId, Integer page, Integer size, List<String> sort
+public record SearchStoreRepositoryCommand(
+    String searchText, String categoryNameSearchText, String storeNameSearchText,
+    UUID regionId, Long ownerId, Integer page, Integer size, List<String> sort
 ) {
 
   public long offset() {
@@ -30,8 +32,20 @@ public record SearchStoreRepositoryRequestDto(
   public BooleanExpression getContainsSearchText() {
     return StringUtils.hasText(searchText)
         ? store.name.containsIgnoreCase(searchText).or(store.content.containsIgnoreCase(searchText))
+        .or(category.name.containsIgnoreCase(searchText))
         : null;
   }
+
+  public BooleanExpression getContainsCategorySearchText() {
+    return StringUtils.hasText(categoryNameSearchText)
+        ? category.name.containsIgnoreCase(categoryNameSearchText) : null;
+  }
+
+  public BooleanExpression getContainsStoreNameSearchText() {
+    return StringUtils.hasText(storeNameSearchText)
+        ? store.name.containsIgnoreCase(storeNameSearchText) : null;
+  }
+
 
   public BooleanExpression getEqRegionId() {
     return regionId != null ? store.region.id.eq(regionId) : null;

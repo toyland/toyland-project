@@ -4,9 +4,9 @@
  */
 package com.toyland.store.model.repository;
 
+import com.toyland.store.infrastructure.impl.dao.StoreWithOwnerResponseDao;
 import com.toyland.store.model.entity.Store;
-import com.toyland.store.model.repository.dto.SearchStoreRepositoryRequestDto;
-import com.toyland.store.presentation.dto.StoreWithOwnerResponseDto;
+import com.toyland.store.model.repository.command.SearchStoreRepositoryCommand;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,7 +18,7 @@ public interface StoreRepository {
 
     Optional<Store> findById(UUID id);
 
-    Page<StoreWithOwnerResponseDto> searchStore(SearchStoreRepositoryRequestDto build);
+    Page<StoreWithOwnerResponseDao> searchStore(SearchStoreRepositoryCommand build);
 
     // test code 용
 

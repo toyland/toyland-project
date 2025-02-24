@@ -18,7 +18,7 @@ import com.toyland.store.application.usecase.dto.DeleteStoreServiceRequestDto;
 import com.toyland.store.application.usecase.dto.UpdateStoreServiceRequestDto;
 import com.toyland.store.model.entity.Store;
 import com.toyland.store.model.repository.StoreRepository;
-import com.toyland.store.model.repository.dto.SearchStoreRepositoryRequestDto;
+import com.toyland.store.model.repository.command.SearchStoreRepositoryCommand;
 import com.toyland.store.presentation.dto.CreateStoreRequestDto;
 import com.toyland.store.presentation.dto.SearchStoreRequestDto;
 import com.toyland.store.presentation.dto.StoreResponseDto;
@@ -63,15 +63,17 @@ public class StoreServiceImpl implements StoreService {
   @Transactional(readOnly = true)
   public Page<StoreWithOwnerResponseDto> searchStores(SearchStoreRequestDto dto) {
     return storeRepository.searchStore(
-        SearchStoreRepositoryRequestDto.builder()
+        SearchStoreRepositoryCommand.builder()
             .searchText(dto.searchText())
+            .categoryNameSearchText(dto.categoryNameSearchText())
+            .storeNameSearchText(dto.storeNameSearchText())
             .ownerId(dto.ownerId())
             .regionId(dto.regionId())
             .page(dto.page() - 1)
             .size(Set.of(10, 30, 50).contains(dto.size()) ? dto.size() : 10)
             .sort(dto.sort())
             .build()
-    );
+    ).map(StoreWithOwnerResponseDto::from);
   }
 
   @Override

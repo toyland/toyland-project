@@ -4,11 +4,11 @@
  */
 package com.toyland.store.infrastructure;
 
-import com.toyland.store.model.repository.dto.SearchStoreRepositoryRequestDto;
-import com.toyland.store.presentation.dto.StoreWithOwnerResponseDto;
+import com.toyland.store.infrastructure.impl.dao.StoreWithOwnerResponseDao;
+import com.toyland.store.model.repository.command.SearchStoreRepositoryCommand;
 import org.springframework.data.domain.Page;
 
 public interface JpaStoreRepositoryCustom {
 
-  Page<StoreWithOwnerResponseDto> searchStore(SearchStoreRepositoryRequestDto build);
+  Page<StoreWithOwnerResponseDao> searchStore(SearchStoreRepositoryCommand build);
 }
