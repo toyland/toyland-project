@@ -29,6 +29,7 @@ public class JpaRegionRepositoryCustomImpl implements JpaRegionRepositoryCustom 
     @Override
     public Page<RegionSearchResponseDto> searchRegion(SearchRegionRepositoryCommand command) {
 
+
         List<Region> fetch = queryFactory
             .selectFrom(region)
             .where(
