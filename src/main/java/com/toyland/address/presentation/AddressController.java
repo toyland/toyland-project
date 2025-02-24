@@ -14,6 +14,7 @@ import com.toyland.global.exception.type.ApiErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.UUID;
@@ -40,14 +41,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/api/v1/addresses")
+@Tag(name = "주소", description = "Address API")
 public class AddressController {
 
     private final AddressFacade addressFacade;
 
 
-    @Operation(summary = "주소 등록", description = "주소 등록 메서드 입니다.")
+    @Operation(summary = "주소 등록", description = "주소 등록 api 입니다.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "주소 등록 성공"),
+        @ApiResponse(responseCode = "201", description = "주소 등록 성공"),
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PostMapping
@@ -64,7 +66,7 @@ public class AddressController {
             .body(CustomApiResponse.of(HttpSuccessCode.ADDRESS_CREATE, address));
     }
 
-    @Operation(summary = "주소 단 건 조회", description = "주소 조회 메서드 입니다.")
+    @Operation(summary = "주소 단 건 조회", description = "주소 조회 api 입니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "주소 조회 성공"),
     })
@@ -77,7 +79,7 @@ public class AddressController {
                 addressFacade.findByAddressId(addressId)));
     }
 
-    @Operation(summary = "주소 검색", description = "주소 검색 메서드 입니다." +
+    @Operation(summary = "주소 검색", description = "주소 검색 api 입니다." +
         " 예시 http://localhost:8080/api/v1/addresses/search?addressName=busan&page=0&size=10&" +
         "addressName에 맞는 값이 없다면 전체를 조회합니다.")
     @ApiResponses(value = {
@@ -94,7 +96,7 @@ public class AddressController {
 
     }
 
-    @Operation(summary = "주소 수정", description = "주소 수정 메서드 입니다.")
+    @Operation(summary = "주소 수정", description = "주소 수정 api 입니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "주소 수정 성공"),
     })
@@ -109,7 +111,7 @@ public class AddressController {
 
     }
 
-    @Operation(summary = "주소 삭제", description = "주소 삭제 메서드 입니다.")
+    @Operation(summary = "주소 삭제", description = "주소 삭제 api 입니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "지역 삭제 성공"),
     })

@@ -48,7 +48,7 @@ public class RegionController {
 
     @Operation(summary = "지역 등록", description = "지역 등록 메서드 입니다.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "지역 등록 성공"),
+        @ApiResponse(responseCode = "201", description = "지역 등록 성공"),
     })
     @ApiErrorCodeAnnotation(ApiErrorCode.INVALID_REQUEST)
     @PreAuthorize("hasAnyRole('MANAGER', 'MASTER')")
