@@ -71,14 +71,14 @@
 
 ### 🧨 도메인 요구사항
 <details>
- <summary>📌 공통</summary>
+ <summary>공통</summary>
  <ul>
    <li>✅ 각 도메인의 CRUD, search 작업 필요</li>
  </ul>
 </details>
 
 <details>
- <summary>🌍 운영 지역</summary>
+ <summary>운영 지역</summary>
  <ul>
    <li>✅ 확장을 고려한 지역 분류 시스템 설계 필요</li>
    <li>✅ 지역정보 수정 및 추가 등이 가능 하도록 고려</li>
@@ -87,7 +87,7 @@
 </details>
 
 <details>
- <summary>🍽️ 음식점 카테고리 분류</summary>
+ <summary>음식점 카테고리 분류</summary>
  <ul>
    <li>✅ 음식점 카테고리로 분류(한식, 중식, 분식, 치킨, 피자 등)</li>
    <li>✅ 음식점 카테고리를 추가하거나 수정할 수 있도록 유연한 데이터 구조 설계 필요</li>
@@ -95,7 +95,7 @@
 </details>
 
 <details>
- <summary>📦 주문 관리</summary>
+ <summary>주문 관리</summary>
  <ul>
    <li>✅ 주문 취소: 주문 생성 후 5분 이내에만 취소 가능하도록 제한</li>
    <li>✅ 주문 유형: 온라인 주문과 대면 주문(가게에서 직접 주문) 모두 지원</li>
@@ -104,7 +104,7 @@
 </details>
 
 <details>
- <summary>🏡 고객 배송지 정보</summary>
+ <summary>고객 배송지 정보</summary>
  <ul>
    <li>✅ 필수 입력 사항: 주소지, 요청 사항</li>
    <li>✅ ‘주문’ 과 ‘배달’ 에 모두 관련된 정보</li>
@@ -112,7 +112,7 @@
 </details>
 
 <details>
- <summary>🤖 AI API 연동</summary>
+ <summary>AI API 연동</summary>
  <ul>
    <li>✅ 상품 설명 자동 생성: AI API를 연동하여 가게 사장님이 상품 설명을 쉽게 작성할 수 있도록 REST API 호출 로직 구현</li>
    <li>✅ AI 요청 기록: AI API 호출 시 요청 및 응답 데이터를 DB에 저장</li>
@@ -120,7 +120,7 @@
 </details>
 
 <details>
- <summary>💳 결제 시스템</summary>
+ <summary>결제 시스템</summary>
  <ul>
    <li>❌ 결제 방식: 카드 결제만 가능</li>
    <li>❌ PG사 연동: PG사와의 결제 연동은 외주 개발로 진행하며, 결제 관련 내역만 플랫폼의 데이터베이스에 저장</li>
@@ -132,7 +132,7 @@
 ### 🧨 글로벌 요구사항
 
  <details>
-   <summary>📁 프로젝트 구조</summary>
+   <summary>프로젝트 구조</summary>
    <ul>
      <li>✅ Monolithic Application</li>
      <li>✅ Entity 및 DTO: 각 기능별로 Entity와 DTO(Data Transfer Object)를 분리하여 관리</li>
@@ -142,7 +142,7 @@
  </details>
 
  <details>
-   <summary>📜 데이터 보존 및 삭제 처리</summary>
+   <summary>데이터 보존 및 삭제 처리</summary>
    <ul>
      <li>✅ 데이터 보존: 모든 데이터는 완전 삭제되지 않고 숨김 처리로 관리</li>
      <li>✅ 상품 숨김: 개별 상품도 숨김 처리 가능하도록 구현(숨김과 삭제는 다른 필드에서 동작해야함)</li>
@@ -151,7 +151,7 @@
  </details>
 
  <details>
-   <summary>🗃️ 데이터베이스 설계</summary>
+   <summary>데이터베이스 설계</summary>
    <ul>
      <li>✅ 테이블 명명 규칙: 모든 테이블에 p_ 접두사 사용</li>
      <li>✅ UUID 사용: 모든 주요 엔티티의 식별자는 UUID를 사용 (유저는 예외)</li>
@@ -161,7 +161,7 @@
  </details>
 
  <details>
-   <summary>🔑 접근 권한 관리</summary>
+   <summary>접근 권한 관리</summary>
    <ul>
      <li>✅ 고객: 자신의 주문 내역만 조회 가능</li>
      <li>✅ 가게 주인: 자신의 가게 주문 내역, 가게 정보, 주문 처리 및 메뉴 수정 가능</li>
@@ -170,7 +170,7 @@
  </details>
 
  <details>
-   <summary>🔒 보안</summary>
+   <summary>보안</summary>
    <ul>
      <li>✅ JWT 인증: Spring Security와 JWT(Json Web Token)를 이용한 인증 및 권한 관리</li>
      <li>✅ 권한 확인 : CUSTOMER 이상의 권한은 요청마다 저장되어 있는 권한 값과 동일한지 체크필요</li>
@@ -180,7 +180,7 @@
  </details>
 
  <details>
-   <summary>🧪 테스트</summary>
+   <summary>테스트</summary>
    <ul>
      <li>✅ 테스트: Spring Boot Test를 사용한 테스트</li>
      <li>✅ service 통합 테스트 진행</li>
