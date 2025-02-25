@@ -3,17 +3,17 @@ POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "customer",
+  "username": "customer2",
   "password": "!Customer123",
   "role": "CUSTOMER"
 }
 
 ### 로그인
-GET {{baseUrl}}/api/v1/users/login
+POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
-  "username": "customer",
+  "username": "customer2",
   "password": "!Customer123"
 }
 

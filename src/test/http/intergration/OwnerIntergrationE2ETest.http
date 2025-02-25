@@ -8,8 +8,9 @@ Content-Type: application/json
   "role": "OWNER"
 }
 
+
 ### 로그인
-GET {{baseUrl}}/api/v1/users/login
+POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -17,10 +18,24 @@ Content-Type: application/json
   "password": "!Owner123"
 }
 
+> {%
+  client.global.set("access_token", response.headers.valueOf("Authorization"))
+%}
+
+### 주소 생성
+POST {{baseUrl}}/api/v1/addresses
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "addressName": "seoul",
+  "regionId": "d285b0ff-1568-47f0-84e4-e09ebe7f7404"
+}
+
 ### 음식점 생성
 POST {{baseUrl}}/api/v1/stores
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 {
   "name": "상점1",

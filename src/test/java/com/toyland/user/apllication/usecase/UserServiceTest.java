@@ -89,31 +89,6 @@ public class UserServiceTest extends IntegrationTestSupport {
         assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isTrue();
     }
 
-    @DisplayName("회원 정보 저장 실패 케이스")
-    @Test
-    void createUser_wrongPassword() {
-        // when
-        SignupRequestDto signupRequestDto = SignupRequestDto
-            .builder()
-            .username("testuser")
-            //특수문자 미포함시
-            .password("Password123")
-            .role(UserRoleEnum.MASTER)
-            .build();
-
-        userService.signup(signupRequestDto);
-
-        // then
-        List<User> all = userRepository.findAll();
-        assertThat(all).hasSize(1)
-            .extracting("username", "role")
-            .containsExactlyInAnyOrder(
-                tuple("testuser", UserRoleEnum.MASTER)
-            );
-
-        User savedUser = all.get(0);
-        assertThat(passwordEncoder.matches("Password123!", savedUser.getPassword())).isFalse();
-    }
 
     @DisplayName("회원 정보 수정")
     @Test

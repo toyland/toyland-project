@@ -73,7 +73,7 @@ Content-Type: application/json
 }
 
 ### 유저 로그인 (OWNER)
-GET {{baseUrl}}/api/v1/users/login
+POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
@@ -92,7 +92,7 @@ Content-Type: application/json
 }
 
 ### 유저 로그인 (MANAGER)
-GET {{baseUrl}}/api/v1/users/login
+POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {

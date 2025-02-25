@@ -3,24 +3,24 @@ POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "master",
+  "username": "master1",
   "password": "!Master123",
-  "role": "CUSTOMER"
+  "role": "MASTER"
 }
 
 ### 로그인
-GET {{baseUrl}}/api/v1/users/login
+POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
-  "username": "master",
+  "username": "master1",
   "password": "!Master123"
 }
 
 ### 지역 생성
 POST {{baseUrl}}/api/v1/regions
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMyOTE0LCJpYXQiOjE3NDAxMjkzMTR9.Y-8F8ElzKmnNuZw8PCZveU_v7cLcbghCv7DS3JFtMUg
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIxIiwiYXV0aCI6Ik1BU1RFUiIsImV4cCI6MTc0MDQ1MDk1MCwiaWF0IjoxNzQwNDQ3MzUwfQ.y3lJyDbh5-li8Tv6JFYtc1dm8ZKv-cDk9IRjB3aOJ4o
 
 {
   "regionName": "서울시"
