@@ -60,6 +60,9 @@ Authorization: {{access_token}}
   "orderType": "DELIVERY",
   "paymentType": "CARD"
 }
+> {%
+  client.global.set("orderId", response.headers.valueOf("orderId"))
+%}
 
 ### 주문 내역 조회
 GET {{baseUrl}}/api/v1/orders/search?orderStatus=ORDER_COMPLETED&page=0&size=10&sort=createdAt,asc

@@ -4,25 +4,28 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 {
-  "orderId": "ce89e682-0338-42fc-8f20-094a6194170e",
-  "storeId": "2e11ee82-82a9-41cc-ac52-3b532887d5e6",
+  "orderId": "{{orderId}}",
+  "storeId": "{{storeId}}",
   "reviewContent": "쏘쏘",
   "rating": 3
 }
+> {%
+  client.global.set("reviewId", response.headers.valueOf("reviewId"))
+%}
 
 ###review 한 건 조회
-GET {{baseUrl}}/api/v1/reviews/89eda335-8fbc-4b8a-810f-b11d7350d78f
+GET {{baseUrl}}/api/v1/reviews/{{reviewId}}
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ###review 페이징 조회
 GET {{baseUrl}}/api/v1/reviews/search?page=0&size=10&sort=createdAt,asc&
-    storeId=2e11ee82-82a9-41cc-ac52-3b532887d5e6
+    storeId={{storeId}}
 Content-Type: application/json
 Authorization: {{access_token}}
 
 ###review 수정
-PUT {{baseUrl}}/api/v1/reviews/89eda335-8fbc-4b8a-810f-b11d7350d78f
+PUT {{baseUrl}}/api/v1/reviews/{{reviewId}}
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -32,7 +35,7 @@ Authorization: {{access_token}}
 }
 
 ###review 삭제
-DELETE {{baseUrl}}/api/v1/reviews/0d3254eb-763d-424b-8809-92a8ed222907
+DELETE {{baseUrl}}/api/v1/reviews/{{reviewId}}
 Content-Type: application/json
 Authorization: {{access_token}}
 
@@ -42,5 +45,5 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 {
-  "storeId": "2e11ee82-82a9-41cc-ac52-3b532887d5e6"
+  "storeId": "{{storeId}}"
 }

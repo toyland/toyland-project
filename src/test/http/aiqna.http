@@ -5,7 +5,7 @@ Authorization: {{access_token}}
 
 {
   "question": "if i say korean, then speak korean.",
-  "storeId": "2e11ee82-82a9-41cc-ac52-3b532887d5e6"
+  "storeId": "{{storeId}}"
 }
 
 ###Qna 전체 조회
