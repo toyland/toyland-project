@@ -3,69 +3,86 @@ POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "owner",
-  "password": "!Owner123",
-  "role": "OWNER"
+  "username": "{{owner_id}}",
+  "password": "{{owner_pw}}",
+  "role": "{{owner_role}}"
 }
 
+
 ### 로그인
-GET {{baseUrl}}/api/v1/users/login
+POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
-  "username": "owner",
-  "password": "!Owner123"
+  "username": "{{owner_id}}",
+  "password": "{{owner_pw}}"
+}
+
+> {%
+  client.global.set("access_token", response.headers.valueOf("Authorization"))
+%}
+
+### 주소 생성
+POST {{baseUrl}}/api/v1/addresses
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "addressName": "seoul",
+  "regionId": "{{regionId}}"
 }
 
 ### 음식점 생성
 POST {{baseUrl}}/api/v1/stores
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 {
   "name": "상점1",
   "content": "상점1 입니다.",
   "address": "seoul",
-  "regionId": "6ebdc634-bb2a-4651-b0de-01a9d7bd07e5",
+  "regionId": "{{regionId}}",
   "ownerId": "2"
 }
+> {%
+  client.global.set("location", response.headers.valueOf("Location"))
+  client.log("get location ->> " + client.global.get("location"))
+%}
+
+
+### 음식점 조회 {storeId}
+GET {{baseUrl}}/{{location}}
+Content-Type: application/json
+Authorization: {{access_token}}
+
+> {%
+  client.global.set("storeId", response.body.id)
+  client.log("get storeId ->> " + client.global.get("storeId"))
+%}
 
 ### 상품 생성
 POST {{baseUrl}}/api/v1/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 
 {
   "name": "상점1-상품01",
   "price": 50000,
   "isDisplay": false,
-  "storeId": "d2a88144-242d-4a87-b607-4846a66d89de"
+  "storeId": "{{storeId}}"
 }
-
-### 음식점 조회 {storeId}
-GET {{baseUrl}}/api/v1/stores/d2a88144-242d-4a87-b607-4846a66d89de
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+> {%
+  client.global.set("productId", response.headers.valueOf("productId"))
+%}
 
 ### 메뉴 수정 {productId}
-PUT {{baseUrl}}/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+PUT {{baseUrl}}/api/v1/products/{{productId}}
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 {
   "name": "고바",
   "price": 25000,
   "isDisplay": true
 }
-
-### 주문 수정(관리자가 주문 취소)
-PUT {{baseUrl}}/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_CANCELED
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzQ3NiwiaWF0IjoxNzQwMzY5ODc2fQ.eC0Ux31DJdlqpP1m3cJAzxtZnw0z7jn1VgYyyy7m7lI
-
-
-
-### 주문 수정(관리자가 주문 접수)
-PUT {{baseUrl}}/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_COMPLETED
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzUzNiwiaWF0IjoxNzQwMzY5OTM2fQ.a61vupZxPPDOr49UmE7BJIvYgDvYhHMRa-nZC5lFs7s

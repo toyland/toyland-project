@@ -1,7 +1,7 @@
 ### 주문 생성
 POST {{baseUrl}}/api/v1/orders
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDI0OTM0NywiaWF0IjoxNzQwMjQ1NzQ3fQ.jobsXSnPX2nxOaUsyLoksXk-7llcRckA9mkWFlJU5PA
+Authorization: {{access_token}}
 
 {
   "orderProducts": [
@@ -28,14 +28,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDV
 ### 주문 단 건 조회
 GET {{baseUrl}}/api/v1/orders/d457aff9-f6de-4033-8c2d-f267eafe45a5
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTczOTk3OTkzNywiaWF0IjoxNzM5OTc2MzM3fQ.5B-nvNlBJFNDCBN3yr1hH83mQuVQFCyi5zI-TLdBbak
+Authorization: {{access_token}}
 
 
 
 ### 주문 수정(주문 변경)
 PUT {{baseUrl}}/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/menu
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDM3MzM4NiwiaWF0IjoxNzQwMzY5Nzg2fQ.epH77ajxJ_4aFOPshIME_uI_UGz4rcxqWRbKyG3VRro
+Authorization: {{access_token}}
 
 
 {
@@ -62,28 +62,28 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDV
 ### 주문 수정(관리자가 주문 취소)
 PUT {{baseUrl}}/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_CANCELED
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzQ3NiwiaWF0IjoxNzQwMzY5ODc2fQ.eC0Ux31DJdlqpP1m3cJAzxtZnw0z7jn1VgYyyy7m7lI
+Authorization: {{access_token}}
 
 
 
 ### 주문 수정(관리자가 주문 접수)
 PUT {{baseUrl}}/api/v1/orders/b7745ace-f7c5-4eeb-a84f-203d533d21c0/status?status=ORDER_COMPLETED
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDM3MzUzNiwiaWF0IjoxNzQwMzY5OTM2fQ.a61vupZxPPDOr49UmE7BJIvYgDvYhHMRa-nZC5lFs7s
+Authorization: {{access_token}}
 
 
 
 ### 주문 삭제(고객이 주문 취소)
 PUT {{baseUrl}}/api/v1/orders/c6c331bb-58df-4f0f-9b05-864c98c0e630/cancel
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDQwOTU0MSwiaWF0IjoxNzQwNDA1OTQxfQ.7mEagoGZe2V3xcLq0FWFOK2JcPFqpWVF96iI-6SNr9M
+Authorization: {{access_token}}
 
 
 
 ### 주문 삭제
 DELETE {{baseUrl}}/api/v1/orders/a8615669-a074-4e84-a390-cbcc7902d15a
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTQ4Njk5LCJpYXQiOjE3Mzk5NDUwOTl9.6M_7GYd8GXRTjBc9HNhLqHNk7QucICIXgyrU3hMHAkg
+Authorization: {{access_token}}
 
 
 
@@ -93,7 +93,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 ### 주문 검색 (고객이 자신의 주문 목록 검색)
 GET {{baseUrl}}/api/v1/orders/search?orderStatus=ORDER_COMPLETED&page=0&size=10&sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDVVNUT01FUiIsImV4cCI6MTc0MDMwMDg2MiwiaWF0IjoxNzQwMjk3MjYyfQ.IM7s9tkdOpTEPNmcRjJE2DUd0JE6W3NKeb_AG4snTqw
+Authorization: {{access_token}}
 
 
 
@@ -102,14 +102,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lciIsImF1dGgiOiJDV
 GET {{baseUrl}}/api/v1/orders/search?storeId=a9131f3c-53e4-4253-932b-6dc8a897f946&page=0&
     size=10&sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDI5OTkyNSwiaWF0IjoxNzQwMjk2MzI1fQ.p9v9xd6uTob3DQu-zqru1UBKLQVfya_S0MTpVm5lBwQ
+Authorization: {{access_token}}
 
 
 
 ### 주문 검색 (매니저, 마스터가 모든 주문 목록 검색)
 GET {{baseUrl}}/api/v1/orders/search?page=0&size=10&sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMzgwMTE2LCJpYXQiOjE3NDAzNzY1MTZ9.eEMbj403wuNTTCAGDiEaFBl2cN7j6ppJKnLGXbSroE8
+Authorization: {{access_token}}
 
 
 
@@ -117,14 +117,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 GET {{baseUrl}}/api/v1/orders/search?orderStatus=ORDER_PENDING&page=0&size=10&
     sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd25lciIsImF1dGgiOiJPV05FUiIsImV4cCI6MTc0MDI5NjMwMCwiaWF0IjoxNzQwMjkyNzAwfQ.uBUg9n2jOtPeZOUZanBNVHGuye2kBqoua2tFYyJ2rj8
+Authorization: {{access_token}}
 
 
 
 ### 주문 검색 (매니저, 마스터가 특정 회원의 주문 목록 검색)
 GET {{baseUrl}}/api/v1/orders/search?userId=4&page=0&size=10&sort=updatedAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMjk1ODExLCJpYXQiOjE3NDAyOTIyMTF9.GjByE5Nl-W-efx_4B2UMRpHrOVNtjMORaGD4YmAtdTI
+Authorization: {{access_token}}
 
 
 
@@ -132,4 +132,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 GET {{baseUrl}}/api/v1/orders/search?userId=15&
     storeId=d3220318-b2f7-46e0-97d0-8bb8d11fd975&page=0&size=10&sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMjk1ODExLCJpYXQiOjE3NDAyOTIyMTF9.GjByE5Nl-W-efx_4B2UMRpHrOVNtjMORaGD4YmAtdTI
+Authorization: {{access_token}}

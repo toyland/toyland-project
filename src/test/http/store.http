@@ -1,19 +1,19 @@
 ### 음식점 생성
 POST {{baseUrl}}/api/v1/stores
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 {
   "name": "상점3",
   "content": "상점3입니다.",
   "address": "경기도 성남시 분당구 가로 1",
-  "regionId": "376ddba6-d9ab-4953-aee6-614e1dfeef7e",
+  "regionId": "e9647bb4-7b7d-42a4-8539-7f43b8c62a43",
   "ownerId": "2"
 }
 
 ### 음식점 조회
-GET {{baseUrl}}/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+GET {{baseUrl}}/api/v1/stores/ada1666b-ef33-45bc-8656-0d0b3c3526dc
+Authorization: {{access_token}}
 
 ### 음식점 검색
 GET {{baseUrl}}/api/v1/stores/search
@@ -27,30 +27,30 @@ GET {{baseUrl}}/api/v1/stores/search
     &sort=name,desc,created_at
     &size=10
     &page=1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 
 ### 음식점 수정
-PUT {{baseUrl}}/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
+PUT {{baseUrl}}/api/v1/stores/8ca8ce33-121c-4659-8848-13a7993fdce9
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 {
   "name": "피자에땅",
   "content": "피자에땅 입니다.",
   "address": "서울시 강남구",
-  "regionId": "376ddba6-d9ab-4953-aee6-614e1dfeef7e",
+  "regionId": "e9647bb4-7b7d-42a4-8539-7f43b8c62a43",
   "ownerId": 3
 }
 
 ### 음식점 삭제
-DELETE {{baseUrl}}/api/v1/stores/8aa9b4ba-83ae-40c6-9984-760f2c5cbf26
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+DELETE {{baseUrl}}/api/v1/stores/8ca8ce33-121c-4659-8848-13a7993fdce9
+Authorization: {{access_token}}
 
 ### 음식점에 카테고리 생성
 POST {{baseUrl}}/api/v1/stores/d2c7f7bc-5580-4c97-8bbd-7c3cc2981de5/categories
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 {
   "categoryIdList": [
@@ -61,7 +61,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 ### 음식점에 카테고리 생성 - 중복 오류
 POST {{baseUrl}}/api/v1/stores/df41f705-a5d4-419c-a372-f9c43c585e07/categories
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5OTM1MjQzLCJpYXQiOjE3Mzk5MzE2NDN9.EH1k06aEe9SfHvEYfNk-IWOB8osI6cJutl07gvokFiI
+Authorization: {{access_token}}
 
 {
   "categoryIdList": [
