@@ -1,7 +1,7 @@
 ### Address 생성
 POST {{baseUrl}}/api/v1/addresses
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMxNTA4LCJpYXQiOjE3NDAxMjc5MDh9.8rkrN69uV-Tt3bBF7nKe8V0kcHq3zYtAroXSJuu8Ikg
+Authorization: {{access_token}}
 
 {
   "addressName": "seoul",
@@ -10,13 +10,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 ### Address 단 건 조회
 GET {{baseUrl}}/api/v1/addresses/e8198be9-773a-4329-905b-4f03f3cff3b4
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMwNTE2LCJpYXQiOjE3NDAxMjY5MTZ9.HLAsIzWzbJx-KDKrh8Vtq4Tb14tpvGh29Xz8rMMumfQ
+Authorization: {{access_token}}
 
 
 ### Address 수정
 PUT {{baseUrl}}/api/v1/addresses/e8198be9-773a-4329-905b-4f03f3cff3b4
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMwNTE2LCJpYXQiOjE3NDAxMjY5MTZ9.HLAsIzWzbJx-KDKrh8Vtq4Tb14tpvGh29Xz8rMMumfQ
+Authorization: {{access_token}}
 
 {
   "addressName": "수정된 주소",
@@ -25,10 +25,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 
 ### Address 삭제
 DELETE {{baseUrl}}/api/v1/addresses/e8198be9-773a-4329-905b-4f03f3cff3b4
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMwNTE2LCJpYXQiOjE3NDAxMjY5MTZ9.HLAsIzWzbJx-KDKrh8Vtq4Tb14tpvGh29Xz8rMMumfQ
+Authorization: {{access_token}}
 
 ### Address 동적 검색 //page=0&size=10&sort=createdAt,asc
 GET {{baseUrl}}/api/v1/addresses/search?addressName=busan&page=0&size=10&
     sort=createdAt,asc
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwMTMxNTA4LCJpYXQiOjE3NDAxMjc5MDh9.8rkrN69uV-Tt3bBF7nKe8V0kcHq3zYtAroXSJuu8Ikg
+Authorization: {{access_token}}

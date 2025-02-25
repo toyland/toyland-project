@@ -1,19 +1,19 @@
 ### 상품 생성
 POST {{baseUrl}}/api/v1/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 
 {
   "name": "상점2-상품05",
   "price": 50000,
   "isDisplay": false,
-  "storeId": "d2a88144-242d-4a87-b607-4846a66d89de"
+  "storeId": "ada1666b-ef33-45bc-8656-0d0b3c3526dc"
 }
 
 ### 상품 단건 조회
-GET {{baseUrl}}/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+GET {{baseUrl}}/api/v1/products/11dbe8aa-fb36-466b-b404-65207afab640
+Authorization: {{access_token}}
 
 ### 상품 검색
 GET {{baseUrl}}/api/v1/products/search
@@ -23,13 +23,13 @@ GET {{baseUrl}}/api/v1/products/search
     &page=1
     &storeId=d2a88144-242d-4a87-b607-4846a66d89de
     &isDisplay=false
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 
 ### 상품 수정
-PUT {{baseUrl}}/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+PUT {{baseUrl}}/api/v1/products/11dbe8aa-fb36-466b-b404-65207afab640
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
 
 {
   "name": "고바",
@@ -38,6 +38,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTV
 }
 
 ### 상품 삭제
-DELETE {{baseUrl}}/api/v1/products/ea451ea9-aba1-4abc-a6d9-4bba27a48a78
+DELETE {{baseUrl}}/api/v1/products/11dbe8aa-fb36-466b-b404-65207afab640
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzQwNTM3ODg3LCJpYXQiOjE3Mzk5MzMwODd9.E-PWUfNVkpvyNRr--JPLlrdciiTihSdhksmgoehWvE0
+Authorization: {{access_token}}
