@@ -1,4 +1,4 @@
-###review 생성
+###review 생성 403 뜨신다고 하심 확인해보기.
 POST {{baseUrl}}/api/v1/reviews
 Content-Type: application/json
 Authorization: {{access_token}}

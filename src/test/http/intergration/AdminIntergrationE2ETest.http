@@ -3,9 +3,9 @@ POST {{baseUrl}}/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "master1",
-  "password": "!Master123",
-  "role": "MASTER"
+  "username": "{{master_id}}",
+  "password": "{{master_pw}}",
+  "role": "{{master_role}}"
 }
 
 ### 로그인
@@ -13,25 +13,22 @@ POST {{baseUrl}}/api/v1/users/login
 Content-Type: application/json
 
 {
-  "username": "master1",
-  "password": "!Master123"
+  "username": "{{master_id}}",
+  "password": "{{master_pw}}"
 }
+> {%
+  client.global.set("access_token", response.headers.valueOf("Authorization"))
+%}
+
 
 ### 지역 생성
 POST {{baseUrl}}/api/v1/regions
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIxIiwiYXV0aCI6Ik1BU1RFUiIsImV4cCI6MTc0MDQ1MDk1MCwiaWF0IjoxNzQwNDQ3MzUwfQ.y3lJyDbh5-li8Tv6JFYtc1dm8ZKv-cDk9IRjB3aOJ4o
+Authorization: {{access_token}}
 
 {
   "regionName": "서울시"
 }
-
-### 카테고리 생성
-POST {{baseUrl}}/api/v1/categories
-Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYXN0ZXIiLCJhdXRoIjoiTUFTVEVSIiwiZXhwIjoxNzM5ODU5NjQ5LCJpYXQiOjE3Mzk4NTYwNDl9.VC0YwrVoNFo_9VMyovczvf1YBC82gIgQ4_m6QlsohCQ
-
-{
-  "name": "야식",
-  "patentId": null
-}
+> {%
+  client.global.set("regionId", response.body.result.regionId)
+%}
